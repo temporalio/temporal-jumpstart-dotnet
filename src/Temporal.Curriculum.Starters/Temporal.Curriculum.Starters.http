@@ -1,0 +1,6 @@
+@Temporal.Curriculum.Starters_HostAddress = http://localhost:5031
+
+GET {{Temporal.Curriculum.Starters_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
