@@ -7,8 +7,8 @@ public class WorkerConfig
 
 public class MtlsConfig
 {
-    public string KeyFile { get; set; }
-    public string CertChainFile { get; set; }
+    public required string KeyFile { get; set; }
+    public required string CertChainFile { get; set; }
 }
 public class ConnectionConfig
 {

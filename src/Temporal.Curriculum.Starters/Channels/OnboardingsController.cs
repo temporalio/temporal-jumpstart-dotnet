@@ -6,6 +6,7 @@ using Temporal.Curriculum.Starters.Messages.API;
 using Temporal.Curriculum.Starters.Messages.Orchestrations;
 using Temporalio.Api.Enums.V1;
 using Temporalio.Client;
+using Temporalio.Converters;
 using Temporalio.Exceptions;
 
 namespace Temporal.Curriculum.Starters.Channels;
@@ -58,11 +59,11 @@ public class OnboardingsController:ControllerBase  {
             RetryPolicy = null,
             IdReusePolicy = WorkflowIdReusePolicy.RejectDuplicate,
         };
-        WorkflowHandle handle = null;
+        WorkflowHandle? handle = null;
         var alreadyStarted = false;
         try
         {
-            handle = await temporalClient.StartWorkflowAsync("WorkflowDefinitionDoesntExist", args, opts);
+            handle = await temporalClient.StartWorkflowAsync("WorkflowDefinitionDoesntExistYet", args, opts);
         }
         catch (WorkflowAlreadyStartedException e)
         {
@@ -80,15 +81,24 @@ public class OnboardingsController:ControllerBase  {
 
         return new StatusCodeResult(StatusCodes.Status500InternalServerError);
     } 
-    [HttpGet]
-    public async Task<IActionResult> TestThingAsync()
+    [HttpGet("{id}")]
+    [Produces("application/json")]
+    public async Task<ActionResult<OnboardingsGet>> GetOnboardingStatus(string id)
     {
-        var temporalClient = _httpContextAccessor.HttpContext.Features.Get<ITemporalClient>();
-        
-        Console.WriteLine("INSIDE TEST THING {0:G}", temporalClient?.Connection.IsConnected);
-        var value = await  Task.FromResult("batman");
-        return Ok(value);
-       
+        var result = new OnboardingsGet();
+        var temporalClient = _httpContextAccessor.HttpContext.Features.GetRequiredFeature<ITemporalClient>();
+
+        var handle = temporalClient.GetWorkflowHandle(id);
+        result.Id = handle.Id;
+        var describe = await handle.DescribeAsync();
+        result.ExecutionStatus = describe.Status.ToString();
+        var hist = await handle.FetchHistoryAsync();
+        var started = hist.Events.First(e => e.EventType == EventType.WorkflowExecutionStarted);
+        foreach (var payload in started.WorkflowExecutionStartedEventAttributes.Input.Payloads_)
+        {
+            result.Input = (StartOnboardingRequest?)DataConverter.Default.PayloadConverter.ToValue(payload, typeof(StartOnboardingRequest)) ?? throw new InvalidOperationException();
+        }
+        return Ok(result);
     }
 }
 // var builder = WebApplication.CreateBuilder(args);

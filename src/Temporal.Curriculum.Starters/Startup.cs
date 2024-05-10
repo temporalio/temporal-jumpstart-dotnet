@@ -22,11 +22,13 @@ public class Startup
         {
             services.Configure<TemporalConfig>(Configuration.GetSection("Temporal"));
             services.AddHttpContextAccessor();
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen();
             services.AddSingleton( ctx =>
             {
                 var config = ctx.GetRequiredService<IOptions<TemporalConfig>>();
                 var loggerFactory = ctx.GetRequiredService<ILoggerFactory>();
-                var logger = loggerFactory.CreateLogger("temporal_cfg");
+                var logger = loggerFactory.CreateLogger<TemporalClient>();
                 logger.LogInformation("connecting to temporal namespace {config.Connection.Namespace}", config.Value.Connection.Namespace);
                 var opts = new TemporalClientConnectOptions
                 {
@@ -43,6 +45,10 @@ public class Startup
                         ClientCert =  File.ReadAllBytes(config.Value.Connection.Mtls.CertChainFile),
                         ClientPrivateKey =  File.ReadAllBytes(config.Value.Connection.Mtls.KeyFile),
                     };
+                }
+                else
+                {
+                    logger.LogWarning("connections to Temporal are not via mTLS");
                 }
                 
                 return TemporalClient.ConnectAsync(opts);
@@ -137,7 +143,10 @@ public class Startup
         {
             
             app.UseTemporalClientHTTPMiddleware();
-            
+           
+
+            app.UseSwagger();
+            app.UseSwaggerUI();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
