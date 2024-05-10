@@ -16,7 +16,7 @@ Obviously, you need a Temporal Cloud namespace configured beforehand.
 ### Local Temporal service
 
 1. Start local Temporal with `temporal server start-dev`
-2. Run `Temporal.Curriculum.Starters: http` application
+2. Run `Temporal.Curriculum.Starters: local` application
 3. You can issue a request with the Swagger UI that opens up OR
    1. Using your favorite HTTP Client send `PUT` request like
       1. `http PUT http://{HOSTNAME}/onboardings/onboarding-123 value=some-value`

@@ -14,7 +14,6 @@ namespace Temporal.Curriculum.Starters.Channels;
 [Route("api/onboardings")]
 [ApiController]
 public class OnboardingsController:ControllerBase  {
-    private readonly ITemporalClient _temporalClient;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IOptions<TemporalConfig> _temporalConfig;
     private readonly ILogger _logger;
@@ -75,8 +74,8 @@ public class OnboardingsController:ControllerBase  {
         if (handle != null || alreadyStarted)
         {
             // poor man's uri template. prefer RFC 6570 implementation
-            var location = "/onboardings/{id}";
-            return Accepted(HttpContext.Request.Host + location);
+            var location = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/onboardings/{id}";
+            return Accepted( location);
         }
 
         return new StatusCodeResult(StatusCodes.Status500InternalServerError);
