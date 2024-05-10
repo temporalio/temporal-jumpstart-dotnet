@@ -22,17 +22,30 @@ public class Startup
         {
             services.Configure<TemporalConfig>(Configuration.GetSection("Temporal"));
             services.AddHttpContextAccessor();
-            services.AddSingleton(ctx =>
+            services.AddSingleton( ctx =>
             {
                 var config = ctx.GetRequiredService<IOptions<TemporalConfig>>();
-                // TODO(cretz): It is not great practice to pass around tasks to be awaited
-                // on separately (VSTHRD003). We may prefer a direct DI extension, see
-                // https://github.com/temporalio/sdk-dotnet/issues/46.
-                return TemporalClient.ConnectAsync(new()
+                var loggerFactory = ctx.GetRequiredService<ILoggerFactory>();
+                var logger = loggerFactory.CreateLogger("temporal_cfg");
+                logger.LogInformation("connecting to temporal namespace {config.Connection.Namespace}", config.Value.Connection.Namespace);
+                var opts = new TemporalClientConnectOptions
                 {
+                    Namespace = config.Value.Connection.Namespace,
                     TargetHost = config.Value.Connection.Target,
                     LoggerFactory = ctx.GetRequiredService<ILoggerFactory>(),
-                });
+                };
+                if (config.Value.Connection.Mtls != null)
+                {
+                    logger.LogInformation("using cert from {config.Connection.Mtls.CertChainFile}", config.Value.Connection.Mtls.CertChainFile);
+
+                    opts.Tls = new TlsOptions
+                    {
+                        ClientCert =  File.ReadAllBytes(config.Value.Connection.Mtls.CertChainFile),
+                        ClientPrivateKey =  File.ReadAllBytes(config.Value.Connection.Mtls.KeyFile),
+                    };
+                }
+                
+                return TemporalClient.ConnectAsync(opts);
             });
             services.AddControllers(setupAction =>
                 {

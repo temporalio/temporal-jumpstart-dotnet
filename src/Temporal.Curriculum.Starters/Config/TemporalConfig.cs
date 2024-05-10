@@ -14,6 +14,8 @@ public class ConnectionConfig
 {
     public required string Namespace { get; set; }
     public required string Target { get; set; }
+    
+    public MtlsConfig? Mtls { get; set; }
 }
 public class TemporalConfig
 {
