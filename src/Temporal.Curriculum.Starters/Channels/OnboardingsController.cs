@@ -88,44 +88,35 @@ public class OnboardingsController:ControllerBase  {
         var result = new OnboardingsGet();
         var temporalClient = _httpContextAccessor.HttpContext.Features.GetRequiredFeature<ITemporalClient>();
 
+        // this is relatively advanced use of the TemporalClient but is shown here to 
+        // illustrate how to interact with the lower-level gRPC API for extracting details
+        // about the WorkflowExecution. 
+        // We will be replacing this usage with a `Query` invocation to be simpler and more explicit.
+        // This module will not overly explain this interaction but will be valuable later when we
+        // want to reason about our Executions with more detail.
         var handle = temporalClient.GetWorkflowHandle(id);
         result.Id = handle.Id;
-        var describe = await handle.DescribeAsync();
-        result.ExecutionStatus = describe.Status.ToString();
-        var hist = await handle.FetchHistoryAsync();
-        var started = hist.Events.First(e => e.EventType == EventType.WorkflowExecutionStarted);
-        foreach (var payload in started.WorkflowExecutionStartedEventAttributes.Input.Payloads_)
+        try
         {
-            result.Input = (StartOnboardingRequest?)DataConverter.Default.PayloadConverter.ToValue(payload, typeof(StartOnboardingRequest)) ?? throw new InvalidOperationException();
+            var describe = await handle.DescribeAsync();
+            result.ExecutionStatus = describe.Status.ToString();
+            var hist = await handle.FetchHistoryAsync();
+            var started = hist.Events.First(e => e.EventType == EventType.WorkflowExecutionStarted);
+            foreach (var payload in started.WorkflowExecutionStartedEventAttributes.Input.Payloads_)
+            {
+                result.Input =
+                    (StartOnboardingRequest?)DataConverter.Default.PayloadConverter.ToValue(payload,
+                        typeof(StartOnboardingRequest)) ?? throw new InvalidOperationException();
+            }
+
+            return Ok(result);
         }
-        return Ok(result);
+        catch (RpcException e)
+        {
+            if(e.Code.Equals(RpcException.StatusCode.NotFound)) {
+                return NotFound();
+            }
+        }
+        return new StatusCodeResult(StatusCodes.Status500InternalServerError);
     }
 }
-// var builder = WebApplication.CreateBuilder(args);
-//
-// // Setup console logging
-// builder.Logging.AddSimpleConsole().SetMinimumLevel(LogLevel.Information);
-//
-// // Set a singleton for the client _task_. Errors will not happen here, only when
-// // the await is performed.
-// builder.Services.AddSingleton(async ctx => 
-//     // TODO(cretz): It is not great practice to pass around tasks to be awaited
-//     // on separately (VSTHRD003). We may prefer a direct DI extension, see
-//     // https://github.com/temporalio/sdk-dotnet/issues/46.
-//     await TemporalClient.ConnectAsync(new()
-//     {
-//         TargetHost = "localhost:7233",
-//         LoggerFactory = ctx.GetRequiredService<ILoggerFactory>(),
-//     }));
-//
-// var app = builder.Build();
-//
-// app.MapGet("/", async (ITemporalClient clientTask, string? name) =>
-// {
-//     var client = await clientTask;
-//     return await client.ExecuteWorkflowAsync(
-//         (MyWorkflow wf) => wf.RunAsync(name ?? "Temporal"),
-//         new(id: $"aspnet-sample-workflow-{Guid.NewGuid()}", taskQueue: MyWorkflow.TaskQueue));
-// });
-//
-// app.Run();
