@@ -1,8 +1,12 @@
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Temporal.Curriculum.Starters.Config;
 using Temporal.Curriculum.Starters.Messages.API;
 using Temporal.Curriculum.Starters.Messages.Orchestrations;
+using Temporalio.Api.Enums.V1;
 using Temporalio.Client;
+using Temporalio.Exceptions;
 
 namespace Temporal.Curriculum.Starters.Channels;
 
@@ -11,16 +15,21 @@ namespace Temporal.Curriculum.Starters.Channels;
 public class OnboardingsController:ControllerBase  {
     private readonly ITemporalClient _temporalClient;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IOptions<TemporalConfig> _temporalConfig;
+    private readonly ILogger _logger;
 
-    public OnboardingsController(IHttpContextAccessor httpContextAccessor)
+    public OnboardingsController(IHttpContextAccessor httpContextAccessor, 
+        IOptions<TemporalConfig> temporalConfig, ILoggerFactory logger)
     {
         _httpContextAccessor = httpContextAccessor;
+        _temporalConfig = temporalConfig;
+        _logger = logger.CreateLogger<OnboardingsController>();
     }
 
-    [HttpPut()]
+    [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> StartOnboardingAsync(OnboardingsPost req)
+    public async Task<IActionResult> StartOnboardingAsync(string id, OnboardingsPut req)
     {
         // Decouple User Experience contracts with proper messaging contracts used in your application.
         // Prefer using AutoMapper or the like for this 
@@ -39,18 +48,37 @@ public class OnboardingsController:ControllerBase  {
             // 1. Prefer _pushing_ an WorkflowID down instead of retrieving after-the-fact.
             // 2. Acquaint your self with the "Workflow ID Reuse Policy" to fit your use case
             // Reference: https://docs.temporal.io/workflows#workflow-id-reuse-policy
-            Id = req.OnboardingId,
-            TaskQueue = "onboardings",
+            Id = id,
+            TaskQueue = _temporalConfig.Value.Worker.TaskQueue,
             // BestPractice: Do not fail a workflow on intermittent (eg bug) errors; prefer handling failures at the Activity level within the Workflow.
             // Details: A Workflow will very rarely need one to specify a RetryPolicy when starting a Workflow and we strongly discourage it.
             // Only Exceptions that inherit from `FailureException` will cause a RetryPolicy to be enforced. Other Exceptions will cause the WorkflowTask
             // to be rescheduled so that Workflows can continue to make progress once repaired/redeployed with corrections.
             // Reference: https://github.com/temporalio/sdk-dotnet/?tab=readme-ov-file#workflow-exceptions
             RetryPolicy = null,
+            IdReusePolicy = WorkflowIdReusePolicy.RejectDuplicate,
         };
-        var handle = await temporalClient.StartWorkflowAsync("WorkflowDefinitionDoesntExist", args, opts);
-        // var output = await temporalClient.ExecuteWorkflowAsync(req);
-        return Accepted(handle.ResultRunId);
+        WorkflowHandle handle = null;
+        var alreadyStarted = false;
+        try
+        {
+            handle = await temporalClient.StartWorkflowAsync("WorkflowDefinitionDoesntExist", args, opts);
+        }
+        catch (WorkflowAlreadyStartedException e)
+        {
+            alreadyStarted = true;
+            _logger.LogError("workflow {id} already started {e}", id, e);
+            // swallow this exception since this is an PUT (idempotent)
+        }
+
+        if (handle != null || alreadyStarted)
+        {
+            // poor man's uri template. prefer RFC 6570 implementation
+            var location = "/onboardings/{id}";
+            return Accepted(HttpContext.Request.Host + location);
+        }
+
+        return new StatusCodeResult(StatusCodes.Status500InternalServerError);
     } 
     [HttpGet]
     public async Task<IActionResult> TestThingAsync()

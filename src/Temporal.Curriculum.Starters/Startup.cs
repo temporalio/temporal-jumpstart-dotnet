@@ -1,7 +1,9 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.Options;
 using Temporal.Curriculum.Starters.Clients;
+using Temporal.Curriculum.Starters.Config;
 using Temporalio.Client;
 using Temporalio.Extensions.Hosting;
 namespace Temporal.Curriculum.Starters;
@@ -18,16 +20,20 @@ public class Startup
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<TemporalConfig>(Configuration.GetSection("Temporal"));
             services.AddHttpContextAccessor();
             services.AddSingleton(ctx =>
+            {
+                var config = ctx.GetRequiredService<IOptions<TemporalConfig>>();
                 // TODO(cretz): It is not great practice to pass around tasks to be awaited
                 // on separately (VSTHRD003). We may prefer a direct DI extension, see
                 // https://github.com/temporalio/sdk-dotnet/issues/46.
-                TemporalClient.ConnectAsync(new()
+                return TemporalClient.ConnectAsync(new()
                 {
-                    TargetHost = "localhost:7233",
+                    TargetHost = config.Value.Connection.Target,
                     LoggerFactory = ctx.GetRequiredService<ILoggerFactory>(),
-                }));
+                });
+            });
             services.AddControllers(setupAction =>
                 {
                     setupAction.ReturnHttpNotAcceptable = true;
