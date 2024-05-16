@@ -17,6 +17,7 @@ Obviously, you need a Temporal Cloud namespace configured beforehand.
 
 1. Start local Temporal with `temporal server start-dev`
 2. Run `Temporal.Curriculum.Starters: local` application
+   1. `dotnet run --launch-profile local`
 3. You can issue a request with the Swagger UI that opens up OR
    1. Using your favorite HTTP Client send `PUT` request like
       1. `http PUT http://{HOSTNAME}/onboardings/onboarding-123 value=some-value`
@@ -32,10 +33,11 @@ Obviously, you need a Temporal Cloud namespace configured beforehand.
 
 ### Temporal Cloud service
 
-1. Ensure you have configured `appsettings.json` with the correct `Temporal` configuration
+1. Ensure you have configured `appsettings.Cloud.json` with the correct `Temporal` configuration
    1. mTLS certs should be configured
    2. Namespace should explicitly be declared
 2. Run `Temporal.Curriculum.Starters: cloud` application in launchSettings `cloud` profile
+   1. `dotnet run --launch-profile cloud`
 3. You can issue a request with the Swagger UI that opens up OR
    1. Using your favorite HTTP Client send `PUT` request like
       1. `http PUT http://{HOSTNAME}/onboardings/onboarding-123 value=some-value`
