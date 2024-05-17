@@ -1,6 +1,11 @@
 @Temporal.Curriculum.Starters_HostAddress = http://localhost:5031
+@id=onboarding-123
 
-GET {{Temporal.Curriculum.Starters_HostAddress}}/weatherforecast/
+PUT {{Temporal.Curriculum.Starters_HostAddress}}/onboardings/{{id}}
 Accept: application/json
+
+{
+"value": "required onboarding value"
+}
 
 ###

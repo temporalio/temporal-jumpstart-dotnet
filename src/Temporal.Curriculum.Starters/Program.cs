@@ -1,3 +1,4 @@
+using Temporal.Curriculum.Starters.Config;
 using Temporalio.Client;
 
 namespace Temporal.Curriculum.Starters;
@@ -17,6 +18,10 @@ public class Program
         Host.CreateDefaultBuilder(args)
             .ConfigureWebHostDefaults(webBuilder =>
             {
+                webBuilder.ConfigureAppConfiguration(c =>
+                {
+                    c.AddEnvironmentVariables().Build();
+                });
                 webBuilder.UseStartup<Startup>();
             });
 }
