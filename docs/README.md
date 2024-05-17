@@ -21,13 +21,14 @@ We will go over the Use Case your team sent to Temporal to ensure there is a com
 
 
 The **JumpStart** Code Project
-Download the `jumpstart` project (https://github.com/pvsone/temporal-worker-cert-rotation).
+Download the `jumpstart` project (https://github.com/temporalio/temporal-jumpstart-dotnet/).
 This project is intended to introduce a Temporal application gradually using top-down application design. We can rename the components to match our Use Case identified in Section 1 to map Temporal thinking to our real-world requirements.
 
 This is a .NET application which steps through an onboarding process.
 
 ## Section 3: Temporal SDK Client, Starters, and Messages
 ### Temporal SDK Client
+Temporal offers SDK Clients for .NET, Java, Go, Python, Typescript and PHP with support for other languages on the roadmap.
 
 ### Starters
 There are several ways to start a Workflow Execution in Temporal. In this section, we will discuss those methods along with the pros and cons of each. The focus here is on the best way to trigger the Workflow Execution for your specific use case including methods to trigger a Workflow from a UI if that is necessary for your use case.
