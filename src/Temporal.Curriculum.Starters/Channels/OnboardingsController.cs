@@ -1,26 +1,35 @@
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Temporal.Curriculum.Starters.Config;
 using Temporal.Curriculum.Starters.Messages.API;
 using Temporal.Curriculum.Starters.Messages.Orchestrations;
+using Temporalio.Api.Enums.V1;
 using Temporalio.Client;
+using Temporalio.Converters;
+using Temporalio.Exceptions;
 
 namespace Temporal.Curriculum.Starters.Channels;
 
 [Route("api/onboardings")]
 [ApiController]
 public class OnboardingsController:ControllerBase  {
-    private readonly ITemporalClient _temporalClient;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IOptions<TemporalConfig> _temporalConfig;
+    private readonly ILogger _logger;
 
-    public OnboardingsController(IHttpContextAccessor httpContextAccessor)
+    public OnboardingsController(IHttpContextAccessor httpContextAccessor, 
+        IOptions<TemporalConfig> temporalConfig, ILoggerFactory logger)
     {
         _httpContextAccessor = httpContextAccessor;
+        _temporalConfig = temporalConfig;
+        _logger = logger.CreateLogger<OnboardingsController>();
     }
 
-    [HttpPut()]
+    [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> StartOnboardingAsync(OnboardingsPost req)
+    public async Task<IActionResult> StartOnboardingAsync(string id, OnboardingsPut req)
     {
         // Decouple User Experience contracts with proper messaging contracts used in your application.
         // Prefer using AutoMapper or the like for this 
@@ -39,55 +48,74 @@ public class OnboardingsController:ControllerBase  {
             // 1. Prefer _pushing_ an WorkflowID down instead of retrieving after-the-fact.
             // 2. Acquaint your self with the "Workflow ID Reuse Policy" to fit your use case
             // Reference: https://docs.temporal.io/workflows#workflow-id-reuse-policy
-            Id = req.OnboardingId,
-            TaskQueue = "onboardings",
+            Id = id,
+            TaskQueue = _temporalConfig.Value.Worker.TaskQueue,
             // BestPractice: Do not fail a workflow on intermittent (eg bug) errors; prefer handling failures at the Activity level within the Workflow.
             // Details: A Workflow will very rarely need one to specify a RetryPolicy when starting a Workflow and we strongly discourage it.
             // Only Exceptions that inherit from `FailureException` will cause a RetryPolicy to be enforced. Other Exceptions will cause the WorkflowTask
             // to be rescheduled so that Workflows can continue to make progress once repaired/redeployed with corrections.
             // Reference: https://github.com/temporalio/sdk-dotnet/?tab=readme-ov-file#workflow-exceptions
             RetryPolicy = null,
+            IdReusePolicy = WorkflowIdReusePolicy.RejectDuplicate,
         };
-        var handle = await temporalClient.StartWorkflowAsync("WorkflowDefinitionDoesntExist", args, opts);
-        // var output = await temporalClient.ExecuteWorkflowAsync(req);
-        return Accepted(handle.ResultRunId);
+        WorkflowHandle? handle = null;
+        var alreadyStarted = false;
+        try
+        {
+            handle = await temporalClient.StartWorkflowAsync("WorkflowDefinitionDoesntExistYet", args, opts);
+        }
+        catch (WorkflowAlreadyStartedException e)
+        {
+            alreadyStarted = true;
+            _logger.LogError("workflow {id} already started {e}", id, e);
+            // swallow this exception since this is an PUT (idempotent)
+        }
+
+        if (handle != null || alreadyStarted)
+        {
+            // poor man's uri template. prefer RFC 6570 implementation
+            var location = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/onboardings/{id}";
+            return Accepted( location);
+        }
+
+        return new StatusCodeResult(StatusCodes.Status500InternalServerError);
     } 
-    [HttpGet]
-    public async Task<IActionResult> TestThingAsync()
+    [HttpGet("{id}")]
+    [Produces("application/json")]
+    public async Task<ActionResult<OnboardingsGet>> GetOnboardingStatus(string id)
     {
-        var temporalClient = _httpContextAccessor.HttpContext.Features.Get<ITemporalClient>();
-        
-        Console.WriteLine("INSIDE TEST THING {0:G}", temporalClient?.Connection.IsConnected);
-        var value = await  Task.FromResult("batman");
-        return Ok(value);
-       
+        var result = new OnboardingsGet();
+        var temporalClient = _httpContextAccessor.HttpContext.Features.GetRequiredFeature<ITemporalClient>();
+
+        // this is relatively advanced use of the TemporalClient but is shown here to 
+        // illustrate how to interact with the lower-level gRPC API for extracting details
+        // about the WorkflowExecution. 
+        // We will be replacing this usage with a `Query` invocation to be simpler and more explicit.
+        // This module will not overly explain this interaction but will be valuable later when we
+        // want to reason about our Executions with more detail.
+        var handle = temporalClient.GetWorkflowHandle(id);
+        result.Id = handle.Id;
+        try
+        {
+            var describe = await handle.DescribeAsync();
+            result.ExecutionStatus = describe.Status.ToString();
+            var hist = await handle.FetchHistoryAsync();
+            var started = hist.Events.First(e => e.EventType == EventType.WorkflowExecutionStarted);
+            foreach (var payload in started.WorkflowExecutionStartedEventAttributes.Input.Payloads_)
+            {
+                result.Input =
+                    (StartOnboardingRequest?)DataConverter.Default.PayloadConverter.ToValue(payload,
+                        typeof(StartOnboardingRequest)) ?? throw new InvalidOperationException();
+            }
+
+            return Ok(result);
+        }
+        catch (RpcException e)
+        {
+            if(e.Code.Equals(RpcException.StatusCode.NotFound)) {
+                return NotFound();
+            }
+        }
+        return new StatusCodeResult(StatusCodes.Status500InternalServerError);
     }
 }
-// var builder = WebApplication.CreateBuilder(args);
-//
-// // Setup console logging
-// builder.Logging.AddSimpleConsole().SetMinimumLevel(LogLevel.Information);
-//
-// // Set a singleton for the client _task_. Errors will not happen here, only when
-// // the await is performed.
-// builder.Services.AddSingleton(async ctx => 
-//     // TODO(cretz): It is not great practice to pass around tasks to be awaited
-//     // on separately (VSTHRD003). We may prefer a direct DI extension, see
-//     // https://github.com/temporalio/sdk-dotnet/issues/46.
-//     await TemporalClient.ConnectAsync(new()
-//     {
-//         TargetHost = "localhost:7233",
-//         LoggerFactory = ctx.GetRequiredService<ILoggerFactory>(),
-//     }));
-//
-// var app = builder.Build();
-//
-// app.MapGet("/", async (ITemporalClient clientTask, string? name) =>
-// {
-//     var client = await clientTask;
-//     return await client.ExecuteWorkflowAsync(
-//         (MyWorkflow wf) => wf.RunAsync(name ?? "Temporal"),
-//         new(id: $"aspnet-sample-workflow-{Guid.NewGuid()}", taskQueue: MyWorkflow.TaskQueue));
-// });
-//
-// app.Run();

@@ -8,9 +8,6 @@ public class TemporalClientHttpMiddleware(RequestDelegate next, Task<TemporalCli
     {
         var temporalClient = await temporalClientTask;
         httpContext.Features.Set<ITemporalClient>(temporalClient);
-        Console.WriteLine("INSIDE MIDDLEWARE");
-
         await next(httpContext);
-        Console.WriteLine("AFTER MIDDLEWARE");
     }
 }
