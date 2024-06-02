@@ -1,6 +1,13 @@
 # Temporal Jump Start -- Starters
 We will demonstrate programmatic start/execution of a Workflow in Temporal. We will also discuss decisions that need to be made before you start development. 
 
+## Workflow Execution
+There are several ways to execute a Temporal Workflow. What is the best way to execute your Workflow from a UX perspective based on your use case?
+* Execute from an API endpoint (for integration with existing applications)
+* Execute from the command line
+* Integrate with your CI/CD system
+* Containerized execution
+
 ## Retry Handling
 * Unify SDK grpc retry handling (survey across Golang, Java, TypeScript, and Rust SDKs)
     * Cleary dissuade from DIY retry noodling at gRPC level
