@@ -7,6 +7,7 @@ There are several ways to execute a Temporal Workflow. What is the best way to e
 * Execute from the command line
 * Integrate with your CI/CD system
 * Containerized execution
+* Can Serverless be involved?
 
 ## Retry Handling
 * Unify SDK grpc retry handling (survey across Golang, Java, TypeScript, and Rust SDKs)
