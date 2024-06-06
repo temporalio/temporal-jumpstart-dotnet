@@ -26,17 +26,35 @@ public interface IOnboardEntity
 [Workflow]
 public class OnboardEntity : IOnboardEntity
 {
-    private void validateRequest(OnboardEntityRequest args)
+    private void AssertValidRequest(OnboardEntityRequest args)
     {
-        if (args.Id.Equals(""))
+        if (string.IsNullOrEmpty(args.Id) || string.IsNullOrEmpty(args.Value) )
         {
-            throw new ApplicationFailureException("OnboardEntity.Id is required");
+            /*
+             * Temporal is not prescriptive about the strategy you choose for indicating failures in your Workflows.
+             * 
+             * We throw an ApplicationFailureException here which would ultimately result in a `WorkflowFailedException`.
+             * This is a common way to fail a Workflow which will never succeed due to bad arguments or some other invariant.
+             * 
+             * It is common to use ApplicationFailure for business failures, but these should be considered distinct from an intermittent failure such as
+             * a bug in the code or some dependency which is temporarily unavailable. Temporal can often recover from these kinds of intermittent failures
+             * with a redeployment, downstream service correction, etc. These intermittent failures would typically result in an Exception NOT descended from
+             * TemporalFailure and would therefore NOT fail the Workflow Execution.
+             * 
+             * If you have explicit business metrics setup to monitor failed Workflows, you could alternatively return a "Status" result with the business failure
+             * and allow the Workflow Execution to "Complete" without failure.
+             * 
+             * Note that `WorkflowFailedException` will count towards the `workflow_failed` SDK Metric (https://docs.temporal.io/references/sdk-metrics#workflow_failed).
+             */
+            throw new ApplicationFailureException("OnboardEntity.Id and OnboardEntity.Value is required");
         }
     }
     [WorkflowRun]
     public async Task ExecuteAsync(OnboardEntityRequest args)
     {
+        AssertValidRequest(args);
         
-        await Workflow.DelayAsync(2000);
+        // ignore. more business logic to come
+        await Workflow.DelayAsync(10000);
     }
 }

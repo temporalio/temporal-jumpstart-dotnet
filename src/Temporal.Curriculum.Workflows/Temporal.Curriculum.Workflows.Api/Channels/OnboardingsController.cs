@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Temporal.Curriculum.Workflows.Api.Config;
+using Temporal.Curriculum.Workflows.Domain.Clients;
 using Temporal.Curriculum.Workflows.Domain.Orchestrations;
 using Temporal.Curriculum.Workflows.Messages.API;
 using Temporal.Curriculum.Workflows.Messages.Orchestrations;
@@ -55,7 +55,7 @@ public class OnboardingsController:ControllerBase  {
         var alreadyStarted = false;
         try
         {
-            handle = await temporalClient.StartWorkflowAsync((OnboardEntity wf) => wf.ExecuteAsync(new OnboardEntityRequest(req.Value)), opts);
+            handle = await temporalClient.StartWorkflowAsync((OnboardEntity wf) => wf.ExecuteAsync(new OnboardEntityRequest(id, req.Value)), opts);
         }
         catch (WorkflowAlreadyStartedException e)
         {

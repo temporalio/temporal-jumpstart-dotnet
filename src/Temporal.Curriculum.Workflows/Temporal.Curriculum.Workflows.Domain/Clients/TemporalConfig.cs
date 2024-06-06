@@ -1,4 +1,4 @@
-namespace Temporal.Curriculum.Workflows.Api.Config;
+namespace Temporal.Curriculum.Workflows.Domain.Clients;
 
 public class WorkerConfig
 {

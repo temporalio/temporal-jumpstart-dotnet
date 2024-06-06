@@ -2,8 +2,8 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Options;
-using Temporal.Curriculum.Workflows.Api.Clients;
-using Temporal.Curriculum.Workflows.Api.Config;
+using Temporal.Curriculum.Workflows.Api.Middleware;
+using Temporal.Curriculum.Workflows.Domain.Clients;
 using Temporalio.Client;
 
 namespace Temporal.Curriculum.Workflows.Api;
@@ -21,38 +21,11 @@ public class Startup
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<TemporalConfig>(Configuration.GetSection("Temporal"));
+            services.AddSingleton<ITemporalClientFactory, TemporalClientFactory>();
             services.AddHttpContextAccessor();
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
-            services.AddSingleton( ctx =>
-            {
-                var config = ctx.GetRequiredService<IOptions<TemporalConfig>>();
-                var loggerFactory = ctx.GetRequiredService<ILoggerFactory>();
-                var logger = loggerFactory.CreateLogger<TemporalClient>();
-                logger.LogInformation("connecting to temporal namespace {config.Connection.Namespace}", config.Value.Connection.Namespace);
-                var opts = new TemporalClientConnectOptions
-                {
-                    Namespace = config.Value.Connection.Namespace,
-                    TargetHost = config.Value.Connection.Target,
-                    LoggerFactory = ctx.GetRequiredService<ILoggerFactory>(),
-                };
-                if (config.Value.Connection.Mtls != null)
-                {
-                    logger.LogInformation("using cert from {config.Connection.Mtls.CertChainFile}", config.Value.Connection.Mtls.CertChainFile);
-
-                    opts.Tls = new TlsOptions
-                    {
-                        ClientCert =  File.ReadAllBytes(config.Value.Connection.Mtls.CertChainFile),
-                        ClientPrivateKey =  File.ReadAllBytes(config.Value.Connection.Mtls.KeyFile),
-                    };
-                }
-                else
-                {
-                    logger.LogWarning("connections to Temporal are not via mTLS");
-                }
-                
-                return TemporalClient.ConnectAsync(opts);
-            });
+            services.AddSingleton( ctx => ctx.GetRequiredService<ITemporalClientFactory>().CreateClientAsync());
             services.AddControllers(setupAction =>
                 {
                     setupAction.ReturnHttpNotAcceptable = true;

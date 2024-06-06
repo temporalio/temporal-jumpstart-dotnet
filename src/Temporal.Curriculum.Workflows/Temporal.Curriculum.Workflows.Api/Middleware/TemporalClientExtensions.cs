@@ -1,4 +1,4 @@
-namespace Temporal.Curriculum.Workflows.Api.Clients;
+namespace Temporal.Curriculum.Workflows.Api.Middleware;
 
 public static class TemporalClientExtensions
 {
