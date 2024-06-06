@@ -13,10 +13,16 @@
         <PackageReference Include="coverlet.collector" Version="3.1.2" />
         <PackageReference Include="MartinCostello.Logging.XUnit" Version="0.3.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
         <PackageReference Include="xunit" Version="2.4.2" />
         <PackageReference Include="xunit.console" Version="2.4.2" />
+        <PackageReference Include="Temporalio" Version="1.0.0" />
+
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\src\Temporal.Curriculum.Workflows\Temporal.Curriculum.Workflows.Domain\Temporal.Curriculum.Workflows.Domain.csproj" />
     </ItemGroup>
 
 </Project>
