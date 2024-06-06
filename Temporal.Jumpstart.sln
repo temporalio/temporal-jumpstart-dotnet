@@ -1,7 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Jumpstart.App", "Temporal.Jumpstart.App\Temporal.Jumpstart.App.csproj", "{3236D6B0-4151-4C94-83C9-6064F73395C2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Jumpstart.App", "src\Temporal.Jumpstart.App\Temporal.Jumpstart.App.csproj", "{6F712E58-03E9-4A54-AA3F-7804C1632F97}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Starters", "src\Temporal.Curriculum.Starters\Temporal.Curriculum.Starters.csproj", "{EE24B378-441C-40C0-AEA1-35729DC3E7E3}"

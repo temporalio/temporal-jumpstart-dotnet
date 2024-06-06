@@ -9,10 +9,11 @@ public class OnboardEntityRequest
     }
 
     [SetsRequiredMembers]
-    public OnboardEntityRequest(string value)
+    public OnboardEntityRequest(string id, string value)
     {
+        Id = id;
         Value = value;
     }
-public required string Id { get; set; }
+    public required string Id { get; set; }
     public required string Value { get; set; }
 }
