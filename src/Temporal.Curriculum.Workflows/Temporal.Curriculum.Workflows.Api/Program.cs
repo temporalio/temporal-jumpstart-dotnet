@@ -17,6 +17,8 @@ public class Program
             {
                 webBuilder.ConfigureAppConfiguration(c =>
                 {
+                    // use Config for this Curriculum section
+                    c.SetBasePath(System.IO.Path.GetFullPath(@"../Config"));
                     c.AddEnvironmentVariables().Build();
                 });
                 webBuilder.UseStartup<Startup>();
