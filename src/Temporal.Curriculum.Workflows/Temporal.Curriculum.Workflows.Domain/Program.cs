@@ -11,8 +11,7 @@ public class Program
         
         // DOTNET_ENVIRONMENT variable isnt working with appsettings files so we are being explicit here
         builder.Configuration
-            .SetBasePath(Path.GetFullPath(@"../Config"))
-            .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json")
+            .AddJsonFile(Path.GetFullPath($"../../../config/appsettings.{builder.Environment.EnvironmentName}.json"))
             .AddEnvironmentVariables().Build();
         builder.Services.Configure<TemporalConfig>(builder.Configuration.GetSection("Temporal"));
         // builder.Configuration.AddJsonFile()

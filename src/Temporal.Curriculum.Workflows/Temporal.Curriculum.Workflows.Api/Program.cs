@@ -15,10 +15,10 @@ public class Program
         Host.CreateDefaultBuilder(args)
             .ConfigureWebHostDefaults(webBuilder =>
             {
+                var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
                 webBuilder.ConfigureAppConfiguration(c =>
                 {
-                    // use Config for this Curriculum section
-                    c.SetBasePath(System.IO.Path.GetFullPath(@"../Config"));
+                    c.AddJsonFile(Path.GetFullPath($"../../../config/appsettings.{env}.json"));
                     c.AddEnvironmentVariables().Build();
                 });
                 webBuilder.UseStartup<Startup>();

@@ -1,13 +1,6 @@
 ﻿{
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "Temporal.Curriculum.Workflows.Domain": {
-      "commandName": "Project",
-      "dotnetRunMessages": true,
-      "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "Development"
-      }
-    },
     "cloud": {
       "commandName": "Project",
       "dotnetRunMessages": true,
