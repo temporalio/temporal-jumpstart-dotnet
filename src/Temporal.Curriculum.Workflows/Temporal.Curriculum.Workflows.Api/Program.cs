@@ -1,7 +1,4 @@
-using Temporal.Curriculum.Starters.Config;
-using Temporalio.Client;
-
-namespace Temporal.Curriculum.Starters;
+namespace Temporal.Curriculum.Workflows.Api;
 
 public class Program
 {
@@ -13,16 +10,15 @@ public class Program
         host.Run();
     }
 
-
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
         
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
                 webBuilder.ConfigureAppConfiguration(c =>
                 {
-                    c.AddJsonFile(Path.GetFullPath($"../../config/appsettings.{env}.json"));
+                    c.AddJsonFile(Path.GetFullPath($"../../../config/appsettings.{env}.json"));
                     c.AddEnvironmentVariables().Build();
                 });
                 webBuilder.UseStartup<Startup>();
