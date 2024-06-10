@@ -3,6 +3,8 @@
 ### Goals
 
 - Introduce `/tests` considerations
+- Introduce our first test using the `WorklowEnvironment`
+- Understand `Failure` implications in our Workflow code
 
 
 ### Refactorings
@@ -25,7 +27,7 @@ _Rename `Starters` to `Api`_
 Explicitly expose our REST API surface and make changes to use strongly typed Workflows in our Starter code.
 Note that we can take a reference directly onto our `Domain` project right now for the Workflow Definitions.
 
-_Move `Clients` to `Domain` _
+_Move `Clients` to `Domain`_
 
-Use the `Domain` as our reusable components for the `Api`, including the Temporal Client
-and respective Config.
+Use the `Domain` package to expose reusable components for the `Api`, including the Temporal Client
+and respective Config. We might extract that later for reuse across other Applications, but this is enough for now.

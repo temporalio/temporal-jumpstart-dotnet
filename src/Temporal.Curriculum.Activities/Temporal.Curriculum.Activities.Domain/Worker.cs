@@ -1,5 +1,6 @@
 using Temporal.Curriculum.Activities.Domain.Clients;
 using Temporal.Curriculum.Activities.Domain.Orchestrations;
+using Temporalio.Worker;
 
 namespace Temporal.Curriculum.Activities.Domain;
 

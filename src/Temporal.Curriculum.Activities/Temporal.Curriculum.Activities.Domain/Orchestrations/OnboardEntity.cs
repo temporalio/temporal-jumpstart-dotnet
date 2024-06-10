@@ -1,3 +1,7 @@
+using Temporal.Curriculum.Activities.Messages.Orchestrations;
+using Temporalio.Exceptions;
+using Temporalio.Workflows;
+
 namespace Temporal.Curriculum.Activities.Domain.Orchestrations;
 
 // This interface is only used for Documentation purposes.

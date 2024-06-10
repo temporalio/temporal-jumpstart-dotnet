@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Options;
+using Temporalio.Client;
 
 namespace Temporal.Curriculum.Activities.Domain.Clients;
 

@@ -1,3 +1,5 @@
+using Temporalio.Client;
+
 namespace Temporal.Curriculum.Activities.Api.Middleware;
 
 public class TemporalClientHttpMiddleware(RequestDelegate next, Task<TemporalClient> temporalClientTask)

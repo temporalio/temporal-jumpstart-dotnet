@@ -1,31 +1,34 @@
-# Workflows
+# Activities
 
 ### Goals
 
-- Introduce `/tests` considerations
-
+- Continue testing, this time with Temporal `ActivityEnvironment` test facility
+- Demonstrate how to pass dependencies into Activities
+- Execute our first Activity from our Workflow and understand Retries, Idempotency, etc
 
 ### Refactorings
 
-- `Messages`
-- `Api`
-- `Domain`
+- `Messages.Commands`
+- `Domain.Handlers`
+- `Domain.Clients.ICrmClient`
 
-_Extract Messages_
+_Test-Drive our `RegisterCrmEntity` Activity`_
 
-Introduce an explicit `Messages` project that establishes the contracts between our services.
+Let's use our first Activity test to drive out all the third-party Clients, Integrations packages,
+and establish the message contracts for our first Activity.
 
-_Introduce `Domain`_
+_Introduce `Messages.Commands`_
 
-Encapsulate our business rules inside a `Domain` project. This is where our Orchestration Workflows and
-related business rules will be maintained.
+Our `Commands` package will hold the contracts we use to Request operations with our Activity Handlers.
 
-_Rename `Starters` to `Api`_
+_Introduce `Domain.Handlers.Integrations`_
 
-Explicitly expose our REST API surface and make changes to use strongly typed Workflows in our Starter code.
-Note that we can take a reference directly onto our `Domain` project right now for the Workflow Definitions.
+Our `Activities` are the atomic operations, the "steps", we will use to get things done in our Use Case.
+We will group the calls to our third party dependencies (eg our "CRM" software) into an explicit
+namespace called "Integrations" and create the message contracts our Orchestration can use to execute 
+these Activity Handlers.
 
-_Move `Clients` to `Domain` _
+_Introduce `ICrmClient` to `Domain.Clients`_
 
-Use the `Domain` as our reusable components for the `Api`, including the Temporal Client
-and respective Config.
+The CRM Client needs to be created at Application startup and injected into our Activity Handlers.
+This client requires an "API Key" to be passed into it upon creation.

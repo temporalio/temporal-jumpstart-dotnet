@@ -1,6 +1,14 @@
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Temporal.Curriculum.Activities.Domain.Clients;
+using Temporal.Curriculum.Activities.Domain.Orchestrations;
+using Temporal.Curriculum.Activities.Messages.API;
+using Temporal.Curriculum.Activities.Messages.Orchestrations;
+using Temporalio.Api.Enums.V1;
+using Temporalio.Client;
+using Temporalio.Converters;
+using Temporalio.Exceptions;
 
 namespace Temporal.Curriculum.Activities.Api.Channels;
 

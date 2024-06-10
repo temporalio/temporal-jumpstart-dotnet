@@ -9,5 +9,10 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0"/>
+        <PackageReference Include="Temporalio" Version="1.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Temporal.Curriculum.Activities.Messages\Temporal.Curriculum.Activities.Messages.csproj" />
     </ItemGroup>
 </Project>
