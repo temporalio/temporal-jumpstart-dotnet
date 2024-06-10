@@ -1,7 +1,6 @@
 using Temporal.Curriculum.Activities.Domain.Clients;
 using Temporal.Curriculum.Activities.Domain.Integrations;
 using Temporal.Curriculum.Activities.Messages.Commands;
-using Temporalio.Exceptions;
 using Temporalio.Testing;
 using Xunit.Abstractions;
 
@@ -35,15 +34,11 @@ public class MockCrmClient : ICrmClient
             return Task.FromResult(PreviouslyRegisteredEntities[id]);
         }
 
-        throw new CrmEntityNotFoundException($"entity {id} id NotFound");
+        throw new CrmEntityNotFoundException($"Entity {id} NotFound");
     }
 }
-public class RegisterCrmEntityTests: TestBase
+public class RegisterCrmEntityTests(ITestOutputHelper output) : TestBase(output)
 {
-    public RegisterCrmEntityTests(ITestOutputHelper output) : base(output)
-    {
-    }
-
     [Fact]
     public async Task RunAsync_RegisterCrmEntity_GivenNoPreviousFailure_FailsWithServiceDown()
     {
@@ -55,8 +50,6 @@ public class RegisterCrmEntityTests: TestBase
         {
             Logger = LoggerFactory.CreateLogger("test"),
         };
-        
-        // var env = new ActivityEnvironment(Logger = LoggerFactory.CreateLogger("d"));
         await Assert.ThrowsAsync<HttpRequestException>(async () =>
         {
             await env.RunAsync(() => handlers.RegisterCrmEntity(args));

@@ -4,6 +4,7 @@ using Temporalio.Activities;
 
 namespace Temporal.Curriculum.Activities.Domain.Integrations;
 
+// Handlers wraps underlying integrations clients to meet Workflow singular message contracts
 public class Handlers
 {
     private readonly ICrmClient _crmClient;

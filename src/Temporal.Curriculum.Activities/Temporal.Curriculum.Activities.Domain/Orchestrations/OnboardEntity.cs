@@ -1,3 +1,4 @@
+using Temporal.Curriculum.Activities.Messages.Commands;
 using Temporal.Curriculum.Activities.Messages.Orchestrations;
 using Temporalio.Exceptions;
 using Temporalio.Workflows;
@@ -53,7 +54,11 @@ public class OnboardEntity : IOnboardEntity
     public async Task ExecuteAsync(OnboardEntityRequest args)
     {
         AssertValidRequest(args);
-        
+
+        await Workflow.ExecuteActivityAsync("RegisterCrmEntity", new []{new RegisterCrmEntityRequest(args.Id, args.Value)}, new ActivityOptions()
+        {
+            StartToCloseTimeout = TimeSpan.FromSeconds(5),
+        });
         // ignore. more business logic to come
         await Workflow.DelayAsync(10000);
     }
