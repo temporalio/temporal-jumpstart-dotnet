@@ -1,6 +1,6 @@
-using Temporal.Curriculum.Workflows.Domain.Clients;
+using Temporal.Curriculum.Activities.Domain.Clients;
 
-namespace Temporal.Curriculum.Workflows.Domain;
+namespace Temporal.Curriculum.Activities.Domain;
 
 public class Program
 {
