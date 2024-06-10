@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Temporal.Curriculum.Activities.Messages.Orchestrations;
 
-public class OnboardEntityRequest
+public record OnboardEntityRequest
 {
     public OnboardEntityRequest()
     {

@@ -1,6 +1,6 @@
 namespace Temporal.Curriculum.Workflows.Messages.API;
 
-public class OnboardingsPut
+public record OnboardingsPut
 {
     public required string Value { get; set; }
 }

@@ -1,15 +1,17 @@
 namespace Temporal.Curriculum.Activities.Messages.Commands;
 
-public class RegisterCrmEntityRequest
+public record RegisterCrmEntityRequest
 {
     public string Id { get; set;  }
     public string Value { get; set;  }
-    public string Type { get; set;  }
 
-    public RegisterCrmEntityRequest(string id, string value, string type)
+    public RegisterCrmEntityRequest(string id, string value)
     {
         Id = id;
         Value = value;
-        Type = type;
+    }
+
+    public RegisterCrmEntityRequest()
+    {
     }
 }
