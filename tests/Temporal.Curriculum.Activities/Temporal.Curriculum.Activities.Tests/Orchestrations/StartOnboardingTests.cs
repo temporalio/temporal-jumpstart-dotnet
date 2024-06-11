@@ -40,10 +40,12 @@ public class StartOnboardingTests : TestBase
         await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
         var args = new OnboardEntityRequest(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
         RegisterCrmEntityRequest entityRegistered = null;
+
+        var workerOptions = new TemporalWorkerOptions("test");
+        workerOptions.AddWorkflow<OnboardEntity>();
         
-        
-        /* couple ways to mock the activity.
-         here is an inline example
+        /* There are a number of ways to mock the activity.
+         Here is an inline example
          */
         [Activity]
         Task RegisterCrmEntity(RegisterCrmEntityRequest req)
@@ -51,24 +53,21 @@ public class StartOnboardingTests : TestBase
             entityRegistered = req;
             return  Task.CompletedTask;
         }
+        workerOptions.AddActivity(RegisterCrmEntity);
 
-        /* here we can create an activity definition */
+        /* Or here we can create an activity definition */
         var act = [Activity("RegisterCrmEntity")] (RegisterCrmEntityRequest req) =>
         {
             entityRegistered = req;
             return Task.CompletedTask;
         };
+        // workerOptions.AddActivity(act);
 
         using var worker = new TemporalWorker(
             env.Client,
-            new TemporalWorkerOptions("test").AddWorkflow<OnboardEntity>()
-                // .AddActivity(act)
-                .AddActivity(RegisterCrmEntity));
-
-        foreach (var def in worker.Options.Activities)
-        {
-            Console.WriteLine(def.Name);
-        }
+            workerOptions
+        );
+        
         await worker.ExecuteAsync(async () =>
         {
             await env.Client.ExecuteWorkflowAsync(

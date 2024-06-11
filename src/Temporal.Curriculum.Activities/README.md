@@ -37,7 +37,8 @@ Here, we want to verify the `Entity` does not already exist in the CRM before at
 _Test-Drive our `RegisterCrmEntity` Activity`_
 
 Let's use our first Activity test to drive out all the third-party Clients, Integrations packages,
-and establish the message contracts for our first Activity.
+and establish the message contracts for our first Activity. 
+We will create Namespaces for each of our third-party client dependencies we plan on using in our Activity Handlers.
 
 _Introduce `Messages.Commands`_
 
