@@ -1,3 +1,4 @@
+using Temporal.Curriculum.Activities.Domain.Integrations;
 using Temporal.Curriculum.Activities.Messages.Commands;
 using Temporal.Curriculum.Activities.Messages.Orchestrations;
 using Temporalio.Exceptions;
@@ -50,15 +51,25 @@ public class OnboardEntity : IOnboardEntity
             throw new ApplicationFailureException("OnboardEntity.Id and OnboardEntity.Value is required");
         }
     }
+
     [WorkflowRun]
     public async Task ExecuteAsync(OnboardEntityRequest args)
     {
         AssertValidRequest(args);
-
-        await Workflow.ExecuteActivityAsync("RegisterCrmEntity", new []{new RegisterCrmEntityRequest(args.Id, args.Value)}, new ActivityOptions()
+        
+        var opts = new ActivityOptions()
         {
             StartToCloseTimeout = TimeSpan.FromSeconds(5),
-        });
+        };
+
+        /*
+         // During TDD for a Workflow definition it is handy to Execute the activity by its Name as seen here.
+         // Now that we have implemented the Activity, though, we will replace it with the strongly typed invocation.
+            await Workflow.ExecuteActivityAsync("RegisterCrmEntity", new []{new RegisterCrmEntityRequest(args.Id, args.Value)}, opts);
+        */
+        await Workflow.ExecuteActivityAsync((Handlers act) => 
+            act.RegisterCrmEntity(new(args.Id, args.Value)),
+            opts);
         // ignore. more business logic to come
         await Workflow.DelayAsync(10000);
     }

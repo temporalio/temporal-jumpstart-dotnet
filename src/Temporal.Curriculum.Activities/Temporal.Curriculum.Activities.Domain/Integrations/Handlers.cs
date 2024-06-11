@@ -14,6 +14,7 @@ public class Handlers
         _crmClient = crmClient;
     }
 
+    [Activity]
     public async Task RegisterCrmEntity(RegisterCrmEntityRequest args)
     {
         var logger = ActivityExecutionContext.Current.Logger;
