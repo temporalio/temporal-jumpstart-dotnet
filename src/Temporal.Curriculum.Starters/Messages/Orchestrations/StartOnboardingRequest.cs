@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Temporal.Curriculum.Starters.Messages.Orchestrations;
 
-public class StartOnboardingRequest
+public record StartOnboardingRequest
 {
     public StartOnboardingRequest()
     {

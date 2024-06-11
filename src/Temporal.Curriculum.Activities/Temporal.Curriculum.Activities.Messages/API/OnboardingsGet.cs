@@ -1,6 +1,6 @@
-using Temporal.Curriculum.Workflows.Messages.Orchestrations;
+using Temporal.Curriculum.Activities.Messages.Orchestrations;
 
-namespace Temporal.Curriculum.Workflows.Messages.API;
+namespace Temporal.Curriculum.Activities.Messages.API;
 
 public record OnboardingsGet
 {

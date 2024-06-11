@@ -1,0 +1,6 @@
+@Temporal.Curriculum.Activities.Api_HostAddress = http://localhost:5227
+
+GET {{Temporal.Curriculum.Activities.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace Temporal.Curriculum.Workflows.Messages.Orchestrations;
+namespace Temporal.Curriculum.Activities.Messages.Orchestrations;
 
 public record OnboardEntityRequest
 {

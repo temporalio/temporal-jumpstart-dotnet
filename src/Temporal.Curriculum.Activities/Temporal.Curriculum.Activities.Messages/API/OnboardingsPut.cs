@@ -1,4 +1,4 @@
-namespace Temporal.Curriculum.Workflows.Messages.API;
+namespace Temporal.Curriculum.Activities.Messages.API;
 
 public record OnboardingsPut
 {
