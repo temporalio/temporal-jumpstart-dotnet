@@ -1,6 +1,7 @@
 using Temporal.Curriculum.Activities.Domain.Integrations;
 using Temporal.Curriculum.Activities.Messages.Commands;
 using Temporal.Curriculum.Activities.Messages.Orchestrations;
+using Temporalio.Api.Enums.V1;
 using Temporalio.Exceptions;
 using Temporalio.Workflows;
 
@@ -55,6 +56,7 @@ public class OnboardEntity : IOnboardEntity
     [WorkflowRun]
     public async Task ExecuteAsync(OnboardEntityRequest args)
     {
+        var logger = Workflow.Logger;
         AssertValidRequest(args);
         
         var opts = new ActivityOptions()
@@ -62,14 +64,28 @@ public class OnboardEntity : IOnboardEntity
             StartToCloseTimeout = TimeSpan.FromSeconds(5),
         };
 
-        /*
-         // During TDD for a Workflow definition it is handy to Execute the activity by its Name as seen here.
-         // Now that we have implemented the Activity, though, we will replace it with the strongly typed invocation.
-            await Workflow.ExecuteActivityAsync("RegisterCrmEntity", new []{new RegisterCrmEntityRequest(args.Id, args.Value)}, opts);
-        */
-        await Workflow.ExecuteActivityAsync((Handlers act) => 
-            act.RegisterCrmEntity(new(args.Id, args.Value)),
-            opts);
+        try
+        {
+            /*
+             // During TDD for a Workflow definition it is handy to Execute the activity by its Name as seen here.
+             // Now that we have implemented the Activity, though, we will replace it with the strongly typed invocation.
+                await Workflow.ExecuteActivityAsync("RegisterCrmEntity", new []{new RegisterCrmEntityRequest(args.Id, args.Value)}, opts);
+            */
+            await Workflow.ExecuteActivityAsync((Handlers act) =>
+                    act.RegisterCrmEntity(new(args.Id, args.Value)),
+                opts);
+        }
+        catch (ActivityFailureException e)
+        {
+            logger.LogError(e.InnerException, "this is the Inner");
+            if (e.RetryState == RetryState.NonRetryableFailure)
+            {
+                logger.LogError($"NonRetryable failure: {((ApplicationFailureException)e.GetBaseException()).ErrorType}");
+            }
+
+            throw;
+        }
+
         // ignore. more business logic to come
         await Workflow.DelayAsync(10000);
     }
