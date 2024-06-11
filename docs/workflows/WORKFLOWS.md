@@ -39,6 +39,8 @@ This is where we start get into the implementation of the Workflow Interface and
 
 What about my dependencies? Can I pass a Logger to my Workflow? I also need to connect to a database from my Workflow, how do I do that? Remember in the previous section when we talked about determinism as well as serialization? Input and output parameters to the Workflow have to be Serializable, so that leaves out handlers to resources like loggers and databases. Having these handlers directly in the Workflow code will likely break determinism since there are typically side effects you cannot be in control of. Specifically for a logger, we have our own deterministic version of a logger that can be used inside a Workflow. The exact implementation differs per SDK, so check our SDK documentation. Database connections should not be made inside of a Workflow, they should only be made inside Activities. We will cover Activities in the next section of the class.
 
+We have mentioned previously that return parameters need to be Serializable, but beyond that we have recommendations that will make your design easier to maintain as well as maintaining Command-Query segregation. What does this mean? This means that Worfklows should have a single responsibility. They should either be responsible for performing actions in the system/mutating state (Command) or they should be responsible for getting data out of the system (Query). Command Workflows should not return parameters. Any changes to Workflow state should be retrieved via a Query into that Workflow.
+
 
 
 
