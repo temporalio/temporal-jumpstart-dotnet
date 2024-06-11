@@ -20,7 +20,7 @@ Most of the SDKs Temporal supports have popular test frameworks and we make a re
 
 
 ## Feedback Loop
-The Feedback Loop is software testing is the iterative approach to developing software. Write a test, let it fail and then write the code to make the test pass. This methodology forces developers to both ensure your code is tested thoroughly and also that you are not writing extraneous code.
+The Feedback Loop in software testing is the iterative approach to developing software. Write a test, let it fail and then write the code to make the test pass. This methodology forces developers to both ensure your code is tested thoroughly and also that you are not writing extraneous code.
 
 ### Orchestration Test
 The first step in the Feedback Loop is to write an Orchestration test.
