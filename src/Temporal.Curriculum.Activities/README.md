@@ -65,4 +65,17 @@ Should we just let the default retry policy of "try forever" happen?
 Or should we instead only try registering the Entity for a period of time before doing something else?
 Maybe we want to keep retrying but gradually backoff to ease pressure on our CRM service?
 
+### NonRetryable Errors
+
+You can give Temporal hints about which `ErrorType` should not cause a Retry when invoking an Activity.
+There are two "sides" to configure these (string) `ErrorType` exclusions. 
+Which you do, depends on who "owns" the retry rule. 
+
+1. **_Workflow Owner_** : When calling the activity *from the Workflow* you can provide the `ErrorType` as one of the `NonRetryableErrorTypes` 
+   1. This is useful when the Workflow wants to enforce some kind of compensation logic or short-circuiting within a time span.
+   2. Avoid coupling Workflow execution path to low-level exceptions that should be more generalized in your Activities. 
+2. **_Activity Owner_** : When an Activity raises an `ApplicationFailureException` and sets the `nonRetryable` flag to `true`
+   1. This is useful if your Activity knows it will never recover and so will cause a stuck Workflow.
+   2. A Workflow author should often not be coupled to such low-level concerns so the Activity can own this rule.
+   3. Avoid coupling Activity retryability to some assumption about how it is being executed. Setting this flag from the Activity should be reserved for cases where it will never succeed.
 
