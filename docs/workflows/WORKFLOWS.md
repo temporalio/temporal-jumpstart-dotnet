@@ -37,6 +37,7 @@ This is where we start get into the implementation of the Workflow Interface and
 | Typescript   | Just a Typescript function | [Develop a Workflow](https://docs.temporal.io/develop/typescript/core-application#develop-workflows) |
 | PHP          | Workflow Interface class with ```#[WorkflowInterface]``` annotation and an implementation class | [Develop a Workflow](https://docs.temporal.io/develop/php/core-application#develop-workflows) |
 
+What about my dependencies? Can I pass a Logger to my Workflow? I also need to connect to a database from my Workflow, how do I do that? Remember in the previous section when we talked about determinism as well as serialization? Input and output parameters to the Workflow have to be Serializable, so that leaves out handlers to resources like loggers and databases. Having these handlers directly in the Workflow code will likely break determinism since there are typically side effects you cannot be in control of. Specifically for a logger, we have our own deterministic version of a logger that can be used inside a Workflow. The exact implementation differs per SDK, so check our SDK documentation. Database connections should not be made inside of a Workflow, they should only be made inside Activities. We will cover Activities in the next section of the class.
 
 
 
