@@ -1,4 +1,4 @@
-namespace Temporal.Curriculum.Activities.Domain.Clients;
+namespace Temporal.Curriculum.Activities.Domain.Clients.Temporal;
 
 public class WorkerConfig
 {

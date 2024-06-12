@@ -20,6 +20,16 @@ Let's continue doing top-down development by first Executing this activity in ou
 3. Update the `OnboardEntity` Workflow to invoke the `RegisterCrmEntity` activity.
 4. See it succeed in the tests.
 
+### TaskQueue assignment
+
+Temporal will schedule Activity tasks on the same TaskQueue as the Workflow that executes it by default.
+Task Queue assignment, done through Activity Options, is useful especially when:
+
+* You need to target a specific host because of the resources the Activity needs or due to cost.
+* The underlying behavior in the Activity requires some kind of rate-limiting.
+* Multi-tenancy segregation is required in your deployment scheme; for example, giving some tenants higher priority than others due to business classification. 
+* You want to "intercept" work to run in other environments dynamically.
+
 ## Activity: Implement our first Activity
 
 Let's introduce the `RegisterCrmEntity` Activity implementation.
@@ -79,3 +89,15 @@ Which you do, depends on who "owns" the retry rule.
    2. A Workflow author should often not be coupled to such low-level concerns so the Activity can own this rule.
    3. Avoid coupling Activity retryability to some assumption about how it is being executed. Setting this flag from the Activity should be reserved for cases where it will never succeed.
 
+## Try It Out
+
+Ensuring you are using either `cloud` or `local` launchSettings for both services:
+
+1. Run the `Api` Program.
+2. Run the `Domain` Program .
+3. Visit the Swagger UI and 
+   1. `PUT` a `/onboardings/{id}` request.
+      1. Note that if you include `timeout` text in the `value` you can simulate a Workflow failure when trying to "RegisterCrmEntity"
+   2. `GET` a `/onboardings/{id}` request (using the ID you provided)
+      1. See the response includes the Workflow Status 
+4. Visit the Temporal Web UI and verify that the Workflow has Completed or Failed as expected.

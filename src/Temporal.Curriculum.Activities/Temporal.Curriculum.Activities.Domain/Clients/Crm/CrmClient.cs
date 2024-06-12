@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 
-namespace Temporal.Curriculum.Activities.Domain.Clients;
+namespace Temporal.Curriculum.Activities.Domain.Clients.Crm;
 
 public class CrmEntityNotFoundException: Exception {
     public CrmEntityNotFoundException()
@@ -16,6 +16,25 @@ public class CrmEntityNotFoundException: Exception {
     }
 
     public CrmEntityNotFoundException(string? message, Exception? innerException) : base(message, innerException)
+    {
+    }
+}
+
+public class CrmEntityExistsException : Exception
+{
+    public CrmEntityExistsException()
+    {
+    }
+
+    protected CrmEntityExistsException(SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+    }
+
+    public CrmEntityExistsException(string? message) : base(message)
+    {
+    }
+
+    public CrmEntityExistsException(string? message, Exception? innerException) : base(message, innerException)
     {
     }
 }

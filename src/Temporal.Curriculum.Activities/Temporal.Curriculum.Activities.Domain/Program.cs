@@ -1,4 +1,6 @@
 using Temporal.Curriculum.Activities.Domain.Clients;
+using Temporal.Curriculum.Activities.Domain.Clients.Crm;
+using Temporal.Curriculum.Activities.Domain.Clients.Temporal;
 
 namespace Temporal.Curriculum.Activities.Domain;
 
@@ -15,9 +17,12 @@ public class Program
             .AddJsonFile(Path.GetFullPath($"../../../config/appsettings.{builder.Environment.EnvironmentName}.json"))
             .AddEnvironmentVariables().Build();
         builder.Services.Configure<TemporalConfig>(builder.Configuration.GetSection("Temporal"));
-        // builder.Configuration.AddJsonFile()
         builder.Services.AddOptions<TemporalConfig>().BindConfiguration("Temporal");
         builder.Services.AddSingleton<ITemporalClientFactory, TemporalClientFactory>();
+        
+        // add our stubbed services
+        builder.Services.AddSingleton<ICrmClient, InMemoryCrmClient>();
+        
         builder.Services.AddHostedService<Worker>();
         var host = builder.Build();
         // run the app

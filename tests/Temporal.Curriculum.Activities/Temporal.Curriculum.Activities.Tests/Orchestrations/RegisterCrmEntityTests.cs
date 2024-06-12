@@ -1,4 +1,5 @@
 using Temporal.Curriculum.Activities.Domain.Clients;
+using Temporal.Curriculum.Activities.Domain.Clients.Crm;
 using Temporal.Curriculum.Activities.Domain.Integrations;
 using Temporal.Curriculum.Activities.Messages.Commands;
 using Temporalio.Testing;
