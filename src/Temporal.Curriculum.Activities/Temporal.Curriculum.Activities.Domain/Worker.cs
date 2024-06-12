@@ -1,4 +1,7 @@
 using Temporal.Curriculum.Activities.Domain.Clients;
+using Temporal.Curriculum.Activities.Domain.Clients.Crm;
+using Temporal.Curriculum.Activities.Domain.Clients.Temporal;
+using Temporal.Curriculum.Activities.Domain.Integrations;
 using Temporal.Curriculum.Activities.Domain.Orchestrations;
 using Temporalio.Worker;
 
@@ -24,10 +27,14 @@ public class Worker : IHostedService
         var client = await _temporalClientFactory.CreateClientAsync();
         // Run worker until cancelled
         Console.WriteLine("Running worker");
+        var crmClient = new InMemoryCrmClient();
+        var integrationHandlers = new Handlers(crmClient);
         using var worker = new TemporalWorker(
             client,
-            new TemporalWorkerOptions(_temporalClientFactory.GetConfig().Worker.TaskQueue).
-                AddWorkflow<OnboardEntity>());
+            new TemporalWorkerOptions(_temporalClientFactory.GetConfig().Worker.TaskQueue)
+                .AddWorkflow<OnboardEntity>()
+                .AddAllActivities(integrationHandlers)
+            );
         try
         {
             await worker.ExecuteAsync(cancellationToken);

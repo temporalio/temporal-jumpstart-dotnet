@@ -2,6 +2,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Temporal.Curriculum.Activities.Api.Middleware;
+using Temporal.Curriculum.Activities.Domain.Clients.Temporal;
 
 namespace Temporal.Curriculum.Activities.Api;
 
