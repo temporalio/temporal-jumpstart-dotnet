@@ -21,7 +21,7 @@ public class InMemoryCrmClient: ICrmClient
 
         if (value.Contains("timeout"))
         {
-            throw new TaskCanceledException($"Timeout spoofed for {id} because {value}");
+            throw new TaskCanceledException($"Timeout spoofed for {id} because {value}", null, new CancellationToken(true));
         }
 
         if (!_database.TryAdd(id, value))
@@ -42,7 +42,7 @@ public class InMemoryCrmClient: ICrmClient
 
         if (id.Contains("timeout"))
         {
-            throw new TaskCanceledException($"Timeout spoofed for {id}");
+            throw new TaskCanceledException($"Timeout spoofed for {id}", null, new CancellationToken(true));
         }
         throw new CrmEntityNotFoundException($"Entity {id} not found");
     }
