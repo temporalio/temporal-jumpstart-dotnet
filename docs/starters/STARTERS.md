@@ -1,5 +1,5 @@
 # Temporal Jump Start -- Starters
-We will demonstrate programmatic start/execution of a Workflow in Temporal. We will also discuss decisions that need to be made before you start development. 
+There are several ways to start a Workflow Execution in Temporal. In this section, we will discuss those methods along with the pros and cons of each. We will also demonstrate programmatic start/execution of a Workflow in Temporal and discuss decisions that need to be made before you start development. 
 
 ## Workflow Execution
 There are several ways to execute a Temporal Workflow. What is the best way to execute your Workflow from a UX perspective based on your use case?
