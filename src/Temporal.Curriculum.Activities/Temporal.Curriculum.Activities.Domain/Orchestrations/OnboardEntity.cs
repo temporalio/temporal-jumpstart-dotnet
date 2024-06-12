@@ -62,6 +62,12 @@ public class OnboardEntity : IOnboardEntity
         var opts = new ActivityOptions()
         {
             StartToCloseTimeout = TimeSpan.FromSeconds(5),
+            // Targetting a specific TaskQueue for Activities is useful if you have hosts that run expensive hardware, 
+            // need rate limiting provided by the Temporal service, or access to resources at those hosts in isolation.
+            // Prefer using TaskQueue assignment for strategic reasons; that is, split things up when you really need it.
+            // The TaskQueue assignment done here is redundant since by default Activities will be executed that are subscribed
+            // to the TaskQueue this Workflow execution is using. 
+            TaskQueue = Workflow.Info.TaskQueue,
         };
 
         try
