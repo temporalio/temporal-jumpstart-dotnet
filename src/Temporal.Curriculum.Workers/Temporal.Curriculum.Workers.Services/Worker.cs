@@ -35,10 +35,14 @@ public class Worker : IHostedService
         var integrationHandlers = new Handlers(crmClient);
         var opts = new TemporalWorkerOptions(_temporalConfig.Worker.TaskQueue)
         {
+            // Pollers ask for work if Executors are available
             MaxConcurrentActivityTaskPolls = _temporalConfig.Worker.Capacity.MaxConcurrentActivityTaskPollers,
-            MaxConcurrentActivities = _temporalConfig.Worker.Capacity.MaxConcurrentActivityExecutors,
             MaxConcurrentWorkflowTaskPolls =_temporalConfig.Worker.Capacity.MaxConcurrentWorkflowTaskPollers,
+            // Executors do the work the Pollers hand them
             MaxConcurrentWorkflowTasks = _temporalConfig.Worker.Capacity.MaxConcurrentWorkflowTaskExecutors,
+            MaxConcurrentActivities = _temporalConfig.Worker.Capacity.MaxConcurrentActivityExecutors,
+            MaxConcurrentLocalActivities = _temporalConfig.Worker.Capacity.MaxConcurrentLocalActivityExecutors,
+            // Rate Limiting configuration
             MaxActivitiesPerSecond = _temporalConfig.Worker.RateLimits.MaxWorkerActivitiesPerSecond,
             MaxTaskQueueActivitiesPerSecond = _temporalConfig.Worker.RateLimits.MaxTaskQueueActivitiesPerSecond,
         };

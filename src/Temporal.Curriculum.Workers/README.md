@@ -6,6 +6,10 @@
 - Understand high level about Executors and Pollers to guide Worker configuration and deployment
 - Run the Worker with our Workflow and Activity registered 
 
+## Worker Fundamentals
+
+![Worker fundamentals](worker.png)
+
 ## Try It Out
 
 Ensuring you are using either `cloud` or `local` launchSettings for both services:
