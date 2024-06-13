@@ -1,7 +1,7 @@
-using Temporal.Curriculum.Activities.Domain.Clients.Crm;
-using Temporal.Curriculum.Activities.Domain.Clients.Temporal;
+using Temporal.Curriculum.Workers.Domain.Clients.Crm;
+using Temporal.Curriculum.Workers.Domain.Clients.Temporal;
 
-namespace Temporal.Curriculum.Activities.Domain;
+namespace Temporal.Curriculum.Workers.Services;
 
 public class Program
 {
