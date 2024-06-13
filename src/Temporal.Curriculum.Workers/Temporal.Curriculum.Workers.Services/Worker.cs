@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Options;
 using Temporal.Curriculum.Workers.Domain.Clients.Crm;
 using Temporal.Curriculum.Workers.Domain.Clients.Temporal;
 using Temporal.Curriculum.Workers.Domain.Integrations;
@@ -14,10 +15,14 @@ public class Worker : IHostedService
 {
     private readonly ILogger<Worker> _logger;
     private readonly ITemporalClientFactory _temporalClientFactory;
+    private readonly TemporalConfig _temporalConfig;
+
     public Worker(ILogger<Worker> logger, 
+        IOptions<TemporalConfig> temporalConfig,
         ITemporalClientFactory temporalClientFactory)
     {
         _logger = logger;
+        _temporalConfig = temporalConfig.Value;
         _temporalClientFactory = temporalClientFactory;
     }
 
@@ -28,9 +33,18 @@ public class Worker : IHostedService
         Console.WriteLine("Running worker");
         var crmClient = new InMemoryCrmClient();
         var integrationHandlers = new Handlers(crmClient);
+        var opts = new TemporalWorkerOptions(_temporalConfig.Worker.TaskQueue)
+        {
+            MaxConcurrentActivityTaskPolls = _temporalConfig.Worker.Capacity.MaxConcurrentActivityTaskPollers,
+            MaxConcurrentActivities = _temporalConfig.Worker.Capacity.MaxConcurrentActivityExecutors,
+            MaxConcurrentWorkflowTaskPolls =_temporalConfig.Worker.Capacity.MaxConcurrentWorkflowTaskPollers,
+            MaxConcurrentWorkflowTasks = _temporalConfig.Worker.Capacity.MaxConcurrentWorkflowTaskExecutors,
+            MaxActivitiesPerSecond = _temporalConfig.Worker.RateLimits.MaxWorkerActivitiesPerSecond,
+            MaxTaskQueueActivitiesPerSecond = _temporalConfig.Worker.RateLimits.MaxTaskQueueActivitiesPerSecond,
+        };
+
         using var worker = new TemporalWorker(
-            client,
-            new TemporalWorkerOptions(_temporalClientFactory.GetConfig().Worker.TaskQueue)
+            client,opts
                 .AddWorkflow<OnboardEntity>()
                 .AddAllActivities(integrationHandlers)
             );
