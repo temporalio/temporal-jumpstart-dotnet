@@ -60,111 +60,18 @@ public class Program
         builder.Services.AddSingleton<ICrmClient, InMemoryCrmClient>();
 
         // configure our Worker
-        builder.Services.AddHostedTemporalWorker( temporalConfig.Worker.TaskQueue, null)
-            .ConfigureOptions(o =>
-            {
-                o.ConfigureService(temporalConfig);
-            })
+        builder.Services.AddHostedTemporalWorker(temporalConfig.Worker.TaskQueue, null)
+            .ConfigureOptions(o => { o.ConfigureService(temporalConfig); })
             .AddScopedActivities<Handlers>()
             .AddWorkflow<OnboardEntity>();
-        
+
         var host = builder.Build();
-        Console.WriteLine("Starting worker...");
+        var lf = host.Services.GetService<ILoggerFactory>();
+        Debug.Assert(lf != null);
+        var logger = lf.CreateLogger<Program>();
+        logger.LogInformation("Starting Temporal Worker connecting to "+
+                              $"Namespace '{temporalConfig.Connection.Namespace}@{temporalConfig.Connection.Target}'" +
+                              $" subscribed to TaskQueue: '{temporalConfig.Worker.TaskQueue}'");
         await host.RunAsync();
-        
-//      
-        // builder.Services.AddOptions<TemporalConfig>().BindConfiguration("Temporal");
-
-        
-           // builder.Services.AddSingleton<ICrmClient, InMemoryCrmClient>((ctx, svc) => {});
-//         builder.Services.add
-//         builder.Services.AddScoped<Handlers>();
-//         builder.Services.AddSingleton<object>((ctx) =>
-//         {
-//             var opts = ctx.GetRequiredService<IOptions<TemporalConfig>>();
-//             var cfg = opts.Value;
-//             builder.Services.AddHostedTemporalWorker(cfg.Connection.Target).ConfigureOptions(o =>
-//             {
-//                 o.ClientOptions = new TemporalClientConnectOptions(cfg.Connection.Target)
-//             });
-//                 
-//                 ConfigureOptions(o =>
-//             {
-//                 o.ClientOptions.Namespace = cfg.Connection.Namespace;
-//                 o.ClientOptions.Tls = new TlsOptions()
-//                 {
-//                     ClientCert = cfg.Connection.Mtls.CertChainFile;
-//                 }
-//             });
-//         })
-//         builder.Services.AddHostedTemporalWorker()
-//         builder.Services.AddTemporalClient() 
-//         hostBuilder.Configuration
-//         hostBuilder.ConfigureLogging(ctx => ctx.AddSimpleConsole().SetMinimumLevel(LogLevel.Information))
-//             .ConfigureHostConfiguration(b =>
-//             {
-//                 b.AddJsonFile(
-//                         Path.GetFullPath($"../../../config/appsettings.{builder.Environment.EnvironmentName}.json"))
-//                     .AddEnvironmentVariables().Build();
-//             })
-//             .ConfigureServices(ctx =>
-//             {
-//                 ctx.
-//                 ctx.Configure<TemporalConfig>(ctx.Configuration.GetSection("Temporal"));
-//                 ctx.AddOptions<TemporalConfig>().BindConfiguration("Temporal");
-//             })
-//             
-//             
-//             .ConfigureServices(ctx =>
-//             {
-//                 c
-//             })
-//         var builder = Host.CreateApplicationBuilder(args);
-// // Add a hosted Temporal worker which returns a builder to add activities and workflows
-//         builder.Services.
-//             AddTemporalClient(c =>
-//             {
-//                 cfg = builder.Services.
-//                 
-//             }).
-//             AddHostedTemporalWorker(
-//                 "my-temporal-host:7233",
-//                 "my-namespace",
-//                 "my-task-queue").
-//             AddScopedActivities<MyActivityClass>().
-//             AddWorkflow<MyWorkflow>();
-//
-//         var b= hostBuilder.Build();
-// // Make sure you use RunAsync and not Run, see https://github.com/temporalio/sdk-dotnet/issues/220
-//         await hostBuilder.RunAsync();
     }
-    public static void RunApp(string[] args)
-    {
-        
-        // var builder = Host.CreateApplicationBuilder(args);
-        // builder.Logging.AddConsole();
-        //
-        // // DOTNET_ENVIRONMENT variable isnt working with appsettings files so we are being explicit here
-        // builder.Configuration
-        //     .AddJsonFile(Path.GetFullPath($"../../../config/appsettings.{builder.Environment.EnvironmentName}.json"))
-        //     .AddEnvironmentVariables().Build();
-        // builder.Services.Configure<TemporalConfig>(builder.Configuration.GetSection("Temporal"));
-        // builder.Services.AddOptions<TemporalConfig>().BindConfiguration("Temporal");
-        // builder.Services.AddSingleton<ITemporalClientFactory, TemporalClientFactory>((ctx) =>
-        // {
-        // });
-        // builder.Services.AddHostedTemporalWorker("","","","")
-        // builder.Services.AddScoped<>()
-        // // add our stubbed services
-        // builder.Services.AddSingleton<ICrmClient, InMemoryCrmClient>();
-        //
-        // builder.Services.AddScoped<>()
-        //
-        // builder.Services.AddHostedService<Worker>();
-        // var host = builder.Build();
-        // // run the app
-        // host.Run();
-    }
-   
-
 }
