@@ -1,11 +1,11 @@
+using System.Diagnostics;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.Extensions.Options;
 using Temporal.Curriculum.Starters.Clients;
 using Temporal.Curriculum.Starters.Config;
 using Temporalio.Client;
-using Temporalio.Extensions.Hosting;
+
 namespace Temporal.Curriculum.Starters;
 
 public class Startup
@@ -20,39 +20,31 @@ public class Startup
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<TemporalConfig>(Configuration.GetSection("Temporal"));
+            const string temporalConfigSection = "Temporal";
+            var temporalConfig = Configuration.GetRequiredSection(temporalConfigSection).Get<TemporalConfig>();
+            Debug.Assert(temporalConfig!=null);
+            services.AddOptions<TemporalConfig>().BindConfiguration(temporalConfigSection);
             services.AddHttpContextAccessor();
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
-            services.AddSingleton( ctx =>
+            services.AddTemporalClient(o =>
             {
-                var config = ctx.GetRequiredService<IOptions<TemporalConfig>>();
-                var loggerFactory = ctx.GetRequiredService<ILoggerFactory>();
-                var logger = loggerFactory.CreateLogger<TemporalClient>();
-                logger.LogInformation("connecting to temporal namespace {config.Connection.Namespace}", config.Value.Connection.Namespace);
-                var opts = new TemporalClientConnectOptions
+                o.Namespace = temporalConfig.Connection.Namespace;
+                o.TargetHost = temporalConfig.Connection.Target;
+                if (temporalConfig.Connection.Mtls != null)
                 {
-                    Namespace = config.Value.Connection.Namespace,
-                    TargetHost = config.Value.Connection.Target,
-                    LoggerFactory = ctx.GetRequiredService<ILoggerFactory>(),
-                };
-                if (config.Value.Connection.Mtls != null)
-                {
-                    logger.LogInformation("using cert from {config.Connection.Mtls.CertChainFile}", config.Value.Connection.Mtls.CertChainFile);
-
-                    opts.Tls = new TlsOptions
+                    o.Tls = new TlsOptions()
                     {
-                        ClientCert =  File.ReadAllBytes(config.Value.Connection.Mtls.CertChainFile),
-                        ClientPrivateKey =  File.ReadAllBytes(config.Value.Connection.Mtls.KeyFile),
+                        ClientCert = File.ReadAllBytes(temporalConfig.Connection.Mtls.CertChainFile),
+                        ClientPrivateKey = File.ReadAllBytes(temporalConfig.Connection.Mtls.KeyFile)
                     };
                 }
-                else
-                {
-                    logger.LogWarning("connections to Temporal are not via mTLS");
-                }
-                
-                return TemporalClient.ConnectAsync(opts);
+            }).Configure<ITemporalClient>(c =>
+            {
+                c.Connection.ConnectAsync();
             });
+           
+            
             services.AddControllers(setupAction =>
                 {
                     setupAction.ReturnHttpNotAcceptable = true;
@@ -141,7 +133,7 @@ public class Startup
         {
             // expose the Temporal Client in the request Features set 
             app.UseTemporalClientHttpMiddleware();
-           
+            
 
             app.UseSwagger();
             app.UseSwaggerUI();

@@ -6,11 +6,11 @@ namespace Temporal.Curriculum.Starters;
 public class Program
 {
 
-    public static void Main(string[] args)
+    public static async  Task Main(string[] args)
     {
         var host = CreateHostBuilder(args).Build();
         // run the web app
-        host.Run();
+        await host.RunAsync();
     }
 
 
