@@ -15,15 +15,18 @@ public class Worker : IHostedService
 {
     private readonly ILogger<Worker> _logger;
     private readonly ITemporalClientFactory _temporalClientFactory;
+    private readonly ICrmClient _crmClient;
     private readonly TemporalConfig _temporalConfig;
 
     public Worker(ILogger<Worker> logger, 
         IOptions<TemporalConfig> temporalConfig,
-        ITemporalClientFactory temporalClientFactory)
+        ITemporalClientFactory temporalClientFactory,
+        ICrmClient crmClient)
     {
         _logger = logger;
         _temporalConfig = temporalConfig.Value;
         _temporalClientFactory = temporalClientFactory;
+        _crmClient = crmClient;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -31,8 +34,7 @@ public class Worker : IHostedService
         var client = await _temporalClientFactory.CreateClientAsync();
         // Run worker until cancelled
         Console.WriteLine("Running worker");
-        var crmClient = new InMemoryCrmClient();
-        var integrationHandlers = new Handlers(crmClient);
+        var integrationHandlers = new Handlers(_crmClient);
         var opts = new TemporalWorkerOptions(_temporalConfig.Worker.TaskQueue)
         {
             // Pollers ask for work if Executors are available
