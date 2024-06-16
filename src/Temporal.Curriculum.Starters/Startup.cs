@@ -29,18 +29,10 @@ public class Startup
             services.AddSwaggerGen();
             services.AddTemporalClient(o =>
             {
-                o.Namespace = temporalConfig.Connection.Namespace;
-                o.TargetHost = temporalConfig.Connection.Target;
-                if (temporalConfig.Connection.Mtls != null)
-                {
-                    o.Tls = new TlsOptions()
-                    {
-                        ClientCert = File.ReadAllBytes(temporalConfig.Connection.Mtls.CertChainFile),
-                        ClientPrivateKey = File.ReadAllBytes(temporalConfig.Connection.Mtls.KeyFile)
-                    };
-                }
+                o.ConfigureClient(temporalConfig);
             }).Configure<ITemporalClient>(c =>
             {
+                // connect when container is built
                 c.Connection.ConnectAsync();
             });
            

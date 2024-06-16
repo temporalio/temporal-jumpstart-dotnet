@@ -2,12 +2,12 @@ using Temporalio.Client;
 
 namespace Temporal.Curriculum.Activities.Api.Middleware;
 
-public class TemporalClientHttpMiddleware(RequestDelegate next, Task<TemporalClient> temporalClientTask)
+public class TemporalClientHttpMiddleware(RequestDelegate next, ITemporalClient temporalClient)
 {
     public async Task Invoke(HttpContext httpContext)
     {
-        var temporalClient = await temporalClientTask;
-        httpContext.Features.Set<ITemporalClient>(temporalClient);
+        await temporalClient.Connection.ConnectAsync();
+        httpContext.Features.Set(temporalClient);
         await next(httpContext);
     }
 }
