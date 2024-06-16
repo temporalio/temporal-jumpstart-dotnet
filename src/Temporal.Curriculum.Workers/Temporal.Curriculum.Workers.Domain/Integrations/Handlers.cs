@@ -16,10 +16,7 @@ public class Handlers
 {
     private readonly ICrmClient _crmClient;
 
-    public Handlers(ICrmClient crmClient)
-    {
-        _crmClient = crmClient;
-    }
+    public Handlers(ICrmClient crmClient) => _crmClient = crmClient;
 
     [Activity]
     public async Task RegisterCrmEntity(RegisterCrmEntityRequest args)
@@ -49,11 +46,14 @@ public class Handlers
                 // For our demonstration, we will show how to make the Activity tell the Workflow not to keep trying; 
                 // but you may want to allow Temporal to keep retrying this API call.
                 if (ex.CancellationToken.IsCancellationRequested)
+                {
                     throw new ApplicationFailureException(
                         ex.Message,
                         ex,
                         Errors.ERR_SERVICE_UNRECOVERABLE,
                         true);
+                }
+
                 throw;
             }
             catch (Exception ex)

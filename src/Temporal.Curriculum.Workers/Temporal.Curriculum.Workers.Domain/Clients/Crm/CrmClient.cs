@@ -8,9 +8,6 @@ public class CrmEntityNotFoundException : Exception
     {
     }
 
-    protected CrmEntityNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context)
-    {
-    }
 
     public CrmEntityNotFoundException(string? message) : base(message)
     {
@@ -26,11 +23,7 @@ public class CrmEntityExistsException : Exception
     public CrmEntityExistsException()
     {
     }
-
-    protected CrmEntityExistsException(SerializationInfo info, StreamingContext context) : base(info, context)
-    {
-    }
-
+    
     public CrmEntityExistsException(string? message) : base(message)
     {
     }
@@ -48,13 +41,7 @@ public interface ICrmClient
 
 public class CrmClient : ICrmClient
 {
-    public Task RegisterCustomerAsync(string id, string value)
-    {
-        throw new NotImplementedException();
-    }
+    public Task RegisterCustomerAsync(string id, string value) => throw new NotImplementedException();
 
-    public Task<string> GetCustomerByIdAsync(string id)
-    {
-        throw new NotImplementedException();
-    }
+    public Task<string> GetCustomerByIdAsync(string id) => throw new NotImplementedException();
 }

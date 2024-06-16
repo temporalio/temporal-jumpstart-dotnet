@@ -10,22 +10,25 @@ public static class TemporalExtensions
     public static TemporalClientConnectOptions ConfigureClient(this TemporalClientConnectOptions? opts,
         TemporalConfig cfg)
     {
-        if (opts == null) opts = new TemporalClientConnectOptions();
+        opts ??= new TemporalClientConnectOptions();
+
         Debug.Assert(cfg.Connection != null, "Connection is required");
         opts.Namespace = cfg.Connection.Namespace;
         opts.TargetHost = cfg.Connection.Target;
 
         if (cfg.Connection.Mtls != null)
-            opts.Tls = new TlsOptions
-            {
+        {
+            opts.Tls = new TlsOptions {
                 ClientCert = File.ReadAllBytes(cfg.Connection.Mtls.CertChainFile),
                 ClientPrivateKey = File.ReadAllBytes(cfg.Connection.Mtls.KeyFile)
             };
+        }
 
         return opts;
     }
 
-    public static TemporalWorkerOptions ConfigureWorker(this TemporalWorkerOptions opts, TemporalConfig cfg)
+    // ReSharper disable once MemberCanBePrivate.Global
+    public static void ConfigureWorker(this TemporalWorkerOptions opts, TemporalConfig cfg)
     {
         opts.UseWorkerVersioning = false;
         // rate limits
@@ -42,15 +45,12 @@ public static class TemporalExtensions
         opts.MaxConcurrentActivityTaskPolls = cfg.Worker.Capacity.MaxConcurrentActivityTaskPollers;
 
         opts.MaxCachedWorkflows = cfg.Worker.Cache.MaxInstances;
-
-        return opts;
     }
 
-    public static TemporalWorkerServiceOptions ConfigureService(this TemporalWorkerServiceOptions opts,
+    public static void ConfigureService(this TemporalWorkerServiceOptions opts,
         TemporalConfig cfg)
     {
         opts.ClientOptions = opts.ClientOptions.ConfigureClient(cfg);
         opts.ConfigureWorker(cfg);
-        return opts;
     }
 }

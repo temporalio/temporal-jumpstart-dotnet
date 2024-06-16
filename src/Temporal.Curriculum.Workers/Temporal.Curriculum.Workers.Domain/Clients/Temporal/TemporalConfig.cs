@@ -2,29 +2,23 @@ namespace Temporal.Curriculum.Workers.Domain.Clients.Temporal;
 
 public static class Defaults
 {
-    internal const int cacheMaxInstances = 1000;
-    internal const int capacityMaxConcurrentWorkflowTaskExecutors = 100;
-    internal const int capacityMaxConcurrentActivityTaskExecutors = 100;
-    internal const int capacityMaxConcurrentLocalActivityExecutors = 100;
-    internal const int capacityMaxConcurrentWorkflowTaskPollers = 5;
-    internal const int capacityMaxConcurrentActivityTaskPollers = 5;
-    internal static double? rateLimitsMaxWorkerActivitiesPerSecond = null;
-    internal static double? rateLImitsMaxTaskQueueActivitiesPerSecond = null;
+    internal const int CacheMaxInstances = 1000;
+    internal const int CapacityMaxConcurrentWorkflowTaskExecutors = 100;
+    internal const int CapacityMaxConcurrentActivityTaskExecutors = 100;
+    internal const int CapacityMaxConcurrentLocalActivityExecutors = 100;
+    internal const int CapacityMaxConcurrentWorkflowTaskPollers = 5;
+    internal const int CapacityMaxConcurrentActivityTaskPollers = 5;
+    internal static double? RateLimitsMaxWorkerActivitiesPerSecond = null;
+    internal static double? RateLImitsMaxTaskQueueActivitiesPerSecond = null;
 }
 
+// ReSharper disable once ClassNeverInstantiated.Global
 public class WorkerConfig
 {
-    public WorkerConfig()
-    {
-        Capacity = CapacityConfig.WithDefaults();
-        RateLimits = RateLimitsConfig.WithDefaults();
-        Cache = CacheConfig.WithDefaults();
-    }
-
     public required string TaskQueue { get; set; }
-    public required CapacityConfig Capacity { get; set; }
-    public required RateLimitsConfig RateLimits { get; set; }
-    public required CacheConfig Cache { get; set; }
+    public required CapacityConfig Capacity { get; set; } = CapacityConfig.WithDefaults();
+    public required RateLimitsConfig RateLimits { get; set; } = RateLimitsConfig.WithDefaults();
+    public required CacheConfig Cache { get; set; } = CacheConfig.WithDefaults();
 }
 
 public class CapacityConfig
@@ -35,17 +29,14 @@ public class CapacityConfig
     public int MaxConcurrentWorkflowTaskPollers { get; set; }
     public int MaxConcurrentActivityTaskPollers { get; set; }
 
-    public static CapacityConfig WithDefaults()
-    {
-        return new CapacityConfig
-        {
-            MaxConcurrentActivityExecutors = Defaults.capacityMaxConcurrentActivityTaskExecutors,
-            MaxConcurrentActivityTaskPollers = Defaults.capacityMaxConcurrentActivityTaskPollers,
-            MaxConcurrentWorkflowTaskExecutors = Defaults.capacityMaxConcurrentWorkflowTaskExecutors,
-            MaxConcurrentLocalActivityExecutors = Defaults.capacityMaxConcurrentLocalActivityExecutors,
-            MaxConcurrentWorkflowTaskPollers = Defaults.capacityMaxConcurrentWorkflowTaskPollers
+    public static CapacityConfig WithDefaults() =>
+        new() {
+            MaxConcurrentActivityExecutors = Defaults.CapacityMaxConcurrentActivityTaskExecutors,
+            MaxConcurrentActivityTaskPollers = Defaults.CapacityMaxConcurrentActivityTaskPollers,
+            MaxConcurrentWorkflowTaskExecutors = Defaults.CapacityMaxConcurrentWorkflowTaskExecutors,
+            MaxConcurrentLocalActivityExecutors = Defaults.CapacityMaxConcurrentLocalActivityExecutors,
+            MaxConcurrentWorkflowTaskPollers = Defaults.CapacityMaxConcurrentWorkflowTaskPollers
         };
-    }
 }
 
 public class RateLimitsConfig
@@ -53,29 +44,22 @@ public class RateLimitsConfig
     public double? MaxWorkerActivitiesPerSecond { get; set; }
     public double? MaxTaskQueueActivitiesPerSecond { get; set; }
 
-    public static RateLimitsConfig WithDefaults()
-    {
-        return new RateLimitsConfig
-        {
-            MaxWorkerActivitiesPerSecond = Defaults.rateLimitsMaxWorkerActivitiesPerSecond,
-            MaxTaskQueueActivitiesPerSecond = Defaults.rateLImitsMaxTaskQueueActivitiesPerSecond
+    public static RateLimitsConfig WithDefaults() =>
+        new() {
+            MaxWorkerActivitiesPerSecond = Defaults.RateLimitsMaxWorkerActivitiesPerSecond,
+            MaxTaskQueueActivitiesPerSecond = Defaults.RateLImitsMaxTaskQueueActivitiesPerSecond
         };
-    }
 }
 
 public class CacheConfig
 {
     public int MaxInstances { get; set; }
 
-    public static CacheConfig WithDefaults()
-    {
-        return new CacheConfig
-        {
-            MaxInstances = Defaults.cacheMaxInstances
-        };
-    }
+    public static CacheConfig WithDefaults() =>
+        new() { MaxInstances = Defaults.CacheMaxInstances };
 }
 
+// ReSharper disable once ClassNeverInstantiated.Global
 public class MtlsConfig
 {
     public required string KeyFile { get; set; }

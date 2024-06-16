@@ -36,8 +36,7 @@ public class OnboardEntity : IOnboardEntity
         var logger = Workflow.Logger;
         AssertValidRequest(args);
 
-        var opts = new ActivityOptions
-        {
+        var opts = new ActivityOptions {
             StartToCloseTimeout = TimeSpan.FromSeconds(5),
             // Targetting a specific TaskQueue for Activities is useful if you have hosts that run expensive hardware, 
             // need rate limiting provided by the Temporal service, or access to resources at those hosts in isolation.
@@ -62,8 +61,11 @@ public class OnboardEntity : IOnboardEntity
         {
             logger.LogError(e.InnerException, "this is the Inner");
             if (e.RetryState == RetryState.NonRetryableFailure)
+            {
                 logger.LogError(
-                    $"NonRetryable failure: {((ApplicationFailureException)e.GetBaseException()).ErrorType}");
+                    string.Format("NonRetryable failure: {0}",
+                        ((ApplicationFailureException)e.GetBaseException()).ErrorType));
+            }
 
             throw;
         }
@@ -72,7 +74,9 @@ public class OnboardEntity : IOnboardEntity
         await Workflow.DelayAsync(10000);
     }
 
+#pragma warning disable CA1822
     private void AssertValidRequest(OnboardEntityRequest args)
+#pragma warning restore CA1822
     {
         if (string.IsNullOrEmpty(args.Id) || string.IsNullOrEmpty(args.Value))
             /*
@@ -91,6 +95,8 @@ public class OnboardEntity : IOnboardEntity
              *
              * Note that `WorkflowFailedException` will count towards the `workflow_failed` SDK Metric (https://docs.temporal.io/references/sdk-metrics#workflow_failed).
              */
+        {
             throw new ApplicationFailureException("OnboardEntity.Id and OnboardEntity.Value is required");
+        }
     }
 }
