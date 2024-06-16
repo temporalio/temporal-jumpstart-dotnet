@@ -3,7 +3,7 @@
 ## Connection setup
 
 - The `appsettings.Cloud.json` has an example of how to connect to Temporal Cloud.
-- The `appsettings.Development.json` has an example of local Temporal connections.
+- The `appsettings.Local.json` has an example of local Temporal connections.
 
 Both support http/https for the `/onboardings` REST API.
 
