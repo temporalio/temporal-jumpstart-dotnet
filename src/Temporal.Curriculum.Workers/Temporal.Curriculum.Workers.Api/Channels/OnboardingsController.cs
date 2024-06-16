@@ -63,14 +63,15 @@ public class OnboardingsController(
             // swallow this exception since this is an PUT (idempotent)
         }
 
-        if (handle != null || alreadyStarted)
+        if (handle == null && !alreadyStarted)
         {
-            // poor man's uri template. prefer RFC 6570 implementation
-            var location = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/onboardings/{id}";
-            return Accepted(location);
+            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }
 
-        return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        // poor man's uri template. prefer RFC 6570 implementation
+        var location = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/onboardings/{id}";
+        return Accepted(location);
+
     }
 
     [HttpGet("{id}")]

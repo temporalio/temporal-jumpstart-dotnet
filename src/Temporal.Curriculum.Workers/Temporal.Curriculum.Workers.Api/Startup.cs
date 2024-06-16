@@ -103,8 +103,11 @@ public class Startup
         app.UseSwagger();
         app.UseSwaggerUI();
         if (env.IsDevelopment())
+        {
             app.UseDeveloperExceptionPage();
+        }
         else
+        {
             app.UseExceptionHandler(appBuilder =>
             {
                 appBuilder.Run(async context =>
@@ -113,6 +116,7 @@ public class Startup
                     await context.Response.WriteAsync("An unexpected fault happened. Try again later.");
                 });
             });
+        }
 
         app.UseRouting();
 
