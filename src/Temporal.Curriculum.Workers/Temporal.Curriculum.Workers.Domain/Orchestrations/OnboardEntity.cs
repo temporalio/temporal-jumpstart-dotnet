@@ -24,10 +24,12 @@ public interface IOnboardEntity
      * 6. Execute RegisterCRMEntity Activity
      *     i. If RegisterCRMEntity cannot succeed, Compensate
      */
+    // ReSharper disable once UnusedMemberInSuper.Global
     Task ExecuteAsync(OnboardEntityRequest args);
 }
 
 [Workflow]
+// ReSharper disable once ClassNeverInstantiated.Global
 public class OnboardEntity : IOnboardEntity
 {
     [WorkflowRun]
@@ -63,8 +65,7 @@ public class OnboardEntity : IOnboardEntity
             if (e.RetryState == RetryState.NonRetryableFailure)
             {
                 logger.LogError(
-                    string.Format("NonRetryable failure: {0}",
-                        ((ApplicationFailureException)e.GetBaseException()).ErrorType));
+                    $"NonRetryable failure: {((ApplicationFailureException)e.GetBaseException()).ErrorType}");
             }
 
             throw;
@@ -74,9 +75,7 @@ public class OnboardEntity : IOnboardEntity
         await Workflow.DelayAsync(10000);
     }
 
-#pragma warning disable CA1822
-    private void AssertValidRequest(OnboardEntityRequest args)
-#pragma warning restore CA1822
+    private static void AssertValidRequest(OnboardEntityRequest args)
     {
         if (string.IsNullOrEmpty(args.Id) || string.IsNullOrEmpty(args.Value))
             /*

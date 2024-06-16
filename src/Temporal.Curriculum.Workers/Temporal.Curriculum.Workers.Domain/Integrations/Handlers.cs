@@ -8,16 +8,13 @@ namespace Temporal.Curriculum.Workers.Domain.Integrations;
 
 public static class Errors
 {
-    public const string ERR_SERVICE_UNRECOVERABLE = "CRM Service is not recoverable";
+    public const string ErrServiceUnrecoverable = "CRM Service is not recoverable";
 }
 
 // Handlers wraps underlying integrations clients to meet Workflow singular message contracts
-public class Handlers
+// ReSharper disable once ClassNeverInstantiated.Global
+public class Handlers(ICrmClient crmClient)
 {
-    private readonly ICrmClient _crmClient;
-
-    public Handlers(ICrmClient crmClient) => _crmClient = crmClient;
-
     [Activity]
     public async Task RegisterCrmEntity(RegisterCrmEntityRequest args)
     {
@@ -26,8 +23,10 @@ public class Handlers
         {
             // Idempotency check - does the Entity already exist?
             // If so, just return
-            var existingEntityValue = await _crmClient.GetCustomerByIdAsync(args.Id);
+            var existingEntityValue = await crmClient.GetCustomerByIdAsync(args.Id);
+#pragma warning disable CA2254
             logger.LogInformation($"Entity {args.Id} already exists as {existingEntityValue}");
+#pragma warning restore CA2254
         }
         catch (CrmEntityNotFoundException)
         {
@@ -36,7 +35,7 @@ public class Handlers
             // for the customer .
             try
             {
-                await _crmClient.RegisterCustomerAsync(args.Id, args.Value);
+                await crmClient.RegisterCustomerAsync(args.Id, args.Value);
             }
             catch (TaskCanceledException ex)
             {
@@ -50,7 +49,7 @@ public class Handlers
                     throw new ApplicationFailureException(
                         ex.Message,
                         ex,
-                        Errors.ERR_SERVICE_UNRECOVERABLE,
+                        Errors.ErrServiceUnrecoverable,
                         true);
                 }
 

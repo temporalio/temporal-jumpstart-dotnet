@@ -8,17 +8,17 @@ public static class Defaults
     internal const int CapacityMaxConcurrentLocalActivityExecutors = 100;
     internal const int CapacityMaxConcurrentWorkflowTaskPollers = 5;
     internal const int CapacityMaxConcurrentActivityTaskPollers = 5;
-    internal static double? RateLimitsMaxWorkerActivitiesPerSecond = null;
-    internal static double? RateLImitsMaxTaskQueueActivitiesPerSecond = null;
+    // internal static double? RateLimitsMaxWorkerActivitiesPerSecond = null;
+    // internal static double? RateLImitsMaxTaskQueueActivitiesPerSecond = null;
 }
 
 // ReSharper disable once ClassNeverInstantiated.Global
 public record WorkerConfig
 {
-    public required string TaskQueue { get; set; }
-    public required CapacityConfig Capacity { get; set; } = new CapacityConfig();
-    public required RateLimitsConfig RateLimits { get; set; } = new RateLimitsConfig();
-    public required CacheConfig Cache { get; set; } = new CacheConfig();
+    public required string TaskQueue { get; init; }
+    public required CapacityConfig Capacity { get; init; } = new();
+    public required RateLimitsConfig RateLimits { get; init; } = new();
+    public required CacheConfig Cache { get; init; } = new();
 }
 
 public record CapacityConfig(
