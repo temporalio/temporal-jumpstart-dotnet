@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Temporal.Curriculum.Workers.Domain.Clients;
 using Temporal.Curriculum.Workers.Domain.Clients.Temporal;
 using Temporal.Curriculum.Workers.Domain.Orchestrations;
 using Temporal.Curriculum.Workers.Messages.API;
