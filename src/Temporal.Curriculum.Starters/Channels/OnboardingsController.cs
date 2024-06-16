@@ -35,7 +35,7 @@ public class OnboardingsController:ControllerBase  {
         // Prefer using AutoMapper or the like for this 
         var args = new List<object>
         {
-            new StartOnboardingRequest(value: req.Value)
+            new OnboardEntityRequest(value: req.Value)
         };
         
         
@@ -84,7 +84,6 @@ public class OnboardingsController:ControllerBase  {
     [Produces("application/json")]
     public async Task<ActionResult<OnboardingsGet>> GetOnboardingStatus(string id)
     {
-        var result = new OnboardingsGet();
         var temporalClient = _httpContextAccessor.HttpContext.Features.GetRequiredFeature<ITemporalClient>();
 
         // this is relatively advanced use of the TemporalClient but is shown here to 
@@ -94,18 +93,24 @@ public class OnboardingsController:ControllerBase  {
         // This module will not overly explain this interaction but will be valuable later when we
         // want to reason about our Executions with more detail.
         var handle = temporalClient.GetWorkflowHandle(id);
-        result.Id = handle.Id;
+        var result = new OnboardingsGet()
+        {
+            Id = handle.Id,
+        };
+
         try
         {
             var describe = await handle.DescribeAsync();
-            result.ExecutionStatus = describe.Status.ToString();
+            result = result with { ExecutionStatus = describe.Status.ToString() };
             var hist = await handle.FetchHistoryAsync();
             var started = hist.Events.First(e => e.EventType == EventType.WorkflowExecutionStarted);
             foreach (var payload in started.WorkflowExecutionStartedEventAttributes.Input.Payloads_)
             {
-                result.Input =
-                    (StartOnboardingRequest?)DataConverter.Default.PayloadConverter.ToValue(payload,
-                        typeof(StartOnboardingRequest)) ?? throw new InvalidOperationException();
+                result = result with
+                {
+                    Input = (OnboardEntityRequest?)DataConverter.Default.PayloadConverter.ToValue(payload,
+                        typeof(OnboardEntityRequest)) ?? throw new InvalidOperationException()
+                };
             }
 
             return Ok(result);

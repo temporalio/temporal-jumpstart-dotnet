@@ -1,16 +1,17 @@
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Temporal.Curriculum.Workflows.Domain.Clients;
-using Temporal.Curriculum.Workflows.Domain.Orchestrations;
-using Temporal.Curriculum.Workflows.Messages.API;
-using Temporal.Curriculum.Workflows.Messages.Orchestrations;
+using Temporal.Curriculum.Workers.Domain.Clients;
+using Temporal.Curriculum.Workers.Domain.Clients.Temporal;
+using Temporal.Curriculum.Workers.Domain.Orchestrations;
+using Temporal.Curriculum.Workers.Messages.API;
+using Temporal.Curriculum.Workers.Messages.Orchestrations;
 using Temporalio.Api.Enums.V1;
 using Temporalio.Client;
 using Temporalio.Converters;
 using Temporalio.Exceptions;
 
-namespace Temporal.Curriculum.Workflows.Api.Channels;
+namespace Temporal.Curriculum.Workers.Api.Channels;
 
 [Route("api/onboardings")]
 [ApiController]
@@ -73,8 +74,47 @@ public class OnboardingsController:ControllerBase  {
 
         return new StatusCodeResult(StatusCodes.Status500InternalServerError);
     } 
-    
     [HttpGet("{id}")]
     [Produces("application/json")]
     public async Task<ActionResult<OnboardingsGet>> GetOnboardingStatus(string id)
+    {
+        
+        var temporalClient = _httpContextAccessor.HttpContext.Features.GetRequiredFeature<ITemporalClient>();
+
+        // this is relatively advanced use of the TemporalClient but is shown here to 
+        // illustrate how to interact with the lower-level gRPC API for extracting details
+        // about the WorkflowExecution. 
+        // We will be replacing this usage with a `Query` invocation to be simpler and more explicit.
+        // This module will not overly explain this interaction but will be valuable later when we
+        // want to reason about our Executions with more detail.
+        var handle = temporalClient.GetWorkflowHandle(id);
+        var result = new OnboardingsGet()
+        {
+            Id = handle.Id,
+        };
+        try
+        {
+            var describe = await handle.DescribeAsync();
+            result = result with { ExecutionStatus = describe.Status.ToString() };
+            var hist = await handle.FetchHistoryAsync();
+            var started = hist.Events.First(e => e.EventType == EventType.WorkflowExecutionStarted);
+            foreach (var payload in started.WorkflowExecutionStartedEventAttributes.Input.Payloads_)
+            {
+                result = result with
+                {
+                    Input = (OnboardEntityRequest?)DataConverter.Default.PayloadConverter.ToValue(payload,
+                        typeof(OnboardEntityRequest)) ?? throw new InvalidOperationException()
+                };
+            }
+
+            return Ok(result);
+        }
+        catch (RpcException e)
+        {
+            if(e.Code.Equals(RpcException.StatusCode.NotFound)) {
+                return NotFound();
+            }
+        }
+        return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+    }
 }
