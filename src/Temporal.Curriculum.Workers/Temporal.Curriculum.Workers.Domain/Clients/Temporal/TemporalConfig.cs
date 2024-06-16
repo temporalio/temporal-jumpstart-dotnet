@@ -3,13 +3,13 @@ namespace Temporal.Curriculum.Workers.Domain.Clients.Temporal;
 public static class Defaults
 {
     internal const int cacheMaxInstances = 1000;
-    internal static double? rateLimitsMaxWorkerActivitiesPerSecond = null;
-    internal static double? rateLImitsMaxTaskQueueActivitiesPerSecond = null;
     internal const int capacityMaxConcurrentWorkflowTaskExecutors = 100;
     internal const int capacityMaxConcurrentActivityTaskExecutors = 100;
     internal const int capacityMaxConcurrentLocalActivityExecutors = 100;
     internal const int capacityMaxConcurrentWorkflowTaskPollers = 5;
     internal const int capacityMaxConcurrentActivityTaskPollers = 5;
+    internal static double? rateLimitsMaxWorkerActivitiesPerSecond = null;
+    internal static double? rateLImitsMaxTaskQueueActivitiesPerSecond = null;
 }
 
 public class WorkerConfig
@@ -29,7 +29,7 @@ public class WorkerConfig
 
 public class CapacityConfig
 {
-    public int MaxConcurrentWorkflowTaskExecutors  { get; set;}
+    public int MaxConcurrentWorkflowTaskExecutors { get; set; }
     public int MaxConcurrentLocalActivityExecutors { get; set; }
     public int MaxConcurrentActivityExecutors { get; set; }
     public int MaxConcurrentWorkflowTaskPollers { get; set; }
@@ -37,17 +37,16 @@ public class CapacityConfig
 
     public static CapacityConfig WithDefaults()
     {
-        return new CapacityConfig()
+        return new CapacityConfig
         {
             MaxConcurrentActivityExecutors = Defaults.capacityMaxConcurrentActivityTaskExecutors,
             MaxConcurrentActivityTaskPollers = Defaults.capacityMaxConcurrentActivityTaskPollers,
             MaxConcurrentWorkflowTaskExecutors = Defaults.capacityMaxConcurrentWorkflowTaskExecutors,
             MaxConcurrentLocalActivityExecutors = Defaults.capacityMaxConcurrentLocalActivityExecutors,
-            MaxConcurrentWorkflowTaskPollers = Defaults.capacityMaxConcurrentWorkflowTaskPollers,
+            MaxConcurrentWorkflowTaskPollers = Defaults.capacityMaxConcurrentWorkflowTaskPollers
         };
     }
 }
-
 
 public class RateLimitsConfig
 {
@@ -56,10 +55,10 @@ public class RateLimitsConfig
 
     public static RateLimitsConfig WithDefaults()
     {
-        return new RateLimitsConfig()
+        return new RateLimitsConfig
         {
             MaxWorkerActivitiesPerSecond = Defaults.rateLimitsMaxWorkerActivitiesPerSecond,
-            MaxTaskQueueActivitiesPerSecond = Defaults.rateLImitsMaxTaskQueueActivitiesPerSecond,
+            MaxTaskQueueActivitiesPerSecond = Defaults.rateLImitsMaxTaskQueueActivitiesPerSecond
         };
     }
 }
@@ -70,24 +69,27 @@ public class CacheConfig
 
     public static CacheConfig WithDefaults()
     {
-        return new CacheConfig()
+        return new CacheConfig
         {
-            MaxInstances = Defaults.cacheMaxInstances,
+            MaxInstances = Defaults.cacheMaxInstances
         };
     }
 }
+
 public class MtlsConfig
 {
     public required string KeyFile { get; set; }
     public required string CertChainFile { get; set; }
 }
+
 public class ConnectionConfig
 {
     public required string Namespace { get; set; }
     public required string Target { get; set; }
-    
+
     public MtlsConfig? Mtls { get; set; }
 }
+
 public class TemporalConfig
 {
     public required WorkerConfig Worker { get; set; }

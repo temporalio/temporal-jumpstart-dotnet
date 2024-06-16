@@ -10,23 +10,17 @@ public static class TemporalExtensions
     public static TemporalClientConnectOptions ConfigureClient(this TemporalClientConnectOptions? opts,
         TemporalConfig cfg)
     {
-        
-        if(opts == null)
-        {
-            opts = new TemporalClientConnectOptions();
-        }
+        if (opts == null) opts = new TemporalClientConnectOptions();
         Debug.Assert(cfg.Connection != null, "Connection is required");
         opts.Namespace = cfg.Connection.Namespace;
         opts.TargetHost = cfg.Connection.Target;
-        
+
         if (cfg.Connection.Mtls != null)
-        {
             opts.Tls = new TlsOptions
             {
-                ClientCert =  File.ReadAllBytes(cfg.Connection.Mtls.CertChainFile),
-                ClientPrivateKey =  File.ReadAllBytes(cfg.Connection.Mtls.KeyFile),
+                ClientCert = File.ReadAllBytes(cfg.Connection.Mtls.CertChainFile),
+                ClientPrivateKey = File.ReadAllBytes(cfg.Connection.Mtls.KeyFile)
             };
-        }
 
         return opts;
     }
@@ -42,13 +36,13 @@ public static class TemporalExtensions
         opts.MaxConcurrentActivities = cfg.Worker.Capacity.MaxConcurrentActivityExecutors;
         opts.MaxConcurrentLocalActivities = cfg.Worker.Capacity.MaxConcurrentLocalActivityExecutors;
         opts.MaxConcurrentWorkflowTasks = cfg.Worker.Capacity.MaxConcurrentWorkflowTaskExecutors;
-        
+
         // pollers
         opts.MaxConcurrentActivityTaskPolls = cfg.Worker.Capacity.MaxConcurrentWorkflowTaskPollers;
         opts.MaxConcurrentActivityTaskPolls = cfg.Worker.Capacity.MaxConcurrentActivityTaskPollers;
 
         opts.MaxCachedWorkflows = cfg.Worker.Cache.MaxInstances;
-        
+
         return opts;
     }
 

@@ -1,8 +1,7 @@
 namespace Temporal.Curriculum.Workers.Api;
 
-public class Program
+public abstract class Program
 {
-
     public static void Main(string[] args)
     {
         var host = CreateHostBuilder(args).Build();
@@ -10,9 +9,10 @@ public class Program
         host.Run();
     }
 
-        
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
+
+    private static IHostBuilder CreateHostBuilder(string[] args)
+    {
+        return Host.CreateDefaultBuilder(args)
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
@@ -23,4 +23,5 @@ public class Program
                 });
                 webBuilder.UseStartup<Startup>();
             });
+    }
 }

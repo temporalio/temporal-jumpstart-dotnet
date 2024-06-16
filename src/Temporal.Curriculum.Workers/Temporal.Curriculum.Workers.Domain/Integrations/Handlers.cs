@@ -6,7 +6,8 @@ using Temporalio.Exceptions;
 
 namespace Temporal.Curriculum.Workers.Domain.Integrations;
 
-public static class Errors {
+public static class Errors
+{
     public const string ERR_SERVICE_UNRECOVERABLE = "CRM Service is not recoverable";
 }
 
@@ -48,13 +49,11 @@ public class Handlers
                 // For our demonstration, we will show how to make the Activity tell the Workflow not to keep trying; 
                 // but you may want to allow Temporal to keep retrying this API call.
                 if (ex.CancellationToken.IsCancellationRequested)
-                {
                     throw new ApplicationFailureException(
-                        message: ex.Message,
-                        inner: ex,
-                        errorType: Errors.ERR_SERVICE_UNRECOVERABLE,
-                        nonRetryable: true);
-                }
+                        ex.Message,
+                        ex,
+                        Errors.ERR_SERVICE_UNRECOVERABLE,
+                        true);
                 throw;
             }
             catch (Exception ex)

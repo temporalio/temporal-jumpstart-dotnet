@@ -3,9 +3,9 @@ using System.Net;
 
 namespace Temporal.Curriculum.Workers.Domain.Clients.Crm;
 
-public class InMemoryCrmClient: ICrmClient
+public class InMemoryCrmClient : ICrmClient
 {
-    private readonly ConcurrentDictionary<string,string> _database;
+    private readonly ConcurrentDictionary<string, string> _database;
 
     public InMemoryCrmClient()
     {
@@ -14,20 +14,14 @@ public class InMemoryCrmClient: ICrmClient
 
     public Task RegisterCustomerAsync(string id, string value)
     {
-        if (_database.ContainsKey(id))
-        {
-            throw new CrmEntityExistsException($"Entity {id} already exists");
-        }
+        if (_database.ContainsKey(id)) throw new CrmEntityExistsException($"Entity {id} already exists");
 
         if (value.Contains("timeout"))
-        {
-            throw new TaskCanceledException($"Timeout spoofed for {id} because {value}", null, new CancellationToken(true));
-        }
+            throw new TaskCanceledException($"Timeout spoofed for {id} because {value}", null,
+                new CancellationToken(true));
 
         if (!_database.TryAdd(id, value))
-        {
             throw new HttpRequestException($"Failed to add {id}/{value}", null, HttpStatusCode.BadRequest);
-        }
 
         return Task.CompletedTask;
     }
@@ -35,15 +29,10 @@ public class InMemoryCrmClient: ICrmClient
     public Task<string> GetCustomerByIdAsync(string id)
     {
         string value;
-        if (_database.TryGetValue(id, out value))
-        {
-            return Task.FromResult(value);
-        }
+        if (_database.TryGetValue(id, out value)) return Task.FromResult(value);
 
         if (id.Contains("timeout"))
-        {
             throw new TaskCanceledException($"Timeout spoofed for {id}", null, new CancellationToken(true));
-        }
         throw new CrmEntityNotFoundException($"Entity {id} not found");
     }
 }

@@ -2,7 +2,8 @@ using System.Runtime.Serialization;
 
 namespace Temporal.Curriculum.Workers.Domain.Clients.Crm;
 
-public class CrmEntityNotFoundException: Exception {
+public class CrmEntityNotFoundException : Exception
+{
     public CrmEntityNotFoundException()
     {
     }
@@ -38,12 +39,14 @@ public class CrmEntityExistsException : Exception
     {
     }
 }
+
 public interface ICrmClient
 {
-    Task  RegisterCustomerAsync(string id, string value);
+    Task RegisterCustomerAsync(string id, string value);
     Task<string> GetCustomerByIdAsync(string id);
 }
-public class CrmClient: ICrmClient
+
+public class CrmClient : ICrmClient
 {
     public Task RegisterCustomerAsync(string id, string value)
     {

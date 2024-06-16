@@ -1,14 +1,9 @@
 using System.Diagnostics;
-using Microsoft.Extensions.Configuration.Json;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Options;
 using Temporal.Curriculum.Workers.Domain.Clients.Crm;
 using Temporal.Curriculum.Workers.Domain.Clients.Temporal;
 using Temporal.Curriculum.Workers.Domain.Integrations;
 using Temporal.Curriculum.Workers.Domain.Orchestrations;
-using Temporalio.Client;
 using Temporalio.Extensions.Hosting;
-using Temporalio.Worker;
 
 namespace Temporal.Curriculum.Workers.Services;
 
@@ -30,12 +25,10 @@ public static class ProgramExtensions
     //     services.AddHostedTemporalWorker()
     //     services.AddHostedTemporalWorker(taskQueue, buildId).ConfigureOptions(options =>
     //         options.ClientOptions = new(clientTargetHost) { Namespace = clientNamespace });
-
 }
 
 public class Program
 {
-
     public static async Task Main(string[] args)
     {
         await RunIoCApp(args);
@@ -60,7 +53,7 @@ public class Program
         builder.Services.AddSingleton<ICrmClient, InMemoryCrmClient>();
 
         // configure our Worker
-        builder.Services.AddHostedTemporalWorker(temporalConfig.Worker.TaskQueue, null)
+        builder.Services.AddHostedTemporalWorker(temporalConfig.Worker.TaskQueue)
             .ConfigureOptions(o => { o.ConfigureService(temporalConfig); })
             .AddScopedActivities<Handlers>()
             .AddWorkflow<OnboardEntity>();
@@ -69,7 +62,7 @@ public class Program
         var lf = host.Services.GetService<ILoggerFactory>();
         Debug.Assert(lf != null);
         var logger = lf.CreateLogger<Program>();
-        logger.LogInformation("Starting Temporal Worker connecting to "+
+        logger.LogInformation("Starting Temporal Worker connecting to " +
                               $"Namespace '{temporalConfig.Connection.Namespace}@{temporalConfig.Connection.Target}'" +
                               $" subscribed to TaskQueue: '{temporalConfig.Worker.TaskQueue}'");
         await host.RunAsync();
