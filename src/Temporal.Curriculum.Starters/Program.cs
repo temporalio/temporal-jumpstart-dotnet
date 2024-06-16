@@ -1,12 +1,8 @@
-using Temporal.Curriculum.Starters.Config;
-using Temporalio.Client;
-
 namespace Temporal.Curriculum.Starters;
 
-public class Program
+public static class Program
 {
-
-    public static async  Task Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var host = CreateHostBuilder(args).Build();
         // run the web app
@@ -14,9 +10,9 @@ public class Program
     }
 
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        
-        Host.CreateDefaultBuilder(args)
+    private static IHostBuilder CreateHostBuilder(string[] args)
+    {
+        return Host.CreateDefaultBuilder(args)
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
@@ -27,4 +23,5 @@ public class Program
                 });
                 webBuilder.UseStartup<Startup>();
             });
+    }
 }
