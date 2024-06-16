@@ -35,7 +35,7 @@ public class OnboardingsController:ControllerBase  {
         // Prefer using AutoMapper or the like for this 
         var args = new List<object>
         {
-            new OnboardEntityRequest(value: req.Value)
+            new OnboardEntityRequest(req.Value),
         };
         
         
