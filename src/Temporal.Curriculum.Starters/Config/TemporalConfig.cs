@@ -10,13 +10,15 @@ public class MtlsConfig
     public required string KeyFile { get; set; }
     public required string CertChainFile { get; set; }
 }
+
 public class ConnectionConfig
 {
     public required string Namespace { get; set; }
     public required string Target { get; set; }
-    
+
     public MtlsConfig? Mtls { get; set; }
 }
+
 public class TemporalConfig
 {
     public required WorkerConfig Worker { get; set; }

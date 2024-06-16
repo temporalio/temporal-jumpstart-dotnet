@@ -1,7 +1,6 @@
 # temporal-jumpstart-dotnet
 Jumpstart workshop for dotNet
 
+## Curriculum
 
-## Starters
-
-Docs [here](src/Temporal.Curriculum.Starters)
+Docs [here](docs/curriculum/README.md).

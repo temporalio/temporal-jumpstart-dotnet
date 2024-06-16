@@ -13,12 +13,13 @@ namespace Temporal.Curriculum.Starters.Channels;
 
 [Route("api/onboardings")]
 [ApiController]
-public class OnboardingsController:ControllerBase  {
+public class OnboardingsController : ControllerBase
+{
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IOptions<TemporalConfig> _temporalConfig;
     private readonly ILogger _logger;
+    private readonly IOptions<TemporalConfig> _temporalConfig;
 
-    public OnboardingsController(IHttpContextAccessor httpContextAccessor, 
+    public OnboardingsController(IHttpContextAccessor httpContextAccessor,
         IOptions<TemporalConfig> temporalConfig, ILoggerFactory logger)
     {
         _httpContextAccessor = httpContextAccessor;
@@ -35,10 +36,10 @@ public class OnboardingsController:ControllerBase  {
         // Prefer using AutoMapper or the like for this 
         var args = new List<object>
         {
-            new StartOnboardingRequest(value: req.Value)
+            new OnboardEntityRequest(req.Value)
         };
-        
-        
+
+
         var temporalClient = _httpContextAccessor.HttpContext?.Features.GetRequiredFeature<ITemporalClient>();
         
         var opts = new WorkflowOptions
@@ -56,13 +57,15 @@ public class OnboardingsController:ControllerBase  {
             // to be rescheduled so that Workflows can continue to make progress once repaired/redeployed with corrections.
             // Reference: https://github.com/temporalio/sdk-dotnet/?tab=readme-ov-file#workflow-exceptions
             RetryPolicy = null,
-            IdReusePolicy = WorkflowIdReusePolicy.RejectDuplicate,
+            IdReusePolicy = WorkflowIdReusePolicy.RejectDuplicate
         };
         WorkflowHandle? handle = null;
         var alreadyStarted = false;
         try
         {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             handle = await temporalClient.StartWorkflowAsync("WorkflowDefinitionDoesntExistYet", args, opts);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
         }
         catch (WorkflowAlreadyStartedException e)
         {
@@ -75,16 +78,16 @@ public class OnboardingsController:ControllerBase  {
         {
             // poor man's uri template. prefer RFC 6570 implementation
             var location = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/onboardings/{id}";
-            return Accepted( location);
+            return Accepted(location);
         }
 
         return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-    } 
+    }
+
     [HttpGet("{id}")]
     [Produces("application/json")]
     public async Task<ActionResult<OnboardingsGet>> GetOnboardingStatus(string id)
     {
-        var result = new OnboardingsGet();
         var temporalClient = _httpContextAccessor.HttpContext.Features.GetRequiredFeature<ITemporalClient>();
 
         // this is relatively advanced use of the TemporalClient but is shown here to 
@@ -94,28 +97,31 @@ public class OnboardingsController:ControllerBase  {
         // This module will not overly explain this interaction but will be valuable later when we
         // want to reason about our Executions with more detail.
         var handle = temporalClient.GetWorkflowHandle(id);
-        result.Id = handle.Id;
+        var result = new OnboardingsGet
+        {
+            Id = handle.Id
+        };
+
         try
         {
             var describe = await handle.DescribeAsync();
-            result.ExecutionStatus = describe.Status.ToString();
+            result = result with { ExecutionStatus = describe.Status.ToString() };
             var hist = await handle.FetchHistoryAsync();
             var started = hist.Events.First(e => e.EventType == EventType.WorkflowExecutionStarted);
             foreach (var payload in started.WorkflowExecutionStartedEventAttributes.Input.Payloads_)
-            {
-                result.Input =
-                    (StartOnboardingRequest?)DataConverter.Default.PayloadConverter.ToValue(payload,
-                        typeof(StartOnboardingRequest)) ?? throw new InvalidOperationException();
-            }
+                result = result with
+                {
+                    Input = (OnboardEntityRequest?)DataConverter.Default.PayloadConverter.ToValue(payload,
+                        typeof(OnboardEntityRequest)) ?? throw new InvalidOperationException()
+                };
 
             return Ok(result);
         }
         catch (RpcException e)
         {
-            if(e.Code.Equals(RpcException.StatusCode.NotFound)) {
-                return NotFound();
-            }
+            if (e.Code.Equals(RpcException.StatusCode.NotFound)) return NotFound();
         }
+
         return new StatusCodeResult(StatusCodes.Status500InternalServerError);
     }
 }

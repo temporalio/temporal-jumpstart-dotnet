@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Temporal.Curriculum.Activities.Domain.Clients.Crm;
 using Temporal.Curriculum.Activities.Messages.Commands;
 using Temporalio.Activities;

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Worker">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
@@ -14,5 +14,9 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Temporal.Curriculum.Activities.Messages\Temporal.Curriculum.Activities.Messages.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Properties\launchSettings.json" />
     </ItemGroup>
 </Project>

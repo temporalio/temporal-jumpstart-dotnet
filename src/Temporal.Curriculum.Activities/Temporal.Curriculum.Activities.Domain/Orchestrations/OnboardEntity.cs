@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Temporal.Curriculum.Activities.Domain.Integrations;
 using Temporal.Curriculum.Activities.Messages.Commands;
 using Temporal.Curriculum.Activities.Messages.Orchestrations;

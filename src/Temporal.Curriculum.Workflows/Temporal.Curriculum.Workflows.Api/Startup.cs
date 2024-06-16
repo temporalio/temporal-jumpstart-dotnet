@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -18,14 +19,25 @@ public class Startup
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<TemporalConfig>(Configuration.GetSection("Temporal"));
-            services.AddSingleton<ITemporalClientFactory, TemporalClientFactory>();
+            const string temporalConfigSection = "Temporal";
+            var temporalConfig = Configuration.GetRequiredSection(temporalConfigSection).Get<TemporalConfig>();
+            Debug.Assert(temporalConfig!=null);
+            services.AddOptions<TemporalConfig>().BindConfiguration(temporalConfigSection);
             services.AddHttpContextAccessor();
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
-            services.AddSingleton( ctx => ctx.GetRequiredService<ITemporalClientFactory>().CreateClientAsync());
+            services.AddTemporalClient(o =>
+            {
+                o.ConfigureClient(temporalConfig);
+            }).Configure<ITemporalClient>(c =>
+            {
+                // connect when container is built
+                c.Connection.ConnectAsync();
+            });
+           
+            
             services.AddControllers(setupAction =>
                 {
                     setupAction.ReturnHttpNotAcceptable = true;
@@ -86,6 +98,7 @@ public class Startup
                 });
             
         }
+
 
 
         internal static IActionResult ProblemDetailsInvalidModelStateResponse(

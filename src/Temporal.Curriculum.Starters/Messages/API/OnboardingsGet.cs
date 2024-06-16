@@ -2,9 +2,4 @@ using Temporal.Curriculum.Starters.Messages.Orchestrations;
 
 namespace Temporal.Curriculum.Starters.Messages.API;
 
-public record OnboardingsGet
-{
-    public string Id { get; set; }
-    public string ExecutionStatus { get; set;  }
-    public StartOnboardingRequest Input { get; set; }
-}
+public record OnboardingsGet(string? Id = null, string? ExecutionStatus = null, OnboardEntityRequest? Input = null);
