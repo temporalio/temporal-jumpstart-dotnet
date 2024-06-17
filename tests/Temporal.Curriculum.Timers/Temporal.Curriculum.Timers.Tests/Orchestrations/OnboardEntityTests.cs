@@ -1,14 +1,14 @@
-using Temporal.Curriculum.Workflows.Domain.Orchestrations;
-using Temporal.Curriculum.Workflows.Messages.Orchestrations;
+using Temporal.Curriculum.Timers.Domain.Orchestrations;
+using Temporal.Curriculum.Timers.Messages.Orchestrations;
 using Temporalio.Client;
 using Temporalio.Exceptions;
-using Temporalio.Worker;
-
-namespace Temporal.Curriculum.Workflows.Tests.Orchestrations;
-using Xunit;
-using Xunit.Abstractions;
 using Temporalio.Testing;
-public class StartOnboardingTests : TestBase
+using Temporalio.Worker;
+using Xunit.Abstractions;
+
+namespace Temporal.Curriculum.Timers.Tests.Orchestrations;
+
+public class OnboardEntityTests : TestBase
 {
     [Fact]
     public async Task RunAsync_SimpleRun_GivenValidArgs_Succeeds()
@@ -50,7 +50,7 @@ public class StartOnboardingTests : TestBase
         });
     }
 
-    public StartOnboardingTests(ITestOutputHelper output) : base(output)
+    public OnboardEntityTests(ITestOutputHelper output) : base(output)
     {
     }
 }

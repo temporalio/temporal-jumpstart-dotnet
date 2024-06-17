@@ -28,6 +28,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Workers
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Workers.Api", "src\Temporal.Curriculum.Workers\Temporal.Curriculum.Workers.Api\Temporal.Curriculum.Workers.Api.csproj", "{776D61AC-22C6-46B5-AFF5-8CDEAAA0CBC0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Timers.Domain", "src\Temporal.Curriculum.Timers\Temporal.Curriculum.Timers.Domain\Temporal.Curriculum.Timers.Domain.csproj", "{6EC6DA56-50CB-4CB8-AE70-0E35C9575045}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Timers.Tests", "tests\Temporal.Curriculum.Timers\Temporal.Curriculum.Timers.Tests\Temporal.Curriculum.Timers.Tests.csproj", "{FC48BBA4-AB7A-4D31-A1C9-45F36B29BD25}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Timers.Messages", "src\Temporal.Curriculum.Timers\Temporal.Curriculum.Timers.Messages\Temporal.Curriculum.Timers.Messages.csproj", "{656251F1-F410-4D11-BEE1-5228745849C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -94,5 +100,17 @@ Global
 		{776D61AC-22C6-46B5-AFF5-8CDEAAA0CBC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{776D61AC-22C6-46B5-AFF5-8CDEAAA0CBC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{776D61AC-22C6-46B5-AFF5-8CDEAAA0CBC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EC6DA56-50CB-4CB8-AE70-0E35C9575045}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EC6DA56-50CB-4CB8-AE70-0E35C9575045}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EC6DA56-50CB-4CB8-AE70-0E35C9575045}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EC6DA56-50CB-4CB8-AE70-0E35C9575045}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC48BBA4-AB7A-4D31-A1C9-45F36B29BD25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC48BBA4-AB7A-4D31-A1C9-45F36B29BD25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC48BBA4-AB7A-4D31-A1C9-45F36B29BD25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC48BBA4-AB7A-4D31-A1C9-45F36B29BD25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{656251F1-F410-4D11-BEE1-5228745849C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{656251F1-F410-4D11-BEE1-5228745849C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{656251F1-F410-4D11-BEE1-5228745849C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{656251F1-F410-4D11-BEE1-5228745849C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
