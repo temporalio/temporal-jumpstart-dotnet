@@ -68,6 +68,10 @@ public class OnboardEntity : IOnboardEntity
             var waitApprovalSecs = args.CompletionTimeoutSeconds;
             if (args.DeputyOwnerEmail != null)
             {
+                // We lean into integer division here to be unconcerned about
+                // determinism issues. Note that if we did this with a float/double
+                // we could run into a problem with hardware results and violate the determinism
+                // requirement for our Timer.
                 waitApprovalSecs = args.CompletionTimeoutSeconds / 2;
             }
 
@@ -81,7 +85,10 @@ public class OnboardEntity : IOnboardEntity
                     // Since we are delivering an message, we want to restrict the number of retry attempts we make 
                     // lest we inadvertently build a SPAM server.
                     var notificationOptions =
-                        new ActivityOptions() { RetryPolicy = new RetryPolicy() { MaximumAttempts = 2, } };
+                        new ActivityOptions() {
+                            StartToCloseTimeout = TimeSpan.FromSeconds(60),
+                            RetryPolicy = new RetryPolicy() { MaximumAttempts = 2, }
+                        };
                     await Workflow.ExecuteActivityAsync((NotificationHandlers act) =>
                             act.RequestDeputyOwnerApproval(
                                 new RequestDeputyOwnerApprovalRequest(args.Id, args.DeputyOwnerEmail!)),
