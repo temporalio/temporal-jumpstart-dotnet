@@ -2,16 +2,16 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Temporal.Curriculum.Workers.Domain.Clients.Temporal;
-using Temporal.Curriculum.Workers.Domain.Orchestrations;
-using Temporal.Curriculum.Workers.Messages.API;
-using Temporal.Curriculum.Workers.Messages.Orchestrations;
+using Temporal.Curriculum.Timers.Domain.Clients.Temporal;
+using Temporal.Curriculum.Timers.Domain.Orchestrations;
+using Temporal.Curriculum.Timers.Messages.API;
+using Temporal.Curriculum.Timers.Messages.Orchestrations;
 using Temporalio.Api.Enums.V1;
 using Temporalio.Client;
 using Temporalio.Converters;
 using Temporalio.Exceptions;
 
-namespace Temporal.Curriculum.Workers.Api.Channels;
+namespace Temporal.Curriculum.Timers.Api.Channels;
 
 [Route("api/onboardings")]
 [ApiController]
@@ -56,7 +56,12 @@ public class OnboardingsController(
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
             handle = await temporalClient.StartWorkflowAsync(
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
-                (OnboardEntity wf) => wf.ExecuteAsync(new OnboardEntityRequest(id, req.Value)), opts);
+                (OnboardEntity wf) => wf.ExecuteAsync(new OnboardEntityRequest(
+                    id,
+                    req.Value,
+                    0,
+                    null, 
+                    false)), opts);
         }
         catch (WorkflowAlreadyStartedException e)
         {

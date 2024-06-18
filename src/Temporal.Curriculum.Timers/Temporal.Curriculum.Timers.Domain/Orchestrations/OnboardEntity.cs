@@ -1,13 +1,23 @@
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq.Expressions;
 using Microsoft.Extensions.Logging;
 using Temporal.Curriculum.Timers.Domain.Integrations;
 using Temporal.Curriculum.Timers.Messages.Commands;
 using Temporal.Curriculum.Timers.Messages.Orchestrations;
+using Temporalio.Activities;
 using Temporalio.Api.Enums.V1;
+using Temporalio.Common;
 using Temporalio.Exceptions;
 using Temporalio.Workflows;
 
+using NotificationHandlers = Temporal.Curriculum.Timers.Domain.Notifications.Handlers;
 namespace Temporal.Curriculum.Timers.Domain.Orchestrations;
 
+public static class Errors
+{
+    public const string ErrOnboardEntityTimedOut = "Entity onboarding timed out.";
+}
 // This interface is only used for Documentation purposes.
 // It is not required for Temporal Workflow implementations.
 public interface IOnboardEntity
@@ -28,6 +38,8 @@ public interface IOnboardEntity
     Task ExecuteAsync(OnboardEntityRequest args);
 }
 
+public record OnboardEntityState(OnboardEntityRequest args, bool IsApproved = false);
+
 [Workflow]
 // ReSharper disable once ClassNeverInstantiated.Global
 public class OnboardEntity : IOnboardEntity
@@ -36,17 +48,61 @@ public class OnboardEntity : IOnboardEntity
     public async Task ExecuteAsync(OnboardEntityRequest args)
     {
         var logger = Workflow.Logger;
+        logger.LogInformation($"onboardingentity with runid {Workflow.Info.RunId}");
         AssertValidRequest(args);
 
         var opts = new ActivityOptions {
             StartToCloseTimeout = TimeSpan.FromSeconds(5),
-            // Targetting a specific TaskQueue for Activities is useful if you have hosts that run expensive hardware, 
+            // Targeting a specific TaskQueue for Activities is useful if you have hosts that run expensive hardware, 
             // need rate limiting provided by the Temporal service, or access to resources at those hosts in isolation.
             // Prefer using TaskQueue assignment for strategic reasons; that is, split things up when you really need it.
             // The TaskQueue assignment done here is redundant since by default Activities will be executed that are subscribed
             // to the TaskQueue this Workflow execution is using. 
             TaskQueue = Workflow.Info.TaskQueue
         };
+
+        var state = new OnboardEntityState(args);
+        if (!args.SkipApproval)
+        {
+
+            var waitApprovalSecs = args.CompletionTimeoutSeconds;
+            if (args.DeputyOwnerEmail != null)
+            {
+                waitApprovalSecs = args.CompletionTimeoutSeconds / 2;
+            }
+
+            // this blocks until we flip the `IsApproved` bit on our state object
+            var conditionMet =
+                await Workflow.WaitConditionAsync(() => state.IsApproved, TimeSpan.FromSeconds(waitApprovalSecs));
+            if (!conditionMet)
+            {
+                if (args.DeputyOwnerEmail != null)
+                {
+                    // Since we are delivering an message, we want to restrict the number of retry attempts we make 
+                    // lest we inadvertently build a SPAM server.
+                    var notificationOptions =
+                        new ActivityOptions() { RetryPolicy = new RetryPolicy() { MaximumAttempts = 2, } };
+                    await Workflow.ExecuteActivityAsync((NotificationHandlers act) =>
+                            act.RequestDeputyOwnerApproval(
+                                new RequestDeputyOwnerApprovalRequest(args.Id, args.DeputyOwnerEmail!)),
+                        notificationOptions);
+
+                    // Now that we have notified the `DeputyOwner` that we need approval we can resume our wait for approval.
+                    // Let's just recursively call our Workflow without the DeputyOwnerEmail specified and with the balance of our approval period.
+                    var newArgs = args with {
+                        DeputyOwnerEmail = null,
+                        CompletionTimeoutSeconds = args.CompletionTimeoutSeconds - waitApprovalSecs
+                    };
+                    throw Workflow.CreateContinueAsNewException<OnboardEntity>(wf => wf.ExecuteAsync(newArgs),
+                        new ContinueAsNewOptions() { TaskQueue = Workflow.Info.TaskQueue, });
+                }
+
+                var message = $"Onboarding {args.Id} failed to be approved in {args.CompletionTimeoutSeconds} seconds.";
+                logger.LogError(message);
+                // We never received approval from Deputy or primary owners, so we just fail the workflow
+                throw new ApplicationFailureException(message, Errors.ErrOnboardEntityTimedOut);
+            }
+        }
 
         try
         {
@@ -70,9 +126,6 @@ public class OnboardEntity : IOnboardEntity
 
             throw;
         }
-
-        // ignore. more business logic to come
-        await Workflow.DelayAsync(10000);
     }
 
     private static void AssertValidRequest(OnboardEntityRequest args)
@@ -96,6 +149,15 @@ public class OnboardEntity : IOnboardEntity
              */
         {
             throw new ApplicationFailureException("OnboardEntity.Id and OnboardEntity.Value is required");
+        }
+
+        if (args is { SkipApproval: true, DeputyOwnerEmail: not null })
+        {
+            throw new ApplicationFailureException("Either skip approval or provide a Deputy Owner email, not both.");
+        }
+        if(args.DeputyOwnerEmail != null && (TimeSpan.FromSeconds(args.CompletionTimeoutSeconds) < TimeSpan.FromDays(4)))
+        {
+            throw new ApplicationFailureException("Give at least four days to receive approval");
         }
     }
 }

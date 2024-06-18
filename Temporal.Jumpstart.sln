@@ -34,6 +34,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Timers.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Timers.Messages", "src\Temporal.Curriculum.Timers\Temporal.Curriculum.Timers.Messages\Temporal.Curriculum.Timers.Messages.csproj", "{656251F1-F410-4D11-BEE1-5228745849C2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Timers.Api", "src\Temporal.Curriculum.Timers\Temporal.Curriculum.Timers.Api\Temporal.Curriculum.Timers.Api.csproj", "{2AD55BDB-1997-49D0-BCBF-BBF6B02B6E8B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Timers.Services", "src\Temporal.Curriculum.Timers\Temporal.Curriculum.Timers.Services\Temporal.Curriculum.Timers.Services.csproj", "{3236C455-A59F-4235-BCA6-DB8B32EB067E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -112,5 +116,13 @@ Global
 		{656251F1-F410-4D11-BEE1-5228745849C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{656251F1-F410-4D11-BEE1-5228745849C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{656251F1-F410-4D11-BEE1-5228745849C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AD55BDB-1997-49D0-BCBF-BBF6B02B6E8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AD55BDB-1997-49D0-BCBF-BBF6B02B6E8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AD55BDB-1997-49D0-BCBF-BBF6B02B6E8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AD55BDB-1997-49D0-BCBF-BBF6B02B6E8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3236C455-A59F-4235-BCA6-DB8B32EB067E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3236C455-A59F-4235-BCA6-DB8B32EB067E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3236C455-A59F-4235-BCA6-DB8B32EB067E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3236C455-A59F-4235-BCA6-DB8B32EB067E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

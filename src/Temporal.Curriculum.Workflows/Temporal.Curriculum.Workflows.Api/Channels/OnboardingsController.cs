@@ -30,7 +30,7 @@ public class OnboardingsController:ControllerBase  {
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> StartOnboardingAsync(string id, OnboardingsPut req)
+    public async Task<IActionResult> OnboardEntityAsync(string id, OnboardingsPut req)
     {
         var temporalClient = _httpContextAccessor.HttpContext?.Features.GetRequiredFeature<ITemporalClient>();
         
@@ -49,7 +49,9 @@ public class OnboardingsController:ControllerBase  {
             // to be rescheduled so that Workflows can continue to make progress once repaired/redeployed with corrections.
             // Reference: https://github.com/temporalio/sdk-dotnet/?tab=readme-ov-file#workflow-exceptions
             RetryPolicy = null,
-            IdReusePolicy = WorkflowIdReusePolicy.RejectDuplicate,
+            // Our requirements state that we want to allow the same WorkflowID if prior attempts were Canceled.
+            // Therefore, we are using this Policy that will reject duplicates unless previous attempts did not reach terminal state as `Completed'.
+            IdReusePolicy = WorkflowIdReusePolicy.AllowDuplicateFailedOnly,
         };
         WorkflowHandle? handle = null;
         var alreadyStarted = false;
