@@ -1,3 +1,4 @@
+using Temporal.Curriculum.Timers.Domain.Clients.Email;
 using Temporal.Curriculum.Timers.Messages.Commands;
 using Temporalio.Activities;
 
@@ -5,9 +6,17 @@ namespace Temporal.Curriculum.Timers.Domain.Notifications;
 
 public class Handlers
 {
-    [Activity]
-    public Task RequestDeputyOwnerApproval(RequestDeputyOwnerApprovalRequest args)
+    private IEmailClient _emailClient;
+
+    public Handlers(IEmailClient emailClient)
     {
-        return Task.CompletedTask;
+        _emailClient = emailClient;
+    }
+
+    [Activity]
+    public async Task RequestDeputyOwnerApproval(RequestDeputyOwnerApprovalRequest args)
+    {   
+        await _emailClient.SendEmailAsync(args.DeputyOwnerEmail,
+            body: $"Entity onboarding requests your approval for id {args.Id}");
     }
 }

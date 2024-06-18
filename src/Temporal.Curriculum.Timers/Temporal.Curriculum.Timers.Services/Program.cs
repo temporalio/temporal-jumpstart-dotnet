@@ -1,10 +1,13 @@
 using System.Diagnostics;
 using Temporal.Curriculum.Timers.Domain.Clients.Crm;
+using Temporal.Curriculum.Timers.Domain.Clients.Email;
 using Temporal.Curriculum.Timers.Domain.Clients.Temporal;
 using Temporal.Curriculum.Timers.Domain.Integrations;
 using Temporal.Curriculum.Timers.Domain.Orchestrations;
 using Temporalio.Extensions.Hosting;
 
+using IntegrationsHandlers = Temporal.Curriculum.Timers.Domain.Integrations.Handlers;
+using NotificationHandlers = Temporal.Curriculum.Timers.Domain.Notifications.Handlers;
 namespace Temporal.Curriculum.Timers.Services
 {
     public class Program
@@ -31,11 +34,13 @@ namespace Temporal.Curriculum.Timers.Services
             // expose OptionsPattern in services
             builder.Services.AddOptions<TemporalConfig>().BindConfiguration(temporalConfigSection);
             builder.Services.AddSingleton<ICrmClient, InMemoryCrmClient>();
+            builder.Services.AddSingleton<IEmailClient, InMemoryEmailClient>();
 
             // configure our Worker
             builder.Services.AddHostedTemporalWorker(temporalConfig.Worker.TaskQueue)
                 .ConfigureOptions(o => { o.ConfigureService(temporalConfig); })
-                .AddScopedActivities<Handlers>()
+                .AddScopedActivities<IntegrationsHandlers>()
+                .AddScopedActivities<NotificationHandlers>()
                 .AddWorkflow<OnboardEntity>();
 
             var host = builder.Build();
