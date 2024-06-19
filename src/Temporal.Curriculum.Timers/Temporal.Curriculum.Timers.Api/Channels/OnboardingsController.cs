@@ -53,15 +53,11 @@ public class OnboardingsController(
         var alreadyStarted = false;
         try
         {
+            var args = new OnboardEntityRequest(id, req.Value);
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
             handle = await temporalClient.StartWorkflowAsync(
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
-                (OnboardEntity wf) => wf.ExecuteAsync(new OnboardEntityRequest(
-                    id,
-                    req.Value,
-                    0,
-                    null, 
-                    false)), opts);
+                (OnboardEntity wf) => wf.ExecuteAsync(args), opts);
         }
         catch (WorkflowAlreadyStartedException e)
         {

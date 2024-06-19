@@ -13,6 +13,5 @@
     
     <ItemGroup>
         <ProjectReference Include="..\Temporal.Curriculum.Timers.Domain\Temporal.Curriculum.Timers.Domain.csproj" />
-        <ProjectReference Include="..\Temporal.Curriculum.Workers.Domain\Temporal.Curriculum.Timers.Domain.csproj"/>
     </ItemGroup>
 </Project>

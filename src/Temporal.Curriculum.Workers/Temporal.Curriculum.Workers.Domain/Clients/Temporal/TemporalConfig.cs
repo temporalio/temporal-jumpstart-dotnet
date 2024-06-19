@@ -40,4 +40,22 @@ public record MtlsConfig(string KeyFile, string CertChainFile);
 // ReSharper disable once ClassNeverInstantiated.Global
 public record ConnectionConfig(string Namespace, string Target, MtlsConfig? Mtls = null);
 
-public record TemporalConfig(WorkerConfig Worker, ConnectionConfig Connection);
+public record TemporalConfig
+{
+    public TemporalConfig() { }
+
+    public TemporalConfig(WorkerConfig Worker, ConnectionConfig Connection)
+    {
+        this.Worker = Worker;
+        this.Connection = Connection;
+    }
+
+    public WorkerConfig Worker { get; init; }
+    public ConnectionConfig Connection { get; init; }
+
+    public void Deconstruct(out WorkerConfig Worker, out ConnectionConfig Connection)
+    {
+        Worker = this.Worker;
+        Connection = this.Connection;
+    }
+}
