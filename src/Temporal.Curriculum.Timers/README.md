@@ -38,5 +38,5 @@ How can we test something that is supposed to happen in the future?
   * What about current tests that were built without this timeout constraint? There are two options:
     * We could use a "magic number" of `-1` to tell our Workflow to skip the approval
     * We could choose to be explicit and add `SkipApproval` to the input argument
-      * This is the one we will go with because it is clearer to maintainers
+      * This is the choice we make because it is clearer to maintainers
 * Support an `Errors`  enumeration for raising a timed out OnboardEntity request.
