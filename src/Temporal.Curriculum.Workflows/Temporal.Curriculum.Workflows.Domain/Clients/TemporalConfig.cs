@@ -19,6 +19,8 @@ public class ConnectionConfig
 }
 public class TemporalConfig
 {
+    public TemporalConfig() { }
+
     public required WorkerConfig Worker { get; set; }
     public required ConnectionConfig Connection { get; set; }
 }

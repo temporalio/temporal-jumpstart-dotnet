@@ -8,7 +8,7 @@ namespace Temporal.Curriculum.Workflows.Tests.Orchestrations;
 using Xunit;
 using Xunit.Abstractions;
 using Temporalio.Testing;
-public class StartOnboardingTests : TestBase
+public class OnboardEntityTests : TestBase
 {
     [Fact]
     public async Task RunAsync_SimpleRun_GivenValidArgs_Succeeds()
@@ -50,7 +50,7 @@ public class StartOnboardingTests : TestBase
         });
     }
 
-    public StartOnboardingTests(ITestOutputHelper output) : base(output)
+    public OnboardEntityTests(ITestOutputHelper output) : base(output)
     {
     }
 }

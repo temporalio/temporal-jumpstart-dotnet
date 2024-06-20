@@ -1,4 +1,4 @@
-namespace Temporal.Curriculum.Workers.Domain.Clients.Temporal;
+namespace Temporal.Curriculum.Timers.Domain.Clients.Temporal;
 
 public static class Defaults
 {
@@ -42,8 +42,9 @@ public record ConnectionConfig(string Namespace, string Target, MtlsConfig? Mtls
 
 public record TemporalConfig
 {
-    public TemporalConfig() { }
-
+    public TemporalConfig()
+    {
+    }
     public TemporalConfig(WorkerConfig Worker, ConnectionConfig Connection)
     {
         this.Worker = Worker;
