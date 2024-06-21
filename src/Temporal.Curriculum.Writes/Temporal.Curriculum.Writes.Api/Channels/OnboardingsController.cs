@@ -1,10 +1,12 @@
 using System.Diagnostics;
+using System.Linq.Expressions;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Temporal.Curriculum.Writes.Domain.Clients.Temporal;
 using Temporal.Curriculum.Writes.Domain.Orchestrations;
 using Temporal.Curriculum.Writes.Messages.API;
+using Temporal.Curriculum.Writes.Messages.Commands;
 using Temporal.Curriculum.Writes.Messages.Orchestrations;
 using Temporalio.Api.Enums.V1;
 using Temporalio.Client;
@@ -30,34 +32,44 @@ public class OnboardingsController(
     {
         var temporalClient = httpContextAccessor.HttpContext?.Features.GetRequiredFeature<ITemporalClient>();
 
-        if (req.Approval.Status.Equals(ApprovalStatus.Pending))
+        if (req.Approval.Status.Equals(Messages.Values.ApprovalStatus.Pending))
         {
             return await startWorkflow(id, req, temporalClient);
         }
 
-        throw new NotImplementedException("Approval/Rejection not supported yet");
-//         WorkflowHandle? handle = temporalClient.GetWorkflowHandle<OnboardEntity>(id);
-//         await handle.SignalAsync<OnboardEntity>(wf => )
-//         var alreadyStarted = false;
-//         try
-//         {
-//             var args = new OnboardEntityRequest(id, req.Value);
-// #pragma warning disable CS8602 // Dereference of a possibly null reference.
-//             handle = await temporalClient.StartWorkflowAsync(
-// #pragma warning restore CS8602 // Dereference of a possibly null reference.
-//                 (OnboardEntity wf) => wf.ExecuteAsync(args), opts);
-//         }
-//         catch (WorkflowAlreadyStartedException e)
-//         {
-//             alreadyStarted = true;
-//             _logger.LogError("workflow {id} already started {e}", id, e);
-//             // swallow this exception since this is an PUT (idempotent)
-//         }
+        try
+        {
+            // do we want to ignore the `value` ? 
+            WorkflowHandle? handle = temporalClient.GetWorkflowHandle<OnboardEntity>(id);
+            Expression<Func<OnboardEntity, Task>> signalCall = null;
+            switch (req.Approval.Status)
+            {
+                case Messages.Values.ApprovalStatus.Approved:
+                    signalCall = wf => wf.Approve(new ApproveEntityRequest(req.Approval.Comment));
+                    break;
+                case Messages.Values.ApprovalStatus.Rejected:
+                    signalCall = wf => wf.Reject(new RejectEntityRequest(req.Approval.Comment));
+                    break;
+                default:
+                    return BadRequest();
+            }
+             await handle.SignalAsync<OnboardEntity>(signalCall);
+             // poor man's uri template. prefer RFC 6570 implementation
+             var location = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/onboardings/{id}";
+             return Accepted(location);
+        } catch (RpcException e)
+        {
+            if (e.Code.Equals(RpcException.StatusCode.NotFound))
+            {
+                return NotFound();
+            }
+           
+        }
+        return new StatusCodeResult(StatusCodes.Status500InternalServerError);
     }
 
     private async Task<IActionResult> startWorkflow(string id, OnboardingsPut req, ITemporalClient? temporalClient)
     {
-        IActionResult onboardEntityAsync;
         var opts = new WorkflowOptions {
             // BestPractice: WorkflowIds should have business meaning.
             // Details: This identifier can be an AccountID, SessionID, etc.
@@ -91,20 +103,19 @@ public class OnboardingsController(
             alreadyStarted = true;
             _logger.LogError("workflow {id} already started {e}", id, e);
             // swallow this exception since this is an PUT (idempotent)
+            // consider doing a redirect to the resource at GET /api/onboardings/{id}
         }
 
         if (handle == null && !alreadyStarted)
         {
             {
-                onboardEntityAsync = new StatusCodeResult(StatusCodes.Status500InternalServerError);
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
         // poor man's uri template. prefer RFC 6570 implementation
         var location = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/onboardings/{id}";
-        onboardEntityAsync = Accepted(location);
-        return Accepted(location);
+       return Accepted(location);
     }
 
     [HttpGet("{id}")]
