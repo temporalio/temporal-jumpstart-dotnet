@@ -56,6 +56,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Reads.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Reads.Services", "src\Temporal.Curriculum.Reads\Temporal.Curriculum.Reads.Services\Temporal.Curriculum.Reads.Services.csproj", "{974A36EF-D980-4B72-8B7D-975744275E2A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Reads.Tests", "tests\Temporal.Curriculum.Reads\Temporal.Curriculum.Reads.Tests\Temporal.Curriculum.Reads.Tests.csproj", "{0FB4FA0F-4677-4B1C-8E4F-FA4920BCAE2F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -178,5 +180,9 @@ Global
 		{974A36EF-D980-4B72-8B7D-975744275E2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{974A36EF-D980-4B72-8B7D-975744275E2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{974A36EF-D980-4B72-8B7D-975744275E2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FB4FA0F-4677-4B1C-8E4F-FA4920BCAE2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FB4FA0F-4677-4B1C-8E4F-FA4920BCAE2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FB4FA0F-4677-4B1C-8E4F-FA4920BCAE2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FB4FA0F-4677-4B1C-8E4F-FA4920BCAE2F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

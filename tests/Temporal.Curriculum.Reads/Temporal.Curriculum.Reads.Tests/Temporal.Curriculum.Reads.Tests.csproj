@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+
+        <IsPackable>false</IsPackable>
+        <IsTestProject>true</IsTestProject>
+        <AssemblyName>Temporal.Curriculum.Reads.Tests</AssemblyName>
+        <RootNamespace>Temporal.Curriculum.Reads.Tests</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0"/>
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+        <PackageReference Include="MartinCostello.Logging.XUnit" Version="0.3.0" />
+        <PackageReference Include="Temporalio.Extensions.Hosting" Version="1.1.2"/>
+        <PackageReference Include="Temporalio" Version="1.1.2" />
+        <PackageReference Include="System.Linq.Async" Version="6.0.1"/>
+
+        <PackageReference Include="xunit" Version="2.4.2"/>
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="coverlet.collector" Version="6.0.0">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\src\Temporal.Curriculum.Reads\Temporal.Curriculum.Reads.Domain\Temporal.Curriculum.Reads.Domain.csproj" />
+        <ProjectReference Include="..\..\..\src\Temporal.Curriculum.Reads\Temporal.Curriculum.Reads.Messages\Temporal.Curriculum.Reads.Messages.csproj" />
+    </ItemGroup>
+
+</Project>

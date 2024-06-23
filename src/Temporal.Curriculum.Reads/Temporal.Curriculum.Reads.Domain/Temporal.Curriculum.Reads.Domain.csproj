@@ -6,4 +6,13 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Temporal.Curriculum.Reads.Messages\Temporal.Curriculum.Reads.Messages.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Temporalio" Version="1.1.2" />
+      <PackageReference Include="Temporalio.Extensions.Hosting" Version="1.1.2" />
+    </ItemGroup>
+
 </Project>
