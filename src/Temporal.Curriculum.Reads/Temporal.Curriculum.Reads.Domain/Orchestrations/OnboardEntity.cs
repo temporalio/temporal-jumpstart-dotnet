@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Temporal.Curriculum.Reads.Domain.Integrations;
 using Temporal.Curriculum.Reads.Messages.Commands;
 using Temporal.Curriculum.Reads.Messages.Orchestrations;
+using Temporal.Curriculum.Reads.Messages.Queries;
 using Temporal.Curriculum.Reads.Messages.Values;
 using Temporalio.Activities;
 using Temporalio.Api.Enums.V1;
@@ -201,21 +202,21 @@ public class OnboardEntity : IOnboardEntity
     }
 
     [WorkflowSignal]
-    public Task ApproveAsync(ApproveEntityRequest approveEntityRequest)
+    public Task ApproveAsync(ApproveEntityRequest cmd)
     {
-        _state = _state with { ApprovalStatus = ApprovalStatus.Approved, ApprovalComment = approveEntityRequest.Comment};
+        _state = _state with { ApprovalStatus = ApprovalStatus.Approved, ApprovalComment = cmd.Comment};
         return Task.CompletedTask;  
     }
 
     [WorkflowSignal]
-    public Task RejectAsync(RejectEntityRequest rejectEntityRequest)
+    public Task RejectAsync(RejectEntityRequest cmd)
     {
-        _state = _state with { ApprovalStatus = ApprovalStatus.Rejected, ApprovalComment = rejectEntityRequest.Comment};
+        _state = _state with { ApprovalStatus = ApprovalStatus.Rejected, ApprovalComment = cmd.Comment};
         return Task.CompletedTask;
     }
 
     [WorkflowUpdateValidator(nameof(SetValueAsync))]
-    public async void ValidateSetValue(SetValueRequest setValueRequest)
+    public void ValidateSetValue(SetValueRequest cmd)
     {
         if (_state is not { ApprovalStatus: ApprovalStatus.Pending })
         {
@@ -229,5 +230,14 @@ public class OnboardEntity : IOnboardEntity
         // throw new ArgumentException("foo");
         _state = _state with { CurrentValue = cmd.Value };
         return _state;
+    }
+
+    
+    [WorkflowQuery]
+    public GetEntityOnboardingStateResponse GetEntityOnboardingStateAsync(GetEntityOnboardingStateRequest q)
+    {
+        return new GetEntityOnboardingStateResponse(Workflow.Info.WorkflowId,
+            _state.CurrentValue,
+            new Approval(_state.ApprovalStatus, _state.ApprovalComment));
     }
 }

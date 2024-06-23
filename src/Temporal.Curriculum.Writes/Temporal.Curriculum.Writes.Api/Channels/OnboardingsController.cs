@@ -34,7 +34,7 @@ public class OnboardingsController(
 
         if (req.Approval.Status.Equals(Messages.Values.ApprovalStatus.Pending))
         {
-            return await startWorkflow(id, req, temporalClient);
+            return await StartWorkflow(id, req, temporalClient);
         }
 
         try
@@ -69,7 +69,7 @@ public class OnboardingsController(
         return new StatusCodeResult(StatusCodes.Status500InternalServerError);
     }
 
-    private async Task<IActionResult> startWorkflow(string id, OnboardingsPut req, ITemporalClient? temporalClient)
+    private async Task<IActionResult> StartWorkflow(string id, OnboardingsPut req, ITemporalClient? temporalClient)
     {
         var opts = new WorkflowOptions {
             // BestPractice: WorkflowIds should have business meaning.
