@@ -40,6 +40,7 @@ public class OnboardingsController(
         try
         {
             // do we want to ignore the `value` ? 
+            // TODO: Introduce the call to `SetValue` in Workflow with Update when improved 
             WorkflowHandle? handle = temporalClient.GetWorkflowHandle<OnboardEntity>(id);
             Expression<Func<OnboardEntity, Task>> signalCall = null;
             switch (req.Approval.Status)

@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Temporal.Curriculum.Writes.Domain.Orchestrations;
 using Temporal.Curriculum.Writes.Messages.Commands;
 using Temporal.Curriculum.Writes.Messages.Orchestrations;
@@ -393,6 +394,67 @@ public class OnboardEntityTests : TestBase
                 wf.SetValueAsync(new SetValueRequest("boop")));
             Assert.Equal("boop", actual.CurrentValue);
             await handle.CancelAsync();
+        });
+        
+        Assert.Null(registrationRequestSent); 
+        Assert.Null(deputyOwnerApprovalRequested);
+    }
+    [Fact(Skip = "Update with test server is broken")]
+    public async Task SetValue_GivenApprovedEntity_ShouldNotUpdateValue()
+    {
+        await using var env = await WorkflowEnvironment.StartLocalAsync();
+        var args = new OnboardEntityRequest(
+            Id: Guid.NewGuid().ToString(), 
+            Value: Guid.NewGuid().ToString(),
+            CompletionTimeoutSeconds:TimeSpan.FromSeconds(5).Seconds);
+        
+        
+        RegisterCrmEntityRequest registrationRequestSent = null;
+        RequestDeputyOwnerApprovalRequest deputyOwnerApprovalRequested = null;
+        var workerOptions = new TemporalWorkerOptions("test") { LoggerFactory = LoggerFactory };
+        workerOptions.AddWorkflow<OnboardEntity>(); 
+        
+        [Activity]
+        Task RegisterCrmEntity(RegisterCrmEntityRequest req)
+        {
+            registrationRequestSent = req;
+            return Task.CompletedTask;
+        }
+
+        [Activity]
+        Task RequestDeputyOwnerApproval(RequestDeputyOwnerApprovalRequest req)
+        {
+            deputyOwnerApprovalRequested = req;
+            return Task.CompletedTask;
+        }
+        workerOptions.AddActivity(RegisterCrmEntity);
+        workerOptions.AddActivity(RequestDeputyOwnerApproval);
+
+        using var worker = new TemporalWorker(
+            env.Client,
+            workerOptions
+        );
+
+        
+        await worker.ExecuteAsync(async () =>
+        {
+            var handle = await env.Client.StartWorkflowAsync<OnboardEntity>(wf => wf.ExecuteAsync(args),
+                new WorkflowOptions(args.Id, worker.Options.TaskQueue!));
+            await env.DelayAsync(TimeSpan.FromSeconds(1));
+            await handle.SignalAsync(wf => wf.ApproveAsync(new ApproveEntityRequest("")));
+            try
+            {
+                var actual = await handle.ExecuteUpdateAsync<OnboardEntity, OnboardEntityState>(wf =>
+                    wf.SetValueAsync(new SetValueRequest("boop")));
+                Assert.Equal("boop", actual.CurrentValue);
+            }
+            catch (Exception e)
+            {
+                LoggerFactory.CreateLogger("update").LogInformation($"Got exception {e.GetType()}");
+            }
+
+            
+            await handle.GetResultAsync();
         });
         
         Assert.Null(registrationRequestSent); 

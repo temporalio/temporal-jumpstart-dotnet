@@ -84,7 +84,6 @@ public class OnboardEntity : IOnboardEntity
         }
         try
         {
-            logger.LogError($"WTF {_state.ApprovalStatus}");
             /*
              // During TDD for a Workflow definition it is handy to Execute the activity by its Name as seen here.
              // Now that we have implemented the Activity, though, we will replace it with the strongly typed invocation.
@@ -216,12 +215,10 @@ public class OnboardEntity : IOnboardEntity
     [WorkflowUpdateValidator(nameof(SetValueAsync))]
     public async void ValidateSetValue(SetValueRequest setValueRequest)
     {
-        if (_state == null)
+        if (_state is not { ApprovalStatus: ApprovalStatus.Pending })
         {
-            Workflow.Logger.LogInformation("_state is null");
-            throw new ArgumentException("_state not exists");
+            throw new InvalidOperationException();
         }
-        Workflow.Logger.LogInformation($"running validator for {setValueRequest.Value}");
     }
     [WorkflowUpdate]
     public async Task<OnboardEntityState> SetValueAsync(SetValueRequest cmd)
