@@ -5,10 +5,12 @@ using Microsoft.Extensions.Logging;
 using Temporal.Curriculum.Writes.Domain.Integrations;
 using Temporal.Curriculum.Writes.Messages.Commands;
 using Temporal.Curriculum.Writes.Messages.Orchestrations;
+using Temporal.Curriculum.Writes.Messages.Values;
 using Temporalio.Activities;
 using Temporalio.Api.Enums.V1;
 using Temporalio.Common;
 using Temporalio.Exceptions;
+using Temporalio.Worker.Interceptors;
 using Temporalio.Workflows;
 
 using NotificationHandlers = Temporal.Curriculum.Writes.Domain.Notifications.Handlers;
@@ -38,14 +40,10 @@ public interface IOnboardEntity
     Task ExecuteAsync(OnboardEntityRequest args);
 }
 
-public enum ApprovalStatus {
-    Pending,
-    Approved,
-    Rejected
-}
 
 public record OnboardEntityState(
     OnboardEntityRequest args,
+    string CurrentValue,
     string ApprovalComment = null,
     ApprovalStatus ApprovalStatus = ApprovalStatus.Pending);
 
@@ -58,6 +56,9 @@ public class OnboardEntity : IOnboardEntity
     [WorkflowRun]
     public async Task ExecuteAsync(OnboardEntityRequest args)
     {
+        args = AssertValidRequest(args);
+        
+        _state = new OnboardEntityState(args, args.Value);
         var logger = Workflow.Logger;
         logger.LogInformation($"onboardingentity with runid {Workflow.Info.RunId}");
         AssertValidRequest(args);
@@ -72,12 +73,11 @@ public class OnboardEntity : IOnboardEntity
             TaskQueue = Workflow.Info.TaskQueue
         };
 
-        _state = new OnboardEntityState(args);
         if (!args.SkipApproval)
         {
 
             var waitApprovalSecs = args.CompletionTimeoutSeconds;
-            if (args.DeputyOwnerEmail != null)
+            if (!string.IsNullOrEmpty(args.DeputyOwnerEmail))
             {
                 // We lean into integer division here to be unconcerned about
                 // determinism issues. Note that if we did this with a float/double
@@ -85,49 +85,54 @@ public class OnboardEntity : IOnboardEntity
                 // requirement for our Timer.
                 waitApprovalSecs = args.CompletionTimeoutSeconds / 2;
             }
+            logger.LogInformation($"Waiting {waitApprovalSecs} seconds for approval");
 
             // this blocks until we flip the `ApprovalStatus` bit on our state object
             var conditionMet =
                 await Workflow.WaitConditionAsync(() => !_state.ApprovalStatus.Equals(ApprovalStatus.Pending), TimeSpan.FromSeconds(waitApprovalSecs));
             if (!conditionMet)
             {
-                if (args.DeputyOwnerEmail != null)
+                logger.LogInformation("entered failure to receive approval");
+                if (string.IsNullOrEmpty(args.DeputyOwnerEmail))
                 {
-                    // Since we are delivering an message, we want to restrict the number of retry attempts we make 
-                    // lest we inadvertently build a SPAM server.
-                    var notificationOptions =
-                        new ActivityOptions() {
-                            StartToCloseTimeout = TimeSpan.FromSeconds(60),
-                            RetryPolicy = new RetryPolicy() { MaximumAttempts = 2, }
-                        };
-                    await Workflow.ExecuteActivityAsync((NotificationHandlers act) =>
-                            act.RequestDeputyOwnerApproval(
-                                new RequestDeputyOwnerApprovalRequest(args.Id, args.DeputyOwnerEmail!)),
-                        notificationOptions);
-
-                    // Now that we have notified the `DeputyOwner` that we need approval we can resume our wait for approval.
-                    // Let's just recursively call our Workflow without the DeputyOwnerEmail specified and with the balance of our approval period.
-                    var newArgs = args with {
-                        DeputyOwnerEmail = null,
-                        CompletionTimeoutSeconds = args.CompletionTimeoutSeconds - waitApprovalSecs
-                    };
-                    throw Workflow.CreateContinueAsNewException<OnboardEntity>(wf => wf.ExecuteAsync(newArgs),
-                        new ContinueAsNewOptions() { TaskQueue = Workflow.Info.TaskQueue, });
+                    var message = $"Onboarding {args.Id} failed to be approved in {args.CompletionTimeoutSeconds} seconds.";
+                    logger.LogError(message);
+                    // We never received approval from Deputy or primary owners, so we just fail the workflow
+                    throw new ApplicationFailureException(message, Errors.ErrOnboardEntityTimedOut);
                 }
+              
+                // Since we are delivering an message, we want to restrict the number of retry attempts we make 
+                // lest we inadvertently build a SPAM server.
+                var notificationOptions =
+                    new ActivityOptions() {
+                        StartToCloseTimeout = TimeSpan.FromSeconds(60),
+                        RetryPolicy = new RetryPolicy() { MaximumAttempts = 2, }
+                    };
+                await Workflow.ExecuteActivityAsync((NotificationHandlers act) =>
+                        act.RequestDeputyOwnerApproval(
+                            new RequestDeputyOwnerApprovalRequest(args.Id, args.DeputyOwnerEmail!)),
+                    notificationOptions);
 
-                var message = $"Onboarding {args.Id} failed to be approved in {args.CompletionTimeoutSeconds} seconds.";
-                logger.LogError(message);
-                // We never received approval from Deputy or primary owners, so we just fail the workflow
-                throw new ApplicationFailureException(message, Errors.ErrOnboardEntityTimedOut);
+                // Now that we have notified the `DeputyOwner` that we need approval we can resume our wait for approval.
+                // Let's just recursively call our Workflow without the DeputyOwnerEmail specified and with the balance of our approval period.
+                var newArgs = args with {
+                    Value = _state.CurrentValue,
+                    DeputyOwnerEmail = null,
+                    CompletionTimeoutSeconds = args.CompletionTimeoutSeconds - waitApprovalSecs,
+                };
+                throw Workflow.CreateContinueAsNewException<OnboardEntity>(wf => wf.ExecuteAsync(newArgs),
+                    new ContinueAsNewOptions() { TaskQueue = Workflow.Info.TaskQueue, });
             }
-            if (_state.ApprovalStatus.Equals(ApprovalStatus.Rejected))
-            {
-                return;
-            }
+            
+        } 
+        if (!_state.ApprovalStatus.Equals(Messages.Values.ApprovalStatus.Approved))
+        {
+            logger.LogInformation($"Failed to obtain approval {_state}");
+            return;
         }
-
         try
         {
+            logger.LogError($"WTF {_state.ApprovalStatus}");
             /*
              // During TDD for a Workflow definition it is handy to Execute the activity by its Name as seen here.
              // Now that we have implemented the Activity, though, we will replace it with the strongly typed invocation.
@@ -150,7 +155,7 @@ public class OnboardEntity : IOnboardEntity
         }
     }
 
-    private static void AssertValidRequest(OnboardEntityRequest args)
+    private static OnboardEntityRequest AssertValidRequest(OnboardEntityRequest args)
     {
         if (string.IsNullOrEmpty(args.Id) || string.IsNullOrEmpty(args.Value))
             /*
@@ -177,23 +182,49 @@ public class OnboardEntity : IOnboardEntity
         {
             throw new ApplicationFailureException("Either skip approval or provide a Deputy Owner email, not both.");
         }
-        if(args.DeputyOwnerEmail != null && (TimeSpan.FromSeconds(args.CompletionTimeoutSeconds) < TimeSpan.FromDays(4)))
+        if(!string.IsNullOrEmpty(args.DeputyOwnerEmail) && (TimeSpan.FromSeconds(args.CompletionTimeoutSeconds) < TimeSpan.FromDays(4)))
         {
             throw new ApplicationFailureException("Give at least four days to receive approval");
         }
+        var def = new OnboardEntityRequest(args.Id, args.Value);
+
+        if (args.CompletionTimeoutSeconds < 1)
+        {
+            args = args with { CompletionTimeoutSeconds = def.CompletionTimeoutSeconds };
+        }
+        return args;
     }
 
     [WorkflowSignal]
-    public Task Approve(ApproveEntityRequest approveEntityRequest)
+    public Task ApproveAsync(ApproveEntityRequest approveEntityRequest)
     {
         _state = _state with { ApprovalStatus = ApprovalStatus.Approved, ApprovalComment = approveEntityRequest.Comment};
-        return Task.CompletedTask;
+        return Task.CompletedTask;  
     }
 
     [WorkflowSignal]
-    public Task Reject(RejectEntityRequest rejectEntityRequest)
+    public Task RejectAsync(RejectEntityRequest rejectEntityRequest)
     {
         _state = _state with { ApprovalStatus = ApprovalStatus.Rejected, ApprovalComment = rejectEntityRequest.Comment};
         return Task.CompletedTask;
+    }
+
+    [WorkflowUpdateValidator(nameof(SetValueAsync))]
+    public async void ValidateSetValue(SetValueRequest setValueRequest)
+    {
+        if (_state == null)
+        {
+            Workflow.Logger.LogInformation("_state is null");
+            throw new ArgumentException("_state not exists");
+        }
+        Workflow.Logger.LogInformation($"running validator for {setValueRequest.Value}");
+    }
+    [WorkflowUpdate]
+    public async Task<OnboardEntityState> SetValueAsync(SetValueRequest cmd)
+    {
+        Workflow.Logger.LogInformation($"setting value from {_state.CurrentValue} to {cmd.Value}");
+        // throw new ArgumentException("foo");
+        _state = _state with { CurrentValue = cmd.Value };
+        return _state;
     }
 }

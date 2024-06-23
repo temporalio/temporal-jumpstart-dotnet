@@ -32,15 +32,21 @@ Signals to be played before continuing on to either Close or ContinueAsNew the E
 
 
 ## Update
+The **Update** primitive allows Request-Reply messaging semantics.
+Update has [phases](https://docs.temporal.io/encyclopedia/application-message-passing#updates) that are interesting to consider.
 
+The "validation" phase of an Update can inspect current workflow state  to determine if the
+Update should be "accepted" or not. 
 // TODO
 
 ## Refactor Our Use Case
 
-We need to support the **Approve** or **Reject** Command that passes along details of the Owner (or Deputy Owner) reasons
-for Approval/Rejection.
+#### Support the **Approve** or **Reject** Command that passes along details of the Owner (or Deputy Owner) reasons for Approval/Rejection.
 
 We can do this by extending our `PUT /onboardings/{id}` endpoint with an `Approval` struct that accepts either `APPROVED` or `REJECTED` status with an optional `Comment`.
 This means employing the "Create or Update" strategy for our Onboarding entity, but now we need to decide
 whether we want to:
 1. Check for existence of the `OnboardEntity` Workflow before sending our `ApproveOnboarding` Signal
+
+#### Support the **SetEntityValue** Command that mutates the value
+

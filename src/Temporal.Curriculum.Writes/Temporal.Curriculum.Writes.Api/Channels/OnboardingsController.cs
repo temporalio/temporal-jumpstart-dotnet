@@ -45,10 +45,10 @@ public class OnboardingsController(
             switch (req.Approval.Status)
             {
                 case Messages.Values.ApprovalStatus.Approved:
-                    signalCall = wf => wf.Approve(new ApproveEntityRequest(req.Approval.Comment));
+                    signalCall = wf => wf.ApproveAsync(new ApproveEntityRequest(req.Approval.Comment));
                     break;
                 case Messages.Values.ApprovalStatus.Rejected:
-                    signalCall = wf => wf.Reject(new RejectEntityRequest(req.Approval.Comment));
+                    signalCall = wf => wf.RejectAsync(new RejectEntityRequest(req.Approval.Comment));
                     break;
                 default:
                     return BadRequest();

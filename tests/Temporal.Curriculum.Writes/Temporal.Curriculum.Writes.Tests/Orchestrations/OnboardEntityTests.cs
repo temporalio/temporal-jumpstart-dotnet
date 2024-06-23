@@ -293,7 +293,7 @@ public class OnboardEntityTests : TestBase
             var handle = await env.Client.StartWorkflowAsync<OnboardEntity>(wf => wf.ExecuteAsync(args),
                 new WorkflowOptions(args.Id, worker.Options.TaskQueue!));
             await env.DelayAsync(TimeSpan.FromSeconds(2));
-            await handle.SignalAsync(wf => wf.Approve(new ApproveEntityRequest("beep")));
+            await handle.SignalAsync(wf => wf.ApproveAsync(new ApproveEntityRequest("beep")));
             await handle.GetResultAsync(followRuns:false);
             Assert.NotNull(registrationRequestSent); 
             Assert.Null(deputyOwnerApprovalRequested);
@@ -340,13 +340,64 @@ public class OnboardEntityTests : TestBase
             var handle = await env.Client.StartWorkflowAsync<OnboardEntity>(wf => wf.ExecuteAsync(args),
                 new WorkflowOptions(args.Id, worker.Options.TaskQueue!));
             await env.DelayAsync(TimeSpan.FromSeconds(2));
-            await handle.SignalAsync(wf => wf.Reject(new RejectEntityRequest("beep")));
+            await handle.SignalAsync(wf => wf.RejectAsync(new RejectEntityRequest("beep")));
             await handle.GetResultAsync(followRuns:false);
             Assert.Null(registrationRequestSent); 
             Assert.Null(deputyOwnerApprovalRequested);
         });
     }
-   
+    [Fact]
+    public async Task SetValue_GivenPendingApproval_ShouldUpdateValue()
+    {
+        await using var env = await WorkflowEnvironment.StartLocalAsync();
+        var args = new OnboardEntityRequest(
+            Id: Guid.NewGuid().ToString(), 
+            Value: Guid.NewGuid().ToString(),
+            CompletionTimeoutSeconds:TimeSpan.FromSeconds(5).Seconds);
+        
+        
+        RegisterCrmEntityRequest registrationRequestSent = null;
+        RequestDeputyOwnerApprovalRequest deputyOwnerApprovalRequested = null;
+        var workerOptions = new TemporalWorkerOptions("test") { LoggerFactory = LoggerFactory };
+        workerOptions.AddWorkflow<OnboardEntity>(); 
+        
+        [Activity]
+        Task RegisterCrmEntity(RegisterCrmEntityRequest req)
+        {
+            registrationRequestSent = req;
+            return Task.CompletedTask;
+        }
+
+        [Activity]
+        Task RequestDeputyOwnerApproval(RequestDeputyOwnerApprovalRequest req)
+        {
+            deputyOwnerApprovalRequested = req;
+            return Task.CompletedTask;
+        }
+        workerOptions.AddActivity(RegisterCrmEntity);
+        workerOptions.AddActivity(RequestDeputyOwnerApproval);
+
+        using var worker = new TemporalWorker(
+            env.Client,
+            workerOptions
+        );
+
+        
+        await worker.ExecuteAsync(async () =>
+        {
+            var handle = await env.Client.StartWorkflowAsync<OnboardEntity>(wf => wf.ExecuteAsync(args),
+                new WorkflowOptions(args.Id, worker.Options.TaskQueue!));
+            await env.DelayAsync(TimeSpan.FromSeconds(1));
+
+            var actual = await handle.ExecuteUpdateAsync<OnboardEntity, OnboardEntityState>(wf =>
+                wf.SetValueAsync(new SetValueRequest("boop")));
+            Assert.Equal("boop", actual.CurrentValue);
+            await handle.CancelAsync();
+        });
+        
+        Assert.Null(registrationRequestSent); 
+        Assert.Null(deputyOwnerApprovalRequested);
+    }
     public OnboardEntityTests(ITestOutputHelper output, ITestOutputHelper testOutputHelper) : base(output)
     {
         _testOutputHelper = testOutputHelper;
