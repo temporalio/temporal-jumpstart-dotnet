@@ -301,7 +301,7 @@ public class OnboardEntityTests : TestBase
         });
     }
     [Fact]
-    public async Task RejectOnboardingEntity_GivenAwaitingApproval_ShouldRegisterEntityWithCrm()
+    public async Task RejectOnboardingEntity_GivenAwaitingApproval_ShouldNotRegisterEntityWithCrm()
     {
         await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
         var args = new OnboardEntityRequest(

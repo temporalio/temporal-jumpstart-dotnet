@@ -58,7 +58,7 @@ public class OnboardEntity : IOnboardEntity
     {
         args = AssertValidRequest(args);
         
-        _state = new OnboardEntityState(args, args.Value);
+        _state = new OnboardEntityState(args, args.Value, ApprovalStatus:args.SkipApproval ? ApprovalStatus.Approved : ApprovalStatus.Pending);
         var logger = Workflow.Logger;
         logger.LogInformation($"onboardingentity with runid {Workflow.Info.RunId}");
         AssertValidRequest(args);
@@ -76,12 +76,14 @@ public class OnboardEntity : IOnboardEntity
         if (!args.SkipApproval)
         {
             await AwaitApproval(args);
-        } 
-        if (!_state.ApprovalStatus.Equals(Messages.Values.ApprovalStatus.Approved))
+        }
+
+        if (!_state.ApprovalStatus.Equals(ApprovalStatus.Approved))
         {
-            logger.LogInformation($"Failed to obtain approval {_state}");
+            logger.LogWarning($"Failed to gain approval for {args.Id}. Aborting request.");
             return;
         }
+        
         try
         {
             /*

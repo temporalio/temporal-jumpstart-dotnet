@@ -48,6 +48,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Writes.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Writes.Tests", "tests\Temporal.Curriculum.Writes\Temporal.Curriculum.Writes.Tests\Temporal.Curriculum.Writes.Tests.csproj", "{EDA5B2B5-2EEA-4313-B096-CB2677C338BF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Reads.Api", "src\Temporal.Curriculum.Reads\Temporal.Curriculum.Reads.Api\Temporal.Curriculum.Reads.Api.csproj", "{B6E7B80C-0DBF-4AE6-9D6C-0BA8718DE13B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Reads.Messages", "src\Temporal.Curriculum.Reads\Temporal.Curriculum.Reads.Messages\Temporal.Curriculum.Reads.Messages.csproj", "{917BCB94-A613-4F41-8816-E116C137E429}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Reads.Domain", "src\Temporal.Curriculum.Reads\Temporal.Curriculum.Reads.Domain\Temporal.Curriculum.Reads.Domain.csproj", "{01163400-5B5D-4CF2-BD5A-4AF20903F3B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Reads.Services", "src\Temporal.Curriculum.Reads\Temporal.Curriculum.Reads.Services\Temporal.Curriculum.Reads.Services.csproj", "{974A36EF-D980-4B72-8B7D-975744275E2A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -154,5 +162,21 @@ Global
 		{EDA5B2B5-2EEA-4313-B096-CB2677C338BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EDA5B2B5-2EEA-4313-B096-CB2677C338BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EDA5B2B5-2EEA-4313-B096-CB2677C338BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6E7B80C-0DBF-4AE6-9D6C-0BA8718DE13B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6E7B80C-0DBF-4AE6-9D6C-0BA8718DE13B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6E7B80C-0DBF-4AE6-9D6C-0BA8718DE13B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6E7B80C-0DBF-4AE6-9D6C-0BA8718DE13B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{917BCB94-A613-4F41-8816-E116C137E429}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{917BCB94-A613-4F41-8816-E116C137E429}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{917BCB94-A613-4F41-8816-E116C137E429}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{917BCB94-A613-4F41-8816-E116C137E429}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01163400-5B5D-4CF2-BD5A-4AF20903F3B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01163400-5B5D-4CF2-BD5A-4AF20903F3B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01163400-5B5D-4CF2-BD5A-4AF20903F3B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01163400-5B5D-4CF2-BD5A-4AF20903F3B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{974A36EF-D980-4B72-8B7D-975744275E2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{974A36EF-D980-4B72-8B7D-975744275E2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{974A36EF-D980-4B72-8B7D-975744275E2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{974A36EF-D980-4B72-8B7D-975744275E2A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
