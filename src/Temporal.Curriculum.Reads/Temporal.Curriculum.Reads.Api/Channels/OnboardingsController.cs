@@ -3,17 +3,18 @@ using System.Linq.Expressions;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Temporal.Curriculum.Writes.Domain.Clients.Temporal;
-using Temporal.Curriculum.Writes.Domain.Orchestrations;
-using Temporal.Curriculum.Writes.Messages.API;
-using Temporal.Curriculum.Writes.Messages.Commands;
-using Temporal.Curriculum.Writes.Messages.Orchestrations;
+using Temporal.Curriculum.Reads.Domain.Clients.Temporal;
+using Temporal.Curriculum.Reads.Domain.Orchestrations;
+using Temporal.Curriculum.Reads.Messages.API;
+using Temporal.Curriculum.Reads.Messages.Commands;
+using Temporal.Curriculum.Reads.Messages.Orchestrations;
+using Temporal.Curriculum.Reads.Messages.Queries;
 using Temporalio.Api.Enums.V1;
 using Temporalio.Client;
 using Temporalio.Converters;
 using Temporalio.Exceptions;
 
-namespace Temporal.Curriculum.Writes.Api.Channels;
+namespace Temporal.Curriculum.Reads.Api.Channels;
 
 [Route("api/onboardings")]
 [ApiController]
@@ -132,25 +133,11 @@ public class OnboardingsController(
         // We will be replacing this usage with a `Query` invocation to be simpler and more explicit.
         // This module will not overly explain this interaction but will be valuable later when we
         // want to reason about our Executions with more detail.
-        var handle = temporalClient.GetWorkflowHandle(id);
-        var result = new OnboardingsGet
-        {
-            Id = handle.Id
-        };
         try
         {
-            var describe = await handle.DescribeAsync();
-            result = result with { ExecutionStatus = describe.Status.ToString() };
-            var hist = await handle.FetchHistoryAsync();
-            var started = hist.Events.First(e => e.EventType == EventType.WorkflowExecutionStarted);
-            result = started.WorkflowExecutionStartedEventAttributes.Input.Payloads_.Aggregate(result,
-                (current, payload) => current with
-                {
-                    Input = (OnboardEntityRequest?)DataConverter.Default.PayloadConverter.ToValue(payload,
-                        typeof(OnboardEntityRequest)) ?? throw new InvalidOperationException()
-                });
-
-            return Ok(result);
+            var handle = temporalClient.GetWorkflowHandle<OnboardEntity>(id);
+            var q = await handle.QueryAsync<GetEntityOnboardingStateResponse>(wf =>  wf.GetEntityOnboardingStateAsync(new GetEntityOnboardingStateRequest(id)));
+            return Ok(new OnboardingsGet(q.Id, q.CurrentValue, q.Approval));
         }
         catch (RpcException e)
         {
@@ -159,7 +146,6 @@ public class OnboardingsController(
                 return NotFound();
             }
         }
-
         return new StatusCodeResult(StatusCodes.Status500InternalServerError);
     }
 }

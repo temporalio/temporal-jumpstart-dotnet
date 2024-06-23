@@ -1,7 +1,9 @@
 using Microsoft.Extensions.Logging;
-using Temporal.Curriculum.Writes.Domain.Orchestrations;
-using Temporal.Curriculum.Writes.Messages.Commands;
-using Temporal.Curriculum.Writes.Messages.Orchestrations;
+using Temporal.Curriculum.Reads.Domain.Orchestrations;
+using Temporal.Curriculum.Reads.Messages.Commands;
+using Temporal.Curriculum.Reads.Messages.Orchestrations;
+using Temporal.Curriculum.Reads.Messages.Queries;
+using Temporal.Curriculum.Reads.Messages.Values;
 using Temporalio.Activities;
 using Temporalio.Api.Enums.V1;
 using Temporalio.Client;
@@ -10,10 +12,10 @@ using Temporalio.Exceptions;
 using Temporalio.Testing;
 using Temporalio.Worker;
 using Xunit.Abstractions;
-using Errors = Temporal.Curriculum.Writes.Domain.Orchestrations.Errors;
-using IntegrationErrors = Temporal.Curriculum.Writes.Domain.Integrations.Errors;
+using Errors = Temporal.Curriculum.Reads.Domain.Orchestrations.Errors;
+using IntegrationErrors = Temporal.Curriculum.Reads.Domain.Integrations.Errors;
 
-namespace Temporal.Curriculum.Writes.Tests.Orchestrations;
+namespace Temporal.Curriculum.Reads.Tests.Orchestrations;
 
 public class OnboardEntityTests : TestBase
 {
@@ -460,6 +462,40 @@ public class OnboardEntityTests : TestBase
         Assert.Null(registrationRequestSent); 
         Assert.Null(deputyOwnerApprovalRequested);
     }
+
+    [Fact]
+    public async Task GetEntityOnboardingState_ShouldReturnState()
+    {
+        await using var env = await WorkflowEnvironment.StartLocalAsync();
+        var args = new OnboardEntityRequest(
+            Id: Guid.NewGuid().ToString(),
+            Value: Guid.NewGuid().ToString(),
+            CompletionTimeoutSeconds: TimeSpan.FromSeconds(5).Seconds);
+
+
+        RegisterCrmEntityRequest registrationRequestSent = null;
+        RequestDeputyOwnerApprovalRequest deputyOwnerApprovalRequested = null;
+        var workerOptions = new TemporalWorkerOptions("test") { LoggerFactory = LoggerFactory };
+        workerOptions.AddWorkflow<OnboardEntity>();
+        
+        using var worker = new TemporalWorker(
+            env.Client,
+            workerOptions
+        );
+
+
+        await worker.ExecuteAsync(async () =>
+        {
+            var handle = await env.Client.StartWorkflowAsync<OnboardEntity>(wf => wf.ExecuteAsync(args),
+                new WorkflowOptions(args.Id, worker.Options.TaskQueue!));
+            var actual = await handle.QueryAsync(wf => wf.GetEntityOnboardingStateAsync(
+                new GetEntityOnboardingStateRequest(args.Id)));
+            Assert.Equivalent(new GetEntityOnboardingStateResponse(args.Id, args.Value, new Approval(ApprovalStatus.Pending, null!)), actual);
+            await handle.CancelAsync();
+        });
+
+    }
+
     public OnboardEntityTests(ITestOutputHelper output, ITestOutputHelper testOutputHelper) : base(output)
     {
         _testOutputHelper = testOutputHelper;
