@@ -1,7 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Jumpstart.App", "src\Temporal.Jumpstart.App\Temporal.Jumpstart.App.csproj", "{6F712E58-03E9-4A54-AA3F-7804C1632F97}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Starters", "src\Temporal.Curriculum.Starters\Temporal.Curriculum.Starters.csproj", "{EE24B378-441C-40C0-AEA1-35729DC3E7E3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Workflows.Domain", "src\Temporal.Curriculum.Workflows\Temporal.Curriculum.Workflows.Domain\Temporal.Curriculum.Workflows.Domain.csproj", "{6FC824FF-658E-4CC0-A464-978BB39F9778}"
@@ -58,6 +56,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Reads.S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Reads.Tests", "tests\Temporal.Curriculum.Reads\Temporal.Curriculum.Reads.Tests\Temporal.Curriculum.Reads.Tests.csproj", "{0FB4FA0F-4677-4B1C-8E4F-FA4920BCAE2F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Jumpstart.App.Services", "src\Temporal.Jumpstart.App\Temporal.Jumpstart.App.Services\Temporal.Jumpstart.App.Services.csproj", "{2AF43329-668F-4FD3-BB34-A5916CBCD9EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Jumpstart.App.Messages", "src\Temporal.Jumpstart.App\Temporal.Jumpstart.App.Messages\Temporal.Jumpstart.App.Messages.csproj", "{D88BB5CD-2957-4F8A-957B-840D9D43CA3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Jumpstart.App.Domain", "src\Temporal.Jumpstart.App\Temporal.Jumpstart.App.Domain\Temporal.Jumpstart.App.Domain.csproj", "{76C501E4-BE84-4502-B719-785D5688D223}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Jumpstart.App.Api", "src\Temporal.Jumpstart.App\Temporal.Jumpstart.App.Api\Temporal.Jumpstart.App.Api.csproj", "{15A9B439-D370-416A-8A1E-A29C3DFCF7A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Jumpstart.App.Tests", "tests\Temporal.Jumpstart.App\Temporal.Jumpstart.App.Tests\Temporal.Jumpstart.App.Tests.csproj", "{AB4483DA-6028-4F52-B1A2-46C9167997A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,10 +76,6 @@ Global
 		{3236D6B0-4151-4C94-83C9-6064F73395C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3236D6B0-4151-4C94-83C9-6064F73395C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3236D6B0-4151-4C94-83C9-6064F73395C2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6F712E58-03E9-4A54-AA3F-7804C1632F97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6F712E58-03E9-4A54-AA3F-7804C1632F97}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6F712E58-03E9-4A54-AA3F-7804C1632F97}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6F712E58-03E9-4A54-AA3F-7804C1632F97}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EE24B378-441C-40C0-AEA1-35729DC3E7E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EE24B378-441C-40C0-AEA1-35729DC3E7E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE24B378-441C-40C0-AEA1-35729DC3E7E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -184,5 +188,25 @@ Global
 		{0FB4FA0F-4677-4B1C-8E4F-FA4920BCAE2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0FB4FA0F-4677-4B1C-8E4F-FA4920BCAE2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0FB4FA0F-4677-4B1C-8E4F-FA4920BCAE2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AF43329-668F-4FD3-BB34-A5916CBCD9EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AF43329-668F-4FD3-BB34-A5916CBCD9EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AF43329-668F-4FD3-BB34-A5916CBCD9EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AF43329-668F-4FD3-BB34-A5916CBCD9EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D88BB5CD-2957-4F8A-957B-840D9D43CA3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D88BB5CD-2957-4F8A-957B-840D9D43CA3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D88BB5CD-2957-4F8A-957B-840D9D43CA3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D88BB5CD-2957-4F8A-957B-840D9D43CA3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76C501E4-BE84-4502-B719-785D5688D223}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76C501E4-BE84-4502-B719-785D5688D223}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76C501E4-BE84-4502-B719-785D5688D223}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76C501E4-BE84-4502-B719-785D5688D223}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15A9B439-D370-416A-8A1E-A29C3DFCF7A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15A9B439-D370-416A-8A1E-A29C3DFCF7A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15A9B439-D370-416A-8A1E-A29C3DFCF7A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15A9B439-D370-416A-8A1E-A29C3DFCF7A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB4483DA-6028-4F52-B1A2-46C9167997A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB4483DA-6028-4F52-B1A2-46C9167997A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB4483DA-6028-4F52-B1A2-46C9167997A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB4483DA-6028-4F52-B1A2-46C9167997A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

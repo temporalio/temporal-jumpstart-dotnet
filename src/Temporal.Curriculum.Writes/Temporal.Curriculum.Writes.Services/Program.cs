@@ -2,7 +2,6 @@ using System.Diagnostics;
 using Temporal.Curriculum.Writes.Domain.Clients.Crm;
 using Temporal.Curriculum.Writes.Domain.Clients.Email;
 using Temporal.Curriculum.Writes.Domain.Clients.Temporal;
-using Temporal.Curriculum.Writes.Domain.Integrations;
 using Temporal.Curriculum.Writes.Domain.Orchestrations;
 using Temporalio.Extensions.Hosting;
 
@@ -15,7 +14,6 @@ namespace Temporal.Curriculum.Writes.Services
         public static async Task Main(string[] args)
         {
             await RunIoCApp(args);
-            // RunApp(args);
         }
 
         private static async Task RunIoCApp(string[] args)
