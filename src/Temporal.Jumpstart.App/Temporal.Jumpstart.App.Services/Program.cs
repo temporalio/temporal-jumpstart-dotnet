@@ -1,13 +1,9 @@
 using System.Diagnostics;
-using Temporal.Curriculum.Writes.Domain.Clients.Crm;
-using Temporal.Curriculum.Writes.Domain.Clients.Email;
-using Temporal.Curriculum.Writes.Domain.Clients.Temporal;
-using Temporal.Curriculum.Writes.Domain.Orchestrations;
-using Temporalio.Extensions.Hosting;
 
-using IntegrationsHandlers = Temporal.Curriculum.Writes.Domain.Integrations.Handlers;
-using NotificationHandlers = Temporal.Curriculum.Writes.Domain.Notifications.Handlers;
-namespace Temporal.Curriculum.Writes.Services
+using Temporal.Jumpstart.App.Domain.Clients.Temporal;
+using Temporal.Jumpstart.App.Domain.Orchestrations;
+using Temporalio.Extensions.Hosting;
+namespace Temporal.Jumpstart.App.Services
 {
     public class Program
     {
@@ -31,15 +27,13 @@ namespace Temporal.Curriculum.Writes.Services
 
             // expose OptionsPattern in services
             builder.Services.AddOptions<TemporalConfig>().BindConfiguration(temporalConfigSection);
-            builder.Services.AddSingleton<ICrmClient, InMemoryCrmClient>();
-            builder.Services.AddSingleton<IEmailClient, InMemoryEmailClient>();
+            // builder.Services.AddSingleton<ICrmClient, InMemoryCrmClient>();;
 
             // configure our Worker
             builder.Services.AddHostedTemporalWorker(temporalConfig.Worker.TaskQueue)
                 .ConfigureOptions(o => { o.ConfigureService(temporalConfig); })
-                .AddScopedActivities<IntegrationsHandlers>()
-                .AddScopedActivities<NotificationHandlers>()
-                .AddWorkflow<OnboardEntity>();
+                // .AddScopedActivities<IntegrationsHandlers>()
+                .AddWorkflow<MyWorkflow>();
 
             var host = builder.Build();
             var lf = host.Services.GetService<ILoggerFactory>();

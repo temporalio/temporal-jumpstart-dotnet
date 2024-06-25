@@ -57,7 +57,7 @@ public class OnboardingsController(
             }
              await handle.SignalAsync<OnboardEntity>(signalCall);
              // poor man's uri template. prefer RFC 6570 implementation
-             var location = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/onboardings/{id}";
+             var location = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/api/onboardings/{id}";
              return Accepted(location);
         } catch (RpcException e)
         {
@@ -116,7 +116,7 @@ public class OnboardingsController(
         }
 
         // poor man's uri template. prefer RFC 6570 implementation
-        var location = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/onboardings/{id}";
+        var location = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/api/onboardings/{id}";
        return Accepted(location);
     }
 
@@ -127,12 +127,6 @@ public class OnboardingsController(
         Debug.Assert(httpContextAccessor.HttpContext != null, "httpContextAccessor.HttpContext != null");
         var temporalClient = httpContextAccessor.HttpContext.Features.GetRequiredFeature<ITemporalClient>();
 
-        // this is relatively advanced use of the TemporalClient but is shown here to 
-        // illustrate how to interact with the lower-level gRPC API for extracting details
-        // about the WorkflowExecution. 
-        // We will be replacing this usage with a `Query` invocation to be simpler and more explicit.
-        // This module will not overly explain this interaction but will be valuable later when we
-        // want to reason about our Executions with more detail.
         try
         {
             var handle = temporalClient.GetWorkflowHandle<OnboardEntity>(id);
