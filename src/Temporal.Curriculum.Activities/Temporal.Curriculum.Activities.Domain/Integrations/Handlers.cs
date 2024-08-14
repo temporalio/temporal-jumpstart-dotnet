@@ -21,7 +21,7 @@ public class Handlers
     }
 
     [Activity]
-    public async Task RegisterCrmEntity(RegisterCrmEntityRequest args)
+    public async void RegisterCrmEntity(RegisterCrmEntityRequest args)
     {
         var logger = ActivityExecutionContext.Current.Logger;
         try
