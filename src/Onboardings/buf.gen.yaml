@@ -1,0 +1,25 @@
+version: v2
+clean: true
+managed:
+  enabled: true
+  override:
+#    - file_option: csharp_namespace
+#      path: proto/onboardings
+#      value: Domain.Onboardings
+    - file_option: csharp_namespace
+      path: proto/snailforce
+      value: Snailforce
+      
+plugins:
+  - remote: buf.build/protocolbuffers/csharp:v31.1
+    out: generated
+#    opt:
+#      - base_namespace=Onboardings
+##    opt: 
+#      - base_namespace=
+#  - remote: buf.build/grpc/csharp:v1.72.1
+#    out: generated/services
+#    opt:
+#      - base_namespace=Onboardings
+inputs:
+  - directory: proto

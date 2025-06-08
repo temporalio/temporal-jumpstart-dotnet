@@ -9,22 +9,22 @@ using Onboardings.Domain.Messages.Commands;
 using Onboardings.Domain.Messages.Orchestrations;
 using Onboardings.Domain.Orchestrations;
 using Temporalio.Api.Enums.V1;
-using DomainValues = Onboardings.Domain.Messages.Values;
 using Temporalio.Client;
 using Temporalio.Converters;
 using Temporalio.Exceptions;
+using DomainValues = Onboardings.Domain.Messages.Values;
 
-namespace Onboardings.Api.Channels;
+namespace Onboardings.Api.Controllers;
 
-[Route("api/onboardings")]
+[Route("api/v2/onboardings")]
 [ApiController]
-public class OnboardingsController(
+public class OnboardingsControllerV2(
     IHttpContextAccessor httpContextAccessor,
     IOptions<TemporalConfig> temporalConfig,
     ILoggerFactory logger)
     : ControllerBase
 {
-    private readonly ILogger _logger = logger.CreateLogger<OnboardingsController>();
+    private readonly ILogger _logger = logger.CreateLogger<OnboardingsControllerV2>();
 
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]

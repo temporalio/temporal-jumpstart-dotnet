@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+// introduce our new v2 package of our message.
+// take care to keep all the field _numbers_ the same and only
+// _add_ fields.
+package onboardings.domain.workflows.v2;
+
+message OnboardEntityRequest {
+  google.protobuf.Timestamp timestamp = 1;
+  string id = 2;
+  string value = 3;
+  uint64 completion_timeout_seconds = 4;
+  string deputy_owner_email = 5;
+  bool skip_approval = 6;
+  // this field is introduced per v2 product requirements
+  // so we are _adding_ it to avoid conflict with old message versions
+  string email = 7;
+}
