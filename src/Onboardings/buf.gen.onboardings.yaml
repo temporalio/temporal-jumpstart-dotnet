@@ -1,19 +1,18 @@
 # generate this with 
 #  buf generate --path proto/onboardings --template buf.gen.onboardings.yaml
 version: v2
-clean: true
 managed:
   enabled: true
       
       
 plugins:
   - remote: buf.build/protocolbuffers/csharp:v31.1
-    out: Onboardings.Generated
+    out: Onboardings.Generated/Onboardings
     opt:
-      - base_namespace=Onboardings.Generated
+      - base_namespace=Onboardings
   - remote: buf.build/grpc/csharp:v1.72.1
-    out: Onboardings.Generated
+    out: Onboardings.Generated/Onboardings
     opt:
-      - base_namespace=Onboardings.Generated
+      - base_namespace=Onboardings
 inputs:
   - directory: proto

@@ -1,5 +1,7 @@
+# generate this with 
+#  buf generate --path proto/snailforce --template buf.gen.snailforce.yaml
+
 version: v2
-clean: true
 managed:
   enabled: true
   override:
@@ -12,24 +14,13 @@ managed:
       
 plugins:
   - remote: buf.build/protocolbuffers/csharp:v31.1
-    out: generated
-#    opt:
-#      - base_namespace=Onboardings
-##    opt: 
-#      - base_namespace=
-#  - remote: buf.build/grpc/csharp:v1.72.1
-#    out: generated/services
-#    opt:
-#      - base_namespace=Onboardings
-inputs:
-  - directory: proto
-    
-plugins:
-  - remote: buf.build/protocolbuffers/csharp:v31.1
     out: Onboardings.Generated/Snailforce
     opt:
-      - base_namespace=Onboardings.Generated
+      - base_namespace=Snailforce
   - remote: buf.build/grpc/csharp:v1.72.1
     out: Onboardings.Generated/Snailforce
     opt:
-      - base_namespace=Onboardings.Generated
+      - base_namespace=Snailforce
+inputs:
+  - directory: proto
+    
