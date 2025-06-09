@@ -8,14 +8,12 @@ managed:
       
 plugins:
   - remote: buf.build/protocolbuffers/csharp:v31.1
-    out: generated/Onboardings
+    out: Onboardings.Generated
     opt:
-      - base_namespace=Onboardings
-##    opt: 
-#      - base_namespace=
-#  - remote: buf.build/grpc/csharp:v1.72.1
-#    out: generated/services
-#    opt:
-#      - base_namespace=Onboardings
+      - base_namespace=Onboardings.Generated
+  - remote: buf.build/grpc/csharp:v1.72.1
+    out: Onboardings.Generated
+    opt:
+      - base_namespace=Onboardings.Generated
 inputs:
   - directory: proto

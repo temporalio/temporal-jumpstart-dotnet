@@ -23,3 +23,13 @@ plugins:
 #      - base_namespace=Onboardings
 inputs:
   - directory: proto
+    
+plugins:
+  - remote: buf.build/protocolbuffers/csharp:v31.1
+    out: Onboardings.Generated/Snailforce
+    opt:
+      - base_namespace=Onboardings.Generated
+  - remote: buf.build/grpc/csharp:v1.72.1
+    out: Onboardings.Generated/Snailforce
+    opt:
+      - base_namespace=Onboardings.Generated
