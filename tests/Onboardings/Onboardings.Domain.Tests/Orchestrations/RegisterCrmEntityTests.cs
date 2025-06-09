@@ -1,7 +1,7 @@
 using Onboardings.Domain.Clients;
 using Onboardings.Domain.Clients.Crm;
+using Onboardings.Domain.Commands.V1;
 using Onboardings.Domain.Integrations;
-using Onboardings.Domain.Messages.Commands;
 using Temporalio.Testing;
 using Xunit.Abstractions;
 
@@ -47,7 +47,9 @@ public class RegisterCrmEntityTests(ITestOutputHelper output) : TestBase(output)
     {
         var requestExc = new HttpRequestException("service is down");
         var crmClient = new MockCrmClient(requestExc);
-        var args = new RegisterCrmEntityRequest(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
+        var args = new RegisterCrmEntityRequest{
+            Id = Guid.NewGuid().ToString(),
+            Value = Guid.NewGuid().ToString()};
         var handlers = new Handlers(crmClient);
         ActivityEnvironment env = new ActivityEnvironment()
         {
@@ -63,7 +65,9 @@ public class RegisterCrmEntityTests(ITestOutputHelper output) : TestBase(output)
     [Fact]
     public async Task RunAsync_RegisterCrmEntity_GivenRecordAlreadyExists_SucceedsWithoutMutation()
     {
-        var args = new RegisterCrmEntityRequest(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
+        var args = new RegisterCrmEntityRequest{
+            Id = Guid.NewGuid().ToString(),
+            Value = Guid.NewGuid().ToString()};
 
         var crmClient = new MockCrmClient(null);
         crmClient.PreviouslyRegisteredEntities.Add(args.Id, args.Value);

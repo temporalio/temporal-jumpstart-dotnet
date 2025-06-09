@@ -26,22 +26,23 @@ namespace Onboardings.Domain.Workflows.V2 {
           string.Concat(
             "Ci1vbmJvYXJkaW5ncy9kb21haW4vd29ya2Zsb3dzL3YyL21lc3NhZ2UucHJv",
             "dG8SH29uYm9hcmRpbmdzLmRvbWFpbi53b3JrZmxvd3MudjIaH2dvb2dsZS9w",
-            "cm90b2J1Zi90aW1lc3RhbXAucHJvdG8inQIKFE9uYm9hcmRFbnRpdHlSZXF1",
+            "cm90b2J1Zi90aW1lc3RhbXAucHJvdG8iyAIKFE9uYm9hcmRFbnRpdHlSZXF1",
             "ZXN0EjgKCXRpbWVzdGFtcBgBIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1l",
             "c3RhbXBSCXRpbWVzdGFtcBIOCgJpZBgCIAEoCVICaWQSFAoFdmFsdWUYAyAB",
             "KAlSBXZhbHVlEjwKGmNvbXBsZXRpb25fdGltZW91dF9zZWNvbmRzGAQgASgE",
-            "Uhhjb21wbGV0aW9uVGltZW91dFNlY29uZHMSLAoSZGVwdXR5X293bmVyX2Vt",
-            "YWlsGAUgASgJUhBkZXB1dHlPd25lckVtYWlsEiMKDXNraXBfYXBwcm92YWwY",
-            "BiABKAhSDHNraXBBcHByb3ZhbBIUCgVlbWFpbBgHIAEoCVIFZW1haWxC0gEK",
-            "I2NvbS5vbmJvYXJkaW5ncy5kb21haW4ud29ya2Zsb3dzLnYyQgxNZXNzYWdl",
-            "UHJvdG9QAaICA09EV6oCH09uYm9hcmRpbmdzLkRvbWFpbi5Xb3JrZmxvd3Mu",
-            "VjLKAh9PbmJvYXJkaW5nc1xEb21haW5cV29ya2Zsb3dzXFYy4gIrT25ib2Fy",
-            "ZGluZ3NcRG9tYWluXFdvcmtmbG93c1xWMlxHUEJNZXRhZGF0YeoCIk9uYm9h",
-            "cmRpbmdzOjpEb21haW46OldvcmtmbG93czo6VjJiBnByb3RvMw=="));
+            "Uhhjb21wbGV0aW9uVGltZW91dFNlY29uZHMSMQoSZGVwdXR5X293bmVyX2Vt",
+            "YWlsGAUgASgJSABSEGRlcHV0eU93bmVyRW1haWyIAQESIwoNc2tpcF9hcHBy",
+            "b3ZhbBgGIAEoCFIMc2tpcEFwcHJvdmFsEhkKBWVtYWlsGAcgASgJSAFSBWVt",
+            "YWlsiAEBQhUKE19kZXB1dHlfb3duZXJfZW1haWxCCAoGX2VtYWlsQtIBCiNj",
+            "b20ub25ib2FyZGluZ3MuZG9tYWluLndvcmtmbG93cy52MkIMTWVzc2FnZVBy",
+            "b3RvUAGiAgNPRFeqAh9PbmJvYXJkaW5ncy5Eb21haW4uV29ya2Zsb3dzLlYy",
+            "ygIfT25ib2FyZGluZ3NcRG9tYWluXFdvcmtmbG93c1xWMuICK09uYm9hcmRp",
+            "bmdzXERvbWFpblxXb3JrZmxvd3NcVjJcR1BCTWV0YWRhdGHqAiJPbmJvYXJk",
+            "aW5nczo6RG9tYWluOjpXb3JrZmxvd3M6OlYyYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Onboardings.Domain.Workflows.V2.OnboardEntityRequest), global::Onboardings.Domain.Workflows.V2.OnboardEntityRequest.Parser, new[]{ "Timestamp", "Id", "Value", "CompletionTimeoutSeconds", "DeputyOwnerEmail", "SkipApproval", "Email" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Onboardings.Domain.Workflows.V2.OnboardEntityRequest), global::Onboardings.Domain.Workflows.V2.OnboardEntityRequest.Parser, new[]{ "Timestamp", "Id", "Value", "CompletionTimeoutSeconds", "DeputyOwnerEmail", "SkipApproval", "Email" }, new[]{ "DeputyOwnerEmail", "Email" }, null, null, null)
           }));
     }
     #endregion
@@ -149,14 +150,28 @@ namespace Onboardings.Domain.Workflows.V2 {
 
     /// <summary>Field number for the "deputy_owner_email" field.</summary>
     public const int DeputyOwnerEmailFieldNumber = 5;
-    private string deputyOwnerEmail_ = "";
+    private readonly static string DeputyOwnerEmailDefaultValue = "";
+
+    private string deputyOwnerEmail_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string DeputyOwnerEmail {
-      get { return deputyOwnerEmail_; }
+      get { return deputyOwnerEmail_ ?? DeputyOwnerEmailDefaultValue; }
       set {
         deputyOwnerEmail_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
+    }
+    /// <summary>Gets whether the "deputy_owner_email" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasDeputyOwnerEmail {
+      get { return deputyOwnerEmail_ != null; }
+    }
+    /// <summary>Clears the value of the "deputy_owner_email" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearDeputyOwnerEmail() {
+      deputyOwnerEmail_ = null;
     }
 
     /// <summary>Field number for the "skip_approval" field.</summary>
@@ -173,7 +188,9 @@ namespace Onboardings.Domain.Workflows.V2 {
 
     /// <summary>Field number for the "email" field.</summary>
     public const int EmailFieldNumber = 7;
-    private string email_ = "";
+    private readonly static string EmailDefaultValue = "";
+
+    private string email_;
     /// <summary>
     /// this field is introduced per v2 product requirements
     /// so we are _adding_ it to avoid conflict with old message versions
@@ -181,10 +198,22 @@ namespace Onboardings.Domain.Workflows.V2 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string Email {
-      get { return email_; }
+      get { return email_ ?? EmailDefaultValue; }
       set {
         email_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
+    }
+    /// <summary>Gets whether the "email" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasEmail {
+      get { return email_ != null; }
+    }
+    /// <summary>Clears the value of the "email" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearEmail() {
+      email_ = null;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -220,9 +249,9 @@ namespace Onboardings.Domain.Workflows.V2 {
       if (Id.Length != 0) hash ^= Id.GetHashCode();
       if (Value.Length != 0) hash ^= Value.GetHashCode();
       if (CompletionTimeoutSeconds != 0UL) hash ^= CompletionTimeoutSeconds.GetHashCode();
-      if (DeputyOwnerEmail.Length != 0) hash ^= DeputyOwnerEmail.GetHashCode();
+      if (HasDeputyOwnerEmail) hash ^= DeputyOwnerEmail.GetHashCode();
       if (SkipApproval != false) hash ^= SkipApproval.GetHashCode();
-      if (Email.Length != 0) hash ^= Email.GetHashCode();
+      if (HasEmail) hash ^= Email.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -257,7 +286,7 @@ namespace Onboardings.Domain.Workflows.V2 {
         output.WriteRawTag(32);
         output.WriteUInt64(CompletionTimeoutSeconds);
       }
-      if (DeputyOwnerEmail.Length != 0) {
+      if (HasDeputyOwnerEmail) {
         output.WriteRawTag(42);
         output.WriteString(DeputyOwnerEmail);
       }
@@ -265,7 +294,7 @@ namespace Onboardings.Domain.Workflows.V2 {
         output.WriteRawTag(48);
         output.WriteBool(SkipApproval);
       }
-      if (Email.Length != 0) {
+      if (HasEmail) {
         output.WriteRawTag(58);
         output.WriteString(Email);
       }
@@ -295,7 +324,7 @@ namespace Onboardings.Domain.Workflows.V2 {
         output.WriteRawTag(32);
         output.WriteUInt64(CompletionTimeoutSeconds);
       }
-      if (DeputyOwnerEmail.Length != 0) {
+      if (HasDeputyOwnerEmail) {
         output.WriteRawTag(42);
         output.WriteString(DeputyOwnerEmail);
       }
@@ -303,7 +332,7 @@ namespace Onboardings.Domain.Workflows.V2 {
         output.WriteRawTag(48);
         output.WriteBool(SkipApproval);
       }
-      if (Email.Length != 0) {
+      if (HasEmail) {
         output.WriteRawTag(58);
         output.WriteString(Email);
       }
@@ -329,13 +358,13 @@ namespace Onboardings.Domain.Workflows.V2 {
       if (CompletionTimeoutSeconds != 0UL) {
         size += 1 + pb::CodedOutputStream.ComputeUInt64Size(CompletionTimeoutSeconds);
       }
-      if (DeputyOwnerEmail.Length != 0) {
+      if (HasDeputyOwnerEmail) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(DeputyOwnerEmail);
       }
       if (SkipApproval != false) {
         size += 1 + 1;
       }
-      if (Email.Length != 0) {
+      if (HasEmail) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Email);
       }
       if (_unknownFields != null) {
@@ -365,13 +394,13 @@ namespace Onboardings.Domain.Workflows.V2 {
       if (other.CompletionTimeoutSeconds != 0UL) {
         CompletionTimeoutSeconds = other.CompletionTimeoutSeconds;
       }
-      if (other.DeputyOwnerEmail.Length != 0) {
+      if (other.HasDeputyOwnerEmail) {
         DeputyOwnerEmail = other.DeputyOwnerEmail;
       }
       if (other.SkipApproval != false) {
         SkipApproval = other.SkipApproval;
       }
-      if (other.Email.Length != 0) {
+      if (other.HasEmail) {
         Email = other.Email;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);

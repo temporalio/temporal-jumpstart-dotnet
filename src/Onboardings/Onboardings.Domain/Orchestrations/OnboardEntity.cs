@@ -46,7 +46,7 @@ public record OnboardEntityState(
 public class OnboardEntity : IOnboardEntity
 {
     private OnboardEntityState _state;
-
+    public static ulong DefaultCompletionTimeoutSeconds =  7 * 86400;
     [WorkflowRun]
     public async Task ExecuteAsync(OnboardEntityRequest args)
     {
@@ -86,7 +86,7 @@ public class OnboardEntity : IOnboardEntity
                 await Workflow.ExecuteActivityAsync("RegisterCrmEntity", new []{new RegisterCrmEntityRequest(args.Id, args.Value)}, opts);
             */
             await Workflow.ExecuteActivityAsync((Handlers act) =>
-                    act.RegisterCrmEntity(new RegisterCrmEntityRequest(args.Id, args.Value)),
+                    act.RegisterCrmEntity(new RegisterCrmEntityRequest { Id = args.Id, Value=args.Value}),
                 opts);
         }
         catch (ActivityFailureException e)
@@ -106,7 +106,7 @@ public class OnboardEntity : IOnboardEntity
     {
         var logger = Workflow.Logger;
         var waitApprovalSecs = args.CompletionTimeoutSeconds;
-        if (!string.IsNullOrEmpty(args.DeputyOwnerEmail))
+        if (args.HasDeputyOwnerEmail)
         {
             // We lean into integer division here to be unconcerned about
             // determinism issues. Note that if we did this with a float/double
@@ -122,7 +122,7 @@ public class OnboardEntity : IOnboardEntity
         if (!conditionMet)
         {
             logger.LogInformation("entered failure to receive approval");
-            if (string.IsNullOrEmpty(args.DeputyOwnerEmail))
+            if (!args.HasDeputyOwnerEmail)
             {
                 var message = $"Onboarding {args.Id} failed to be approved in {args.CompletionTimeoutSeconds} seconds.";
                 logger.LogError(message);
@@ -139,15 +139,17 @@ public class OnboardEntity : IOnboardEntity
                 };
             await Workflow.ExecuteActivityAsync((NotificationHandlers act) =>
                     act.RequestDeputyOwnerApproval(
-                        new RequestDeputyOwnerApprovalRequest(args.Id, args.DeputyOwnerEmail!)),
+                        new RequestDeputyOwnerApprovalRequest { Id=args.Id, DeputyOwnerEmail = args.DeputyOwnerEmail! }),
                 notificationOptions);
 
             // Now that we have notified the `DeputyOwner` that we need approval we can resume our wait for approval.
             // Let's just recursively call our Workflow without the DeputyOwnerEmail specified and with the balance of our approval period.
-            var newArgs = args with {
+            var newArgs = new OnboardEntityRequest {
+                Id = args.Id,
                 Value = _state.CurrentValue,
-                DeputyOwnerEmail = null,
-                CompletionTimeoutSeconds = args.CompletionTimeoutSeconds - waitApprovalSecs,
+                // DeputyOwnerEmail = null,
+                CompletionTimeoutSeconds = (ulong)(args.CompletionTimeoutSeconds - waitApprovalSecs),
+                Email = args.Email,
             };
             throw Workflow.CreateContinueAsNewException<OnboardEntity>(wf => wf.ExecuteAsync(newArgs),
                 new ContinueAsNewOptions() { TaskQueue = Workflow.Info.TaskQueue, });
@@ -177,7 +179,7 @@ public class OnboardEntity : IOnboardEntity
             throw new ApplicationFailureException("OnboardEntity.Id and OnboardEntity.Value is required");
         }
 
-        if (args is { SkipApproval: true, DeputyOwnerEmail: not null })
+        if (args is { SkipApproval: true, HasDeputyOwnerEmail: true })
         {
             throw new ApplicationFailureException("Either skip approval or provide a Deputy Owner email, not both.");
         }
@@ -185,11 +187,9 @@ public class OnboardEntity : IOnboardEntity
         {
             throw new ApplicationFailureException("Give at least four days to receive approval");
         }
-        var def = new OnboardEntityRequest(args.Id, args.Value);
-
         if (args.CompletionTimeoutSeconds < 1)
         {
-            args = args with { CompletionTimeoutSeconds = def.CompletionTimeoutSeconds };
+            args.CompletionTimeoutSeconds = DefaultCompletionTimeoutSeconds;
         }
         return args;
     }

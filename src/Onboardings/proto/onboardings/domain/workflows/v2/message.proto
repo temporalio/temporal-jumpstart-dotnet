@@ -12,9 +12,9 @@ message OnboardEntityRequest {
   string id = 2;
   string value = 3;
   uint64 completion_timeout_seconds = 4;
-  string deputy_owner_email = 5;
+  optional string deputy_owner_email = 5;
   bool skip_approval = 6;
   // this field is introduced per v2 product requirements
   // so we are _adding_ it to avoid conflict with old message versions
-  string email = 7;
+  optional string email = 7;
 }

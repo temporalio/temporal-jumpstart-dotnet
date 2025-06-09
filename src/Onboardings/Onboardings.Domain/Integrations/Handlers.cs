@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Onboardings.Domain.Clients.Crm;
-using Onboardings.Domain.Messages.Commands;
+using Onboardings.Domain.Commands.V1;
 using Temporalio.Activities;
 using Temporalio.Exceptions;
 
