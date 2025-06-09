@@ -217,11 +217,11 @@ public class OnboardEntity : IOnboardEntity
         }
     }
     [WorkflowUpdate]
-    public async Task<OnboardEntityState> SetValueAsync(SetValueRequest cmd)
+    public Task<OnboardEntityState> SetValueAsync(SetValueRequest cmd)
     {
         Workflow.Logger.LogInformation($"setting value from {_state.CurrentValue} to {cmd.Value}");
         // throw new ArgumentException("foo");
         _state = _state with { CurrentValue = cmd.Value };
-        return _state;
+        return Task.FromResult(_state);
     }
 }

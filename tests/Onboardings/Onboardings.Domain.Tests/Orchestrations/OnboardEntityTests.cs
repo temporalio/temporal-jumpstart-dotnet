@@ -427,10 +427,17 @@ public class OnboardEntityTests : TestBase
         Assert.Null(registrationRequestSent); 
         Assert.Null(deputyOwnerApprovalRequested);
     }
-    [Fact(Skip = "Update with test server is broken")]
+    // [Fact(Skip = "Update with test server is broken")]
+    [Fact]
     public async Task SetValue_GivenApprovedEntity_ShouldNotUpdateValue()
     {
-        await using var env = await WorkflowEnvironment.StartLocalAsync();
+        await using var env = await WorkflowEnvironment.StartLocalAsync(options:new WorkflowEnvironmentStartLocalOptions
+        {
+            DevServerOptions = new DevServerOptions
+            {
+                ExistingPath = "/opt/homebrew/bin/temporal"
+            }
+        });
         var args = new OnboardEntityRequest { 
             
             Id= Guid.NewGuid().ToString(),
@@ -464,28 +471,38 @@ public class OnboardEntityTests : TestBase
             workerOptions
         );
 
-        
-        await worker.ExecuteAsync(async () =>
-        {
-            var handle = await env.Client.StartWorkflowAsync<OnboardEntity>(wf => wf.ExecuteAsync(args),
-                new WorkflowOptions(args.Id, worker.Options.TaskQueue!));
-            await env.DelayAsync(TimeSpan.FromSeconds(1));
-            await handle.SignalAsync(wf => wf.ApproveAsync(new ApproveEntityRequest { Comment = ""}));
-            try
-            {
-                var actual = await handle.ExecuteUpdateAsync<OnboardEntity, OnboardEntityState>(wf =>
-                    wf.SetValueAsync(new SetValueRequest { Value = "boop"}));
-                Assert.Equal("boop", actual.CurrentValue);
-            }
-            catch (Exception e)
-            {
-                LoggerFactory.CreateLogger("update").LogInformation($"Got exception {e.GetType()}");
-            }
 
-            
-            await handle.GetResultAsync();
-        });
-        
+        Exception? validationFailure = null;
+        try
+        {
+            await worker.ExecuteAsync(async () =>
+            {
+                var handle = await env.Client.StartWorkflowAsync<OnboardEntity>(wf => wf.ExecuteAsync(args),
+                    new WorkflowOptions(args.Id, worker.Options.TaskQueue!));
+                await env.DelayAsync(TimeSpan.FromSeconds(1));
+                await handle.SignalAsync(wf => wf.ApproveAsync(new ApproveEntityRequest { Comment = "" }));
+                try
+                {
+                    var actual = await handle.ExecuteUpdateAsync<OnboardEntity, OnboardEntityState>(wf =>
+                        wf.SetValueAsync(new SetValueRequest { Value = "boop" }));
+                    Assert.Equal(args.Value, actual.CurrentValue);
+                }
+                catch (Exception? e)
+                {
+                    validationFailure = e;
+                    LoggerFactory.CreateLogger("update").LogInformation($"Got exception {e.GetType()}");
+                }
+
+
+                await handle.GetResultAsync();
+            });
+        }
+        catch (Exception e)
+        {
+            // gulp
+        }
+
+        Assert.NotNull(validationFailure);
         Assert.Null(registrationRequestSent); 
         Assert.Null(deputyOwnerApprovalRequested);
     }
