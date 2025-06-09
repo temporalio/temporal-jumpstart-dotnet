@@ -30,6 +30,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\..\src\Onboardings\Onboardings.Domain\Onboardings.Domain.csproj" />
         <ProjectReference Include="..\..\..\src\Onboardings\Onboardings.Domain.Messages\Onboardings.Domain.Messages.csproj" />
+        <ProjectReference Include="..\..\..\src\Onboardings\Onboardings.Generated\Onboardings.Generated.csproj" />
     </ItemGroup>
 
 </Project>
