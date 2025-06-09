@@ -72,6 +72,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Onboardings.Domain", "src\O
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Onboardings.Workers", "src\Onboardings\Onboardings.Workers\Onboardings.Workers.csproj", "{6E47C763-2FEA-4B52-9AA5-B6F7C6F726E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Onboardings.Domain.Tests", "tests\Onboardings\Onboardings.Domain.Tests\Onboardings.Domain.Tests.csproj", "{98E58234-A9CA-4C1D-8294-7FAD8B5804C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -226,5 +228,9 @@ Global
 		{6E47C763-2FEA-4B52-9AA5-B6F7C6F726E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E47C763-2FEA-4B52-9AA5-B6F7C6F726E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E47C763-2FEA-4B52-9AA5-B6F7C6F726E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98E58234-A9CA-4C1D-8294-7FAD8B5804C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98E58234-A9CA-4C1D-8294-7FAD8B5804C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98E58234-A9CA-4C1D-8294-7FAD8B5804C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98E58234-A9CA-4C1D-8294-7FAD8B5804C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

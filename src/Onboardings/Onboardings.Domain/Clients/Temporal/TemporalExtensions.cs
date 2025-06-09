@@ -1,4 +1,7 @@
 using System.Diagnostics;
+using Temporalio.Client;
+using Temporalio.Extensions.Hosting;
+using Temporalio.Worker;
 
 namespace Onboardings.Domain.Clients.Temporal;
 

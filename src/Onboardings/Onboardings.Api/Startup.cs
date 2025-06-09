@@ -3,6 +3,9 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Onboardings.Api.Middleware;
+using Onboardings.Domain.Clients.Temporal;
+using Temporalio.Client;
 
 namespace Onboardings.Api;
 
