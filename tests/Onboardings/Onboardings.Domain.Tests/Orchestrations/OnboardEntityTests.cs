@@ -1,11 +1,9 @@
 using Microsoft.Extensions.Logging;
-using Onboardings.Domain.Orchestrations;
-
-using Onboardings.Domain.Commands;
 using Onboardings.Domain.Commands.V1;
 using Onboardings.Domain.Orchestrations;
 using Onboardings.Domain.Workflows.V2;
 using Temporalio.Activities;
+
 using Temporalio.Api.Enums.V1;
 using Temporalio.Client;
 using Temporalio.Converters;
@@ -29,7 +27,12 @@ public class OnboardEntityTests : TestBase
         await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
         var wid = Guid.NewGuid();
         var emptyValue = "";
-        var args = new OnboardEntityRequest(wid.ToString(), emptyValue,SkipApproval:true);
+        var args = new OnboardEntityRequest
+        {
+            Id = wid.ToString(), 
+            Value = emptyValue, 
+            SkipApproval = true,
+        };
         using var worker = new TemporalWorker(
             env.Client,
             new TemporalWorkerOptions("test").AddWorkflow<OnboardEntity>());
@@ -49,7 +52,13 @@ public class OnboardEntityTests : TestBase
     public async Task ExecuteAsync_GivenHealthyService_RegistersCrmEntity()
     {
         await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
-        var args = new OnboardEntityRequest(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(),SkipApproval:true);
+        var args = new OnboardEntityRequest
+        {
+            Id = Guid.NewGuid().ToString(), 
+            Value = Guid.NewGuid().ToString(), 
+            SkipApproval = true,
+        };
+
         RegisterCrmEntityRequest requested = null;
 
         var workerOptions = new TemporalWorkerOptions("test");
@@ -93,7 +102,12 @@ public class OnboardEntityTests : TestBase
     public async Task ExecuteAsync_GivenUnhealthyService_IsNotRetryable_FailsEntireOnboarding()
     {
         await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
-        var args = new OnboardEntityRequest(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), SkipApproval:true);
+        var args = new OnboardEntityRequest
+        {
+            Id = Guid.NewGuid().ToString(), 
+            Value = Guid.NewGuid().ToString(), 
+            SkipApproval = true,
+        };
         RegisterCrmEntityRequest requested = null;
 
         var workerOptions = new TemporalWorkerOptions("test");
@@ -145,10 +159,13 @@ public class OnboardEntityTests : TestBase
     public async Task ExecuteAsync_GivenOwnerApprovalNotMetTimely_NoDeputyOwner_ShouldCancelWithFailureOnboardingWithoutRegisteringEntity()
     {
         await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
-        var args = new OnboardEntityRequest(
-            Id: Guid.NewGuid().ToString(), 
-            Value: Guid.NewGuid().ToString(),
-            DeputyOwnerEmail: null);
+        var args = new OnboardEntityRequest
+        {
+            Id = Guid.NewGuid().ToString(), 
+            Value = Guid.NewGuid().ToString(), 
+            SkipApproval = false,
+            DeputyOwnerEmail = null,
+        };
         
         RegisterCrmEntityRequest registrationRequestSent = null;
         RequestDeputyOwnerApprovalRequest deputyOwnerApprovalRequested = null;
@@ -198,10 +215,13 @@ public class OnboardEntityTests : TestBase
     public async Task ExecuteAsync_GivenOwnerApprovalNotMetTimely_WithDeputyOwnerNotResponding_ShouldCancelWithFailureOnboardingWithoutRegisteringEntity()
     {
         await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
-        var args = new OnboardEntityRequest(
-            Id: Guid.NewGuid().ToString(), 
-            Value: Guid.NewGuid().ToString(),
-            DeputyOwnerEmail: "deputy@dawg.com");
+        var args = new OnboardEntityRequest
+        {
+            Id = Guid.NewGuid().ToString(), 
+            Value = Guid.NewGuid().ToString(), 
+            SkipApproval = false,
+            DeputyOwnerEmail = "deputy@dawg.com",
+        };
         
         RegisterCrmEntityRequest registrationRequestSent = null;
         RequestDeputyOwnerApprovalRequest deputyOwnerApprovalRequested = null;
@@ -261,10 +281,12 @@ public class OnboardEntityTests : TestBase
     public async Task ApproveOnboardingEntity_GivenAwaitingApproval_ShouldRegisterEntityWithCrm()
     {
         await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
-        var args = new OnboardEntityRequest(
-            Id: Guid.NewGuid().ToString(), 
-            Value: Guid.NewGuid().ToString(),
-            CompletionTimeoutSeconds:TimeSpan.FromSeconds(3).Seconds);
+        var args = new OnboardEntityRequest
+        {
+            Id= Guid.NewGuid().ToString(),
+            Value= Guid.NewGuid().ToString(),
+            CompletionTimeoutSeconds= (ulong)TimeSpan.FromSeconds(3).Seconds,
+        };
         
         
         RegisterCrmEntityRequest registrationRequestSent = null;
@@ -308,11 +330,11 @@ public class OnboardEntityTests : TestBase
     public async Task RejectOnboardingEntity_GivenAwaitingApproval_ShouldNotRegisterEntityWithCrm()
     {
         await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
-        var args = new OnboardEntityRequest(
-            Id: Guid.NewGuid().ToString(), 
-            Value: Guid.NewGuid().ToString(),
-            CompletionTimeoutSeconds:TimeSpan.FromSeconds(3).Seconds);
-        
+        var args = new OnboardEntityRequest{
+            Id= Guid.NewGuid().ToString(),
+            Value= Guid.NewGuid().ToString(),
+            CompletionTimeoutSeconds= (ulong)TimeSpan.FromSeconds(3).Seconds,
+        };
         
         RegisterCrmEntityRequest registrationRequestSent = null;
         RequestDeputyOwnerApprovalRequest deputyOwnerApprovalRequested = null;
@@ -355,11 +377,13 @@ public class OnboardEntityTests : TestBase
     public async Task SetValue_GivenPendingApproval_ShouldUpdateValue()
     {
         await using var env = await WorkflowEnvironment.StartLocalAsync();
-        var args = new OnboardEntityRequest(
-            Id: Guid.NewGuid().ToString(), 
-            Value: Guid.NewGuid().ToString(),
-            CompletionTimeoutSeconds:TimeSpan.FromSeconds(5).Seconds);
-        
+        var args = new OnboardEntityRequest { 
+            
+                Id= Guid.NewGuid().ToString(),
+                Value= Guid.NewGuid().ToString(),
+                CompletionTimeoutSeconds= (ulong)TimeSpan.FromSeconds(5).Seconds,
+            };
+            
         
         RegisterCrmEntityRequest registrationRequestSent = null;
         RequestDeputyOwnerApprovalRequest deputyOwnerApprovalRequested = null;
@@ -407,11 +431,12 @@ public class OnboardEntityTests : TestBase
     public async Task SetValue_GivenApprovedEntity_ShouldNotUpdateValue()
     {
         await using var env = await WorkflowEnvironment.StartLocalAsync();
-        var args = new OnboardEntityRequest(
-            Id: Guid.NewGuid().ToString(), 
-            Value: Guid.NewGuid().ToString(),
-            CompletionTimeoutSeconds:TimeSpan.FromSeconds(5).Seconds);
-        
+        var args = new OnboardEntityRequest { 
+            
+            Id= Guid.NewGuid().ToString(),
+            Value= Guid.NewGuid().ToString(),
+            CompletionTimeoutSeconds= (ulong)TimeSpan.FromSeconds(5).Seconds,
+        };
         
         RegisterCrmEntityRequest registrationRequestSent = null;
         RequestDeputyOwnerApprovalRequest deputyOwnerApprovalRequested = null;

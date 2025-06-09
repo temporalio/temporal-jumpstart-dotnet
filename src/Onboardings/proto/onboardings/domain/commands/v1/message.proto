@@ -6,7 +6,7 @@ message RegisterCrmEntityRequest {
   string id = 1;
   string value = 2;
 }
-message RequestDeputyOwnerRequest {
+message RequestDeputyOwnerApprovalRequest {
   string id = 1;
   string deputy_owner_email = 2;
 }

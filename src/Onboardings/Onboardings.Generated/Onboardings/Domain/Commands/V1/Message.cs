@@ -27,21 +27,21 @@ namespace Onboardings.Domain.Commands.V1 {
             "CixvbmJvYXJkaW5ncy9kb21haW4vY29tbWFuZHMvdjEvbWVzc2FnZS5wcm90",
             "bxIeb25ib2FyZGluZ3MuZG9tYWluLmNvbW1hbmRzLnYxIkAKGFJlZ2lzdGVy",
             "Q3JtRW50aXR5UmVxdWVzdBIOCgJpZBgBIAEoCVICaWQSFAoFdmFsdWUYAiAB",
-            "KAlSBXZhbHVlIlkKGVJlcXVlc3REZXB1dHlPd25lclJlcXVlc3QSDgoCaWQY",
-            "ASABKAlSAmlkEiwKEmRlcHV0eV9vd25lcl9lbWFpbBgCIAEoCVIQZGVwdXR5",
-            "T3duZXJFbWFpbCIwChRBcHByb3ZlRW50aXR5UmVxdWVzdBIYCgdjb21tZW50",
-            "GAEgASgJUgdjb21tZW50Ii8KE1JlamVjdEVudGl0eVJlcXVlc3QSGAoHY29t",
-            "bWVudBgBIAEoCVIHY29tbWVudELNAQoiY29tLm9uYm9hcmRpbmdzLmRvbWFp",
-            "bi5jb21tYW5kcy52MUIMTWVzc2FnZVByb3RvUAGiAgNPREOqAh5PbmJvYXJk",
-            "aW5ncy5Eb21haW4uQ29tbWFuZHMuVjHKAh5PbmJvYXJkaW5nc1xEb21haW5c",
-            "Q29tbWFuZHNcVjHiAipPbmJvYXJkaW5nc1xEb21haW5cQ29tbWFuZHNcVjFc",
-            "R1BCTWV0YWRhdGHqAiFPbmJvYXJkaW5nczo6RG9tYWluOjpDb21tYW5kczo6",
-            "VjFiBnByb3RvMw=="));
+            "KAlSBXZhbHVlImEKIVJlcXVlc3REZXB1dHlPd25lckFwcHJvdmFsUmVxdWVz",
+            "dBIOCgJpZBgBIAEoCVICaWQSLAoSZGVwdXR5X293bmVyX2VtYWlsGAIgASgJ",
+            "UhBkZXB1dHlPd25lckVtYWlsIjAKFEFwcHJvdmVFbnRpdHlSZXF1ZXN0EhgK",
+            "B2NvbW1lbnQYASABKAlSB2NvbW1lbnQiLwoTUmVqZWN0RW50aXR5UmVxdWVz",
+            "dBIYCgdjb21tZW50GAEgASgJUgdjb21tZW50Qs0BCiJjb20ub25ib2FyZGlu",
+            "Z3MuZG9tYWluLmNvbW1hbmRzLnYxQgxNZXNzYWdlUHJvdG9QAaICA09EQ6oC",
+            "Hk9uYm9hcmRpbmdzLkRvbWFpbi5Db21tYW5kcy5WMcoCHk9uYm9hcmRpbmdz",
+            "XERvbWFpblxDb21tYW5kc1xWMeICKk9uYm9hcmRpbmdzXERvbWFpblxDb21t",
+            "YW5kc1xWMVxHUEJNZXRhZGF0YeoCIU9uYm9hcmRpbmdzOjpEb21haW46OkNv",
+            "bW1hbmRzOjpWMWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Onboardings.Domain.Commands.V1.RegisterCrmEntityRequest), global::Onboardings.Domain.Commands.V1.RegisterCrmEntityRequest.Parser, new[]{ "Id", "Value" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Onboardings.Domain.Commands.V1.RequestDeputyOwnerRequest), global::Onboardings.Domain.Commands.V1.RequestDeputyOwnerRequest.Parser, new[]{ "Id", "DeputyOwnerEmail" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Onboardings.Domain.Commands.V1.RequestDeputyOwnerApprovalRequest), global::Onboardings.Domain.Commands.V1.RequestDeputyOwnerApprovalRequest.Parser, new[]{ "Id", "DeputyOwnerEmail" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Onboardings.Domain.Commands.V1.ApproveEntityRequest), global::Onboardings.Domain.Commands.V1.ApproveEntityRequest.Parser, new[]{ "Comment" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Onboardings.Domain.Commands.V1.RejectEntityRequest), global::Onboardings.Domain.Commands.V1.RejectEntityRequest.Parser, new[]{ "Comment" }, null, null, null, null)
           }));
@@ -286,16 +286,16 @@ namespace Onboardings.Domain.Commands.V1 {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class RequestDeputyOwnerRequest : pb::IMessage<RequestDeputyOwnerRequest>
+  public sealed partial class RequestDeputyOwnerApprovalRequest : pb::IMessage<RequestDeputyOwnerApprovalRequest>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<RequestDeputyOwnerRequest> _parser = new pb::MessageParser<RequestDeputyOwnerRequest>(() => new RequestDeputyOwnerRequest());
+    private static readonly pb::MessageParser<RequestDeputyOwnerApprovalRequest> _parser = new pb::MessageParser<RequestDeputyOwnerApprovalRequest>(() => new RequestDeputyOwnerApprovalRequest());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<RequestDeputyOwnerRequest> Parser { get { return _parser; } }
+    public static pb::MessageParser<RequestDeputyOwnerApprovalRequest> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -311,7 +311,7 @@ namespace Onboardings.Domain.Commands.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public RequestDeputyOwnerRequest() {
+    public RequestDeputyOwnerApprovalRequest() {
       OnConstruction();
     }
 
@@ -319,7 +319,7 @@ namespace Onboardings.Domain.Commands.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public RequestDeputyOwnerRequest(RequestDeputyOwnerRequest other) : this() {
+    public RequestDeputyOwnerApprovalRequest(RequestDeputyOwnerApprovalRequest other) : this() {
       id_ = other.id_;
       deputyOwnerEmail_ = other.deputyOwnerEmail_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -327,8 +327,8 @@ namespace Onboardings.Domain.Commands.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public RequestDeputyOwnerRequest Clone() {
-      return new RequestDeputyOwnerRequest(this);
+    public RequestDeputyOwnerApprovalRequest Clone() {
+      return new RequestDeputyOwnerApprovalRequest(this);
     }
 
     /// <summary>Field number for the "id" field.</summary>
@@ -358,12 +358,12 @@ namespace Onboardings.Domain.Commands.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as RequestDeputyOwnerRequest);
+      return Equals(other as RequestDeputyOwnerApprovalRequest);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(RequestDeputyOwnerRequest other) {
+    public bool Equals(RequestDeputyOwnerApprovalRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -449,7 +449,7 @@ namespace Onboardings.Domain.Commands.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(RequestDeputyOwnerRequest other) {
+    public void MergeFrom(RequestDeputyOwnerApprovalRequest other) {
       if (other == null) {
         return;
       }

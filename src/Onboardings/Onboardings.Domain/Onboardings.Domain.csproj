@@ -12,4 +12,8 @@
       <PackageReference Include="Temporalio.Extensions.Hosting" Version="1.1.2" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Onboardings.Generated\Onboardings.Generated.csproj" />
+    </ItemGroup>
+
 </Project>

@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Logging;
+using Onboardings.Domain.Commands.V1;
 using Onboardings.Domain.Integrations;
-using Onboardings.Domain.Messages.Commands;
-using Onboardings.Domain.Messages.Orchestrations;
-using Onboardings.Domain.Messages.Values;
+using Onboardings.Domain.Values.V1;
+using Onboardings.Domain.Workflows.V2;
 using Temporalio.Api.Enums.V1;
 using Temporalio.Common;
 using Temporalio.Exceptions;
