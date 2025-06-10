@@ -27,22 +27,25 @@ namespace Onboardings.Domain.Queries.V2 {
             "CitvbmJvYXJkaW5ncy9kb21haW4vcXVlcmllcy92Mi9tZXNzYWdlLnByb3Rv",
             "Eh1vbmJvYXJkaW5ncy5kb21haW4ucXVlcmllcy52Mhotb25ib2FyZGluZ3Mv",
             "ZG9tYWluL3dvcmtmbG93cy92Mi9tZXNzYWdlLnByb3RvGipvbmJvYXJkaW5n",
-            "cy9kb21haW4vdmFsdWVzL3YxL21lc3NhZ2UucHJvdG8ilAIKHUVudGl0eU9u",
-            "Ym9hcmRpbmdTdGF0ZVJlc3BvbnNlEg4KAmlkGAEgASgJUgJpZBJYCgxzZW50",
-            "X3JlcXVlc3QYAiABKAsyNS5vbmJvYXJkaW5ncy5kb21haW4ud29ya2Zsb3dz",
-            "LnYyLk9uYm9hcmRFbnRpdHlSZXF1ZXN0UgtzZW50UmVxdWVzdBJCCghhcHBy",
-            "b3ZhbBgDIAEoCzImLm9uYm9hcmRpbmdzLmRvbWFpbi52YWx1ZXMudjEuQXBw",
-            "cm92YWxSCGFwcHJvdmFsEkUKH2FwcHJvdmFsX3RpbWVfcmVtYWluaW5nX3Nl",
-            "Y29uZHMYBCABKARSHGFwcHJvdmFsVGltZVJlbWFpbmluZ1NlY29uZHNCyAEK",
-            "IWNvbS5vbmJvYXJkaW5ncy5kb21haW4ucXVlcmllcy52MkIMTWVzc2FnZVBy",
-            "b3RvUAGiAgNPRFGqAh1PbmJvYXJkaW5ncy5Eb21haW4uUXVlcmllcy5WMsoC",
-            "HU9uYm9hcmRpbmdzXERvbWFpblxRdWVyaWVzXFYy4gIpT25ib2FyZGluZ3Nc",
-            "RG9tYWluXFF1ZXJpZXNcVjJcR1BCTWV0YWRhdGHqAiBPbmJvYXJkaW5nczo6",
-            "RG9tYWluOjpRdWVyaWVzOjpWMmIGcHJvdG8z"));
+            "cy9kb21haW4vdmFsdWVzL3YxL21lc3NhZ2UucHJvdG8iIQofR2V0RW50aXR5",
+            "T25ib2FyZGluZ1N0YXRlUmVxdWVzdCLWAgogR2V0RW50aXR5T25ib2FyZGlu",
+            "Z1N0YXRlUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEkkKBGFyZ3MYAiABKAsy",
+            "NS5vbmJvYXJkaW5ncy5kb21haW4ud29ya2Zsb3dzLnYyLk9uYm9hcmRFbnRp",
+            "dHlSZXF1ZXN0UgRhcmdzEkIKCGFwcHJvdmFsGAMgASgLMiYub25ib2FyZGlu",
+            "Z3MuZG9tYWluLnZhbHVlcy52MS5BcHByb3ZhbFIIYXBwcm92YWwSIwoNY3Vy",
+            "cmVudF92YWx1ZRgEIAEoCVIMY3VycmVudFZhbHVlEkoKH2FwcHJvdmFsX3Rp",
+            "bWVfcmVtYWluaW5nX3NlY29uZHMYBSABKARIAFIcYXBwcm92YWxUaW1lUmVt",
+            "YWluaW5nU2Vjb25kc4gBAUIiCiBfYXBwcm92YWxfdGltZV9yZW1haW5pbmdf",
+            "c2Vjb25kc0LIAQohY29tLm9uYm9hcmRpbmdzLmRvbWFpbi5xdWVyaWVzLnYy",
+            "QgxNZXNzYWdlUHJvdG9QAaICA09EUaoCHU9uYm9hcmRpbmdzLkRvbWFpbi5R",
+            "dWVyaWVzLlYyygIdT25ib2FyZGluZ3NcRG9tYWluXFF1ZXJpZXNcVjLiAilP",
+            "bmJvYXJkaW5nc1xEb21haW5cUXVlcmllc1xWMlxHUEJNZXRhZGF0YeoCIE9u",
+            "Ym9hcmRpbmdzOjpEb21haW46OlF1ZXJpZXM6OlYyYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Onboardings.Domain.Workflows.V2.MessageReflection.Descriptor, global::Onboardings.Domain.Values.V1.MessageReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Onboardings.Domain.Queries.V2.EntityOnboardingStateResponse), global::Onboardings.Domain.Queries.V2.EntityOnboardingStateResponse.Parser, new[]{ "Id", "SentRequest", "Approval", "ApprovalTimeRemainingSeconds" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Onboardings.Domain.Queries.V2.GetEntityOnboardingStateRequest), global::Onboardings.Domain.Queries.V2.GetEntityOnboardingStateRequest.Parser, null, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Onboardings.Domain.Queries.V2.GetEntityOnboardingStateResponse), global::Onboardings.Domain.Queries.V2.GetEntityOnboardingStateResponse.Parser, new[]{ "Id", "Args", "Approval", "CurrentValue", "ApprovalTimeRemainingSeconds" }, new[]{ "ApprovalTimeRemainingSeconds" }, null, null, null)
           }));
     }
     #endregion
@@ -50,16 +53,16 @@ namespace Onboardings.Domain.Queries.V2 {
   }
   #region Messages
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class EntityOnboardingStateResponse : pb::IMessage<EntityOnboardingStateResponse>
+  public sealed partial class GetEntityOnboardingStateRequest : pb::IMessage<GetEntityOnboardingStateRequest>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<EntityOnboardingStateResponse> _parser = new pb::MessageParser<EntityOnboardingStateResponse>(() => new EntityOnboardingStateResponse());
+    private static readonly pb::MessageParser<GetEntityOnboardingStateRequest> _parser = new pb::MessageParser<GetEntityOnboardingStateRequest>(() => new GetEntityOnboardingStateRequest());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<EntityOnboardingStateResponse> Parser { get { return _parser; } }
+    public static pb::MessageParser<GetEntityOnboardingStateRequest> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -75,7 +78,7 @@ namespace Onboardings.Domain.Queries.V2 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public EntityOnboardingStateResponse() {
+    public GetEntityOnboardingStateRequest() {
       OnConstruction();
     }
 
@@ -83,18 +86,182 @@ namespace Onboardings.Domain.Queries.V2 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public EntityOnboardingStateResponse(EntityOnboardingStateResponse other) : this() {
+    public GetEntityOnboardingStateRequest(GetEntityOnboardingStateRequest other) : this() {
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetEntityOnboardingStateRequest Clone() {
+      return new GetEntityOnboardingStateRequest(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as GetEntityOnboardingStateRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(GetEntityOnboardingStateRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(GetEntityOnboardingStateRequest other) {
+      if (other == null) {
+        return;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class GetEntityOnboardingStateResponse : pb::IMessage<GetEntityOnboardingStateResponse>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<GetEntityOnboardingStateResponse> _parser = new pb::MessageParser<GetEntityOnboardingStateResponse>(() => new GetEntityOnboardingStateResponse());
+    private pb::UnknownFieldSet _unknownFields;
+    private int _hasBits0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<GetEntityOnboardingStateResponse> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Onboardings.Domain.Queries.V2.MessageReflection.Descriptor.MessageTypes[1]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetEntityOnboardingStateResponse() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetEntityOnboardingStateResponse(GetEntityOnboardingStateResponse other) : this() {
+      _hasBits0 = other._hasBits0;
       id_ = other.id_;
-      sentRequest_ = other.sentRequest_ != null ? other.sentRequest_.Clone() : null;
+      args_ = other.args_ != null ? other.args_.Clone() : null;
       approval_ = other.approval_ != null ? other.approval_.Clone() : null;
+      currentValue_ = other.currentValue_;
       approvalTimeRemainingSeconds_ = other.approvalTimeRemainingSeconds_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public EntityOnboardingStateResponse Clone() {
-      return new EntityOnboardingStateResponse(this);
+    public GetEntityOnboardingStateResponse Clone() {
+      return new GetEntityOnboardingStateResponse(this);
     }
 
     /// <summary>Field number for the "id" field.</summary>
@@ -109,15 +276,15 @@ namespace Onboardings.Domain.Queries.V2 {
       }
     }
 
-    /// <summary>Field number for the "sent_request" field.</summary>
-    public const int SentRequestFieldNumber = 2;
-    private global::Onboardings.Domain.Workflows.V2.OnboardEntityRequest sentRequest_;
+    /// <summary>Field number for the "args" field.</summary>
+    public const int ArgsFieldNumber = 2;
+    private global::Onboardings.Domain.Workflows.V2.OnboardEntityRequest args_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Onboardings.Domain.Workflows.V2.OnboardEntityRequest SentRequest {
-      get { return sentRequest_; }
+    public global::Onboardings.Domain.Workflows.V2.OnboardEntityRequest Args {
+      get { return args_; }
       set {
-        sentRequest_ = value;
+        args_ = value;
       }
     }
 
@@ -133,27 +300,54 @@ namespace Onboardings.Domain.Queries.V2 {
       }
     }
 
+    /// <summary>Field number for the "current_value" field.</summary>
+    public const int CurrentValueFieldNumber = 4;
+    private string currentValue_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string CurrentValue {
+      get { return currentValue_; }
+      set {
+        currentValue_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     /// <summary>Field number for the "approval_time_remaining_seconds" field.</summary>
-    public const int ApprovalTimeRemainingSecondsFieldNumber = 4;
+    public const int ApprovalTimeRemainingSecondsFieldNumber = 5;
+    private readonly static ulong ApprovalTimeRemainingSecondsDefaultValue = 0UL;
+
     private ulong approvalTimeRemainingSeconds_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public ulong ApprovalTimeRemainingSeconds {
-      get { return approvalTimeRemainingSeconds_; }
+      get { if ((_hasBits0 & 1) != 0) { return approvalTimeRemainingSeconds_; } else { return ApprovalTimeRemainingSecondsDefaultValue; } }
       set {
+        _hasBits0 |= 1;
         approvalTimeRemainingSeconds_ = value;
       }
+    }
+    /// <summary>Gets whether the "approval_time_remaining_seconds" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasApprovalTimeRemainingSeconds {
+      get { return (_hasBits0 & 1) != 0; }
+    }
+    /// <summary>Clears the value of the "approval_time_remaining_seconds" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearApprovalTimeRemainingSeconds() {
+      _hasBits0 &= ~1;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as EntityOnboardingStateResponse);
+      return Equals(other as GetEntityOnboardingStateResponse);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(EntityOnboardingStateResponse other) {
+    public bool Equals(GetEntityOnboardingStateResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -161,8 +355,9 @@ namespace Onboardings.Domain.Queries.V2 {
         return true;
       }
       if (Id != other.Id) return false;
-      if (!object.Equals(SentRequest, other.SentRequest)) return false;
+      if (!object.Equals(Args, other.Args)) return false;
       if (!object.Equals(Approval, other.Approval)) return false;
+      if (CurrentValue != other.CurrentValue) return false;
       if (ApprovalTimeRemainingSeconds != other.ApprovalTimeRemainingSeconds) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -172,9 +367,10 @@ namespace Onboardings.Domain.Queries.V2 {
     public override int GetHashCode() {
       int hash = 1;
       if (Id.Length != 0) hash ^= Id.GetHashCode();
-      if (sentRequest_ != null) hash ^= SentRequest.GetHashCode();
+      if (args_ != null) hash ^= Args.GetHashCode();
       if (approval_ != null) hash ^= Approval.GetHashCode();
-      if (ApprovalTimeRemainingSeconds != 0UL) hash ^= ApprovalTimeRemainingSeconds.GetHashCode();
+      if (CurrentValue.Length != 0) hash ^= CurrentValue.GetHashCode();
+      if (HasApprovalTimeRemainingSeconds) hash ^= ApprovalTimeRemainingSeconds.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -197,16 +393,20 @@ namespace Onboardings.Domain.Queries.V2 {
         output.WriteRawTag(10);
         output.WriteString(Id);
       }
-      if (sentRequest_ != null) {
+      if (args_ != null) {
         output.WriteRawTag(18);
-        output.WriteMessage(SentRequest);
+        output.WriteMessage(Args);
       }
       if (approval_ != null) {
         output.WriteRawTag(26);
         output.WriteMessage(Approval);
       }
-      if (ApprovalTimeRemainingSeconds != 0UL) {
-        output.WriteRawTag(32);
+      if (CurrentValue.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(CurrentValue);
+      }
+      if (HasApprovalTimeRemainingSeconds) {
+        output.WriteRawTag(40);
         output.WriteUInt64(ApprovalTimeRemainingSeconds);
       }
       if (_unknownFields != null) {
@@ -223,16 +423,20 @@ namespace Onboardings.Domain.Queries.V2 {
         output.WriteRawTag(10);
         output.WriteString(Id);
       }
-      if (sentRequest_ != null) {
+      if (args_ != null) {
         output.WriteRawTag(18);
-        output.WriteMessage(SentRequest);
+        output.WriteMessage(Args);
       }
       if (approval_ != null) {
         output.WriteRawTag(26);
         output.WriteMessage(Approval);
       }
-      if (ApprovalTimeRemainingSeconds != 0UL) {
-        output.WriteRawTag(32);
+      if (CurrentValue.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(CurrentValue);
+      }
+      if (HasApprovalTimeRemainingSeconds) {
+        output.WriteRawTag(40);
         output.WriteUInt64(ApprovalTimeRemainingSeconds);
       }
       if (_unknownFields != null) {
@@ -248,13 +452,16 @@ namespace Onboardings.Domain.Queries.V2 {
       if (Id.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Id);
       }
-      if (sentRequest_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(SentRequest);
+      if (args_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Args);
       }
       if (approval_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Approval);
       }
-      if (ApprovalTimeRemainingSeconds != 0UL) {
+      if (CurrentValue.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(CurrentValue);
+      }
+      if (HasApprovalTimeRemainingSeconds) {
         size += 1 + pb::CodedOutputStream.ComputeUInt64Size(ApprovalTimeRemainingSeconds);
       }
       if (_unknownFields != null) {
@@ -265,18 +472,18 @@ namespace Onboardings.Domain.Queries.V2 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(EntityOnboardingStateResponse other) {
+    public void MergeFrom(GetEntityOnboardingStateResponse other) {
       if (other == null) {
         return;
       }
       if (other.Id.Length != 0) {
         Id = other.Id;
       }
-      if (other.sentRequest_ != null) {
-        if (sentRequest_ == null) {
-          SentRequest = new global::Onboardings.Domain.Workflows.V2.OnboardEntityRequest();
+      if (other.args_ != null) {
+        if (args_ == null) {
+          Args = new global::Onboardings.Domain.Workflows.V2.OnboardEntityRequest();
         }
-        SentRequest.MergeFrom(other.SentRequest);
+        Args.MergeFrom(other.Args);
       }
       if (other.approval_ != null) {
         if (approval_ == null) {
@@ -284,7 +491,10 @@ namespace Onboardings.Domain.Queries.V2 {
         }
         Approval.MergeFrom(other.Approval);
       }
-      if (other.ApprovalTimeRemainingSeconds != 0UL) {
+      if (other.CurrentValue.Length != 0) {
+        CurrentValue = other.CurrentValue;
+      }
+      if (other.HasApprovalTimeRemainingSeconds) {
         ApprovalTimeRemainingSeconds = other.ApprovalTimeRemainingSeconds;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -311,10 +521,10 @@ namespace Onboardings.Domain.Queries.V2 {
             break;
           }
           case 18: {
-            if (sentRequest_ == null) {
-              SentRequest = new global::Onboardings.Domain.Workflows.V2.OnboardEntityRequest();
+            if (args_ == null) {
+              Args = new global::Onboardings.Domain.Workflows.V2.OnboardEntityRequest();
             }
-            input.ReadMessage(SentRequest);
+            input.ReadMessage(Args);
             break;
           }
           case 26: {
@@ -324,7 +534,11 @@ namespace Onboardings.Domain.Queries.V2 {
             input.ReadMessage(Approval);
             break;
           }
-          case 32: {
+          case 34: {
+            CurrentValue = input.ReadString();
+            break;
+          }
+          case 40: {
             ApprovalTimeRemainingSeconds = input.ReadUInt64();
             break;
           }
@@ -352,10 +566,10 @@ namespace Onboardings.Domain.Queries.V2 {
             break;
           }
           case 18: {
-            if (sentRequest_ == null) {
-              SentRequest = new global::Onboardings.Domain.Workflows.V2.OnboardEntityRequest();
+            if (args_ == null) {
+              Args = new global::Onboardings.Domain.Workflows.V2.OnboardEntityRequest();
             }
-            input.ReadMessage(SentRequest);
+            input.ReadMessage(Args);
             break;
           }
           case 26: {
@@ -365,7 +579,11 @@ namespace Onboardings.Domain.Queries.V2 {
             input.ReadMessage(Approval);
             break;
           }
-          case 32: {
+          case 34: {
+            CurrentValue = input.ReadString();
+            break;
+          }
+          case 40: {
             ApprovalTimeRemainingSeconds = input.ReadUInt64();
             break;
           }

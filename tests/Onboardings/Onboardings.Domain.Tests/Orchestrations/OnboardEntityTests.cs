@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Onboardings.Domain.Commands.V1;
 using Onboardings.Domain.Orchestrations;
+using Onboardings.Domain.Queries.V2;
 using Onboardings.Domain.Workflows.V2;
 using Temporalio.Activities;
 
@@ -418,7 +419,7 @@ public class OnboardEntityTests : TestBase
                 new WorkflowOptions(args.Id, worker.Options.TaskQueue!));
             await env.DelayAsync(TimeSpan.FromSeconds(1));
 
-            var actual = await handle.ExecuteUpdateAsync<OnboardEntity, OnboardEntityState>(wf =>
+            var actual = await handle.ExecuteUpdateAsync<OnboardEntity, GetEntityOnboardingStateResponse>(wf =>
                 wf.SetValueAsync(new SetValueRequest { Value="boop"}));
             Assert.Equal("boop", actual.CurrentValue);
             await handle.CancelAsync();
@@ -473,8 +474,10 @@ public class OnboardEntityTests : TestBase
 
 
         Exception? validationFailure = null;
+        GetEntityOnboardingStateResponse? currentState = null;
         try
         {
+            
             await worker.ExecuteAsync(async () =>
             {
                 var handle = await env.Client.StartWorkflowAsync<OnboardEntity>(wf => wf.ExecuteAsync(args),
@@ -483,9 +486,10 @@ public class OnboardEntityTests : TestBase
                 await handle.SignalAsync(wf => wf.ApproveAsync(new ApproveEntityRequest { Comment = "" }));
                 try
                 {
-                    var actual = await handle.ExecuteUpdateAsync<OnboardEntity, OnboardEntityState>(wf =>
-                        wf.SetValueAsync(new SetValueRequest { Value = "boop" }));
-                    Assert.Equal(args.Value, actual.CurrentValue);
+                    await handle.StartUpdateAsync<OnboardEntity, GetEntityOnboardingStateResponse>(wf =>
+                        wf.SetValueAsync(new SetValueRequest { Value = "boop" }),
+                        new (waitForStage:WorkflowUpdateStage.Accepted)
+                        );
                 }
                 catch (Exception? e)
                 {
@@ -493,14 +497,17 @@ public class OnboardEntityTests : TestBase
                     LoggerFactory.CreateLogger("update").LogInformation($"Got exception {e.GetType()}");
                 }
 
-
-                await handle.GetResultAsync();
+                currentState = await handle.QueryAsync<OnboardEntity, GetEntityOnboardingStateResponse>(wf => wf.GetEntityOnboardingStateAsync(new ()));
+                // await handle.GetResultAsync();
             });
         }
         catch (Exception e)
         {
+            Console.WriteLine(e.StackTrace);
             // gulp
         }
+        Assert.NotNull(currentState);
+        Assert.Equal(args.Value, currentState.CurrentValue);
 
         Assert.NotNull(validationFailure);
         Assert.Null(registrationRequestSent); 

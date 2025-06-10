@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Onboardings.Domain.Commands.V1;
 using Onboardings.Domain.Integrations;
+using Onboardings.Domain.Queries.V2;
 using Onboardings.Domain.Values.V1;
 using Onboardings.Domain.Workflows.V2;
 using Temporalio.Api.Enums.V1;
@@ -45,14 +46,17 @@ public record OnboardEntityState(
 // ReSharper disable once ClassNeverInstantiated.Global
 public class OnboardEntity : IOnboardEntity
 {
-    private OnboardEntityState _state;
+    private GetEntityOnboardingStateResponse _state;
     public static ulong DefaultCompletionTimeoutSeconds =  7 * 86400;
     [WorkflowRun]
     public async Task ExecuteAsync(OnboardEntityRequest args)
     {
         args = AssertValidRequest(args);
-        
-        _state = new OnboardEntityState(args, args.Value, ApprovalStatus:args.SkipApproval ? ApprovalStatus.Approved : ApprovalStatus.Pending);
+        _state = new GetEntityOnboardingStateResponse{
+            Args = args,
+            Id = args.Id,
+            CurrentValue = args.Value,
+            Approval = new Approval{Status = args.SkipApproval ? ApprovalStatus.Approved : ApprovalStatus.Pending}};
         var logger = Workflow.Logger;
         logger.LogInformation($"onboardingentity with runid {Workflow.Info.RunId}");
         AssertValidRequest(args);
@@ -72,7 +76,7 @@ public class OnboardEntity : IOnboardEntity
             await AwaitApproval(args);
         }
 
-        if (!_state.ApprovalStatus.Equals(ApprovalStatus.Approved))
+        if (!_state.Approval.Status.Equals(ApprovalStatus.Approved))
         {
             logger.LogWarning($"Failed to gain approval for {args.Id}. Aborting request.");
             return;
@@ -118,7 +122,7 @@ public class OnboardEntity : IOnboardEntity
 
         // this blocks until we flip the `ApprovalStatus` bit on our state object
         var conditionMet =
-            await Workflow.WaitConditionAsync(() => !_state.ApprovalStatus.Equals(ApprovalStatus.Pending), TimeSpan.FromSeconds(waitApprovalSecs));
+            await Workflow.WaitConditionAsync(() => !_state.Approval.Status.Equals(ApprovalStatus.Pending), TimeSpan.FromSeconds(waitApprovalSecs));
         if (!conditionMet)
         {
             logger.LogInformation("entered failure to receive approval");
@@ -197,31 +201,38 @@ public class OnboardEntity : IOnboardEntity
     [WorkflowSignal]
     public Task ApproveAsync(ApproveEntityRequest approveEntityRequest)
     {
-        _state = _state with { ApprovalStatus = ApprovalStatus.Approved, ApprovalComment = approveEntityRequest.Comment};
+        _state.Approval.Status = ApprovalStatus.Approved;
+        _state.Approval.Comment = approveEntityRequest.Comment;
         return Task.CompletedTask;  
     }
 
     [WorkflowSignal]
     public Task RejectAsync(RejectEntityRequest rejectEntityRequest)
     {
-        _state = _state with { ApprovalStatus = ApprovalStatus.Rejected, ApprovalComment = rejectEntityRequest.Comment};
+        _state.Approval.Status = ApprovalStatus.Approved;
+        _state.Approval.Comment = rejectEntityRequest.Comment;
         return Task.CompletedTask;
     }
 
     [WorkflowUpdateValidator(nameof(SetValueAsync))]
-    public async void ValidateSetValue(SetValueRequest setValueRequest)
+    public void ValidateSetValue(SetValueRequest setValueRequest)
     {
-        if (_state is not { ApprovalStatus: ApprovalStatus.Pending })
+        if (_state.Approval.Status != ApprovalStatus.Pending )
         {
-            throw new InvalidOperationException();
+            throw new InvalidOperationException("Only pending approval is allowed");
         }
     }
     [WorkflowUpdate]
-    public Task<OnboardEntityState> SetValueAsync(SetValueRequest cmd)
+    public Task<GetEntityOnboardingStateResponse> SetValueAsync(SetValueRequest cmd)
     {
         Workflow.Logger.LogInformation($"setting value from {_state.CurrentValue} to {cmd.Value}");
         // throw new ArgumentException("foo");
-        _state = _state with { CurrentValue = cmd.Value };
+        _state.CurrentValue = cmd.Value;
         return Task.FromResult(_state);
+    }
+    [WorkflowQuery]
+    public GetEntityOnboardingStateResponse GetEntityOnboardingStateAsync(GetEntityOnboardingStateRequest q)
+    {
+        return _state;
     }
 }
