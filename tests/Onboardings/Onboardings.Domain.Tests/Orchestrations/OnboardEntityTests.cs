@@ -488,8 +488,9 @@ public class OnboardEntityTests : TestBase
                 {
                     await handle.StartUpdateAsync<OnboardEntity, GetEntityOnboardingStateResponse>(wf =>
                         wf.SetValueAsync(new SetValueRequest { Value = "boop" }),
-                        new (waitForStage:WorkflowUpdateStage.Accepted)
+                        new (waitForStage:WorkflowUpdateStage.Completed)
                         );
+                    await handle.GetResultAsync();
                 }
                 catch (Exception? e)
                 {

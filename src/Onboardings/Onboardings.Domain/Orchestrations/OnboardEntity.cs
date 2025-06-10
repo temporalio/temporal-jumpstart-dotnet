@@ -35,13 +35,6 @@ public interface IOnboardEntity
     Task ExecuteAsync(OnboardEntityRequest args);
 }
 
-
-public record OnboardEntityState(
-    OnboardEntityRequest args,
-    string CurrentValue,
-    string ApprovalComment = null,
-    ApprovalStatus ApprovalStatus = ApprovalStatus.Pending);
-
 [Workflow]
 // ReSharper disable once ClassNeverInstantiated.Global
 public class OnboardEntity : IOnboardEntity
@@ -209,7 +202,7 @@ public class OnboardEntity : IOnboardEntity
     [WorkflowSignal]
     public Task RejectAsync(RejectEntityRequest rejectEntityRequest)
     {
-        _state.Approval.Status = ApprovalStatus.Approved;
+        _state.Approval.Status = ApprovalStatus.Rejected;
         _state.Approval.Comment = rejectEntityRequest.Comment;
         return Task.CompletedTask;
     }
