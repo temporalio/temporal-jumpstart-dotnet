@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+import "onboardings/domain/values/v1/message.proto";
+package onboardings.domain.commands.v2;
+
+
+message NotifyOnboardEntityCompletedRequest {
+  string id = 1;
+  string email = 2;
+  string value = 3;
+  onboardings.domain.values.v1.Approval approval = 4;
+}

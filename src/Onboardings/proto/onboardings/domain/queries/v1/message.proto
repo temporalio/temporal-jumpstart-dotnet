@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package onboardings.domain.queries.v1;
+import "onboardings/domain/workflows/v1/message.proto";
+import "onboardings/domain/values/v1/message.proto";
+
+message EntityOnboardingStateResponse {
+  string id = 1;
+  onboardings.domain.workflows.v1.OnboardEntityRequest sent_request = 2;
+  onboardings.domain.values.v1.Approval approval = 3;
+  uint64 approval_time_remaining_seconds = 4;
+}

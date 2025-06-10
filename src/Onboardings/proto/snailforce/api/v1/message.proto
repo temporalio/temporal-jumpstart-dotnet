@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package snailforce.api.v1;
+
+message RegisterRequest {
+  string id = 1;
+  string value = 2;
+}
+message RegisterResponse {
+  string id = 1;
+}

@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package onboardings.domain.values.v1;
+
+enum ApprovalStatus {
+  APPROVAL_STATUS_UNSPECIFIED = 0;
+  APPROVAL_STATUS_PENDING = 1;
+  APPROVAL_STATUS_REJECTED = 2;
+  APPROVAL_STATUS_APPROVED = 3;
+}
+
+message Approval {
+  onboardings.domain.values.v1.ApprovalStatus status = 1;
+  string comment = 2;
+}
