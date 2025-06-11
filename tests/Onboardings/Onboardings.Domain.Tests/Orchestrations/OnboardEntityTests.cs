@@ -4,7 +4,6 @@ using Onboardings.Domain.Orchestrations;
 using Onboardings.Domain.Queries.V2;
 using Onboardings.Domain.Workflows.V2;
 using Temporalio.Activities;
-
 using Temporalio.Api.Enums.V1;
 using Temporalio.Client;
 using Temporalio.Converters;
@@ -24,16 +23,10 @@ public class OnboardEntityTests : TestBase
     [Fact]
     public async Task ExecuteAsync_SimpleRun_GivenInvalidArgs_FailsFast()
     {
-        
         await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
         var wid = Guid.NewGuid();
         var emptyValue = "";
-        var args = new OnboardEntityRequest
-        {
-            Id = wid.ToString(), 
-            Value = emptyValue, 
-            SkipApproval = true,
-        };
+        var args = new OnboardEntityRequest { Id = wid.ToString(), Value = emptyValue, SkipApproval = true, };
         using var worker = new TemporalWorker(
             env.Client,
             new TemporalWorkerOptions("test").AddWorkflow<OnboardEntity>());
@@ -55,16 +48,14 @@ public class OnboardEntityTests : TestBase
         await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
         var args = new OnboardEntityRequest
         {
-            Id = Guid.NewGuid().ToString(), 
-            Value = Guid.NewGuid().ToString(), 
-            SkipApproval = true,
+            Id = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString(), SkipApproval = true,
         };
 
         RegisterCrmEntityRequest requested = null;
 
         var workerOptions = new TemporalWorkerOptions("test");
         workerOptions.AddWorkflow<OnboardEntity>();
-        
+
         /* There are a number of ways to mock the activity.
          Here is an inline example
          */
@@ -72,12 +63,13 @@ public class OnboardEntityTests : TestBase
         Task RegisterCrmEntity(RegisterCrmEntityRequest req)
         {
             requested = req;
-            return  Task.CompletedTask;
+            return Task.CompletedTask;
         }
+
         workerOptions.AddActivity(RegisterCrmEntity);
 
         /* Or here we can create an activity definition */
-        var act = [Activity("RegisterCrmEntity")] (RegisterCrmEntityRequest req) =>
+        var act = [Activity("RegisterCrmEntity")](RegisterCrmEntityRequest req) =>
         {
             requested = req;
             return Task.CompletedTask;
@@ -88,52 +80,52 @@ public class OnboardEntityTests : TestBase
             env.Client,
             workerOptions
         );
-        
+
         await worker.ExecuteAsync(async () =>
         {
             await env.Client.ExecuteWorkflowAsync(
                 (OnboardEntity wf) => wf.ExecuteAsync(args),
                 new WorkflowOptions(id: args.Id, taskQueue: worker.Options.TaskQueue!));
-
         });
         Assert.NotNull(requested);
         Assert.Equal(args.Id, requested.Id);
     }
+
     [Fact]
     public async Task ExecuteAsync_GivenUnhealthyService_IsNotRetryable_FailsEntireOnboarding()
     {
         await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
         var args = new OnboardEntityRequest
         {
-            Id = Guid.NewGuid().ToString(), 
-            Value = Guid.NewGuid().ToString(), 
-            SkipApproval = true,
+            Id = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString(), SkipApproval = true,
         };
         RegisterCrmEntityRequest requested = null;
 
         var workerOptions = new TemporalWorkerOptions("test");
         workerOptions.LoggerFactory = LoggerFactory;
         workerOptions.AddWorkflow<OnboardEntity>();
-        
+
         [Activity]
         Task RegisterCrmEntity(RegisterCrmEntityRequest req)
         {
             requested = req;
-            var inner = new TaskCanceledException("synthetic timeout exception", Task.FromCanceled(new CancellationToken(true)).Exception);
+            var inner = new TaskCanceledException("synthetic timeout exception",
+                Task.FromCanceled(new CancellationToken(true)).Exception);
             throw new ApplicationFailureException(
-                message: "test failure", 
+                message: "test failure",
                 // providing this seems to override the bubbling up of the ERR_SERVICE_UNRECOVERABLE ErrorType
                 inner: inner,
                 errorType: IntegrationErrors.ErrServiceUnrecoverable,
                 nonRetryable: true);
         }
+
         workerOptions.AddActivity(RegisterCrmEntity);
 
         using var worker = new TemporalWorker(
             env.Client,
             workerOptions
         );
-        
+
         await worker.ExecuteAsync(async () =>
         {
             WorkflowFailedException e = await Assert.ThrowsAsync<WorkflowFailedException>(async () =>
@@ -147,7 +139,7 @@ public class OnboardEntityTests : TestBase
             var actEx = Assert.IsType<ActivityFailureException>(e.InnerException);
             var appEx = Assert.IsType<ApplicationFailureException>(actEx.InnerException);
             Assert.Equal(IntegrationErrors.ErrServiceUnrecoverable, appEx.ErrorType);
-            
+
             // To get to the underlying Exception root cause, you must walk the BaseException .
             var baseEx = Assert.IsType<ApplicationFailureException>(e.GetBaseException());
             Assert.Equal(typeof(TaskCanceledException).Name, baseEx.ErrorType);
@@ -157,22 +149,21 @@ public class OnboardEntityTests : TestBase
     }
 
     [Fact]
-    public async Task ExecuteAsync_GivenOwnerApprovalNotMetTimely_NoDeputyOwner_ShouldCancelWithFailureOnboardingWithoutRegisteringEntity()
+    public async Task
+        ExecuteAsync_GivenOwnerApprovalNotMetTimely_NoDeputyOwner_ShouldCancelWithFailureOnboardingWithoutRegisteringEntity()
     {
         await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
         var args = new OnboardEntityRequest
         {
-            Id = Guid.NewGuid().ToString(), 
-            Value = Guid.NewGuid().ToString(), 
-            SkipApproval = false,
+            Id = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString(), SkipApproval = false,
         };
-        
+
         RegisterCrmEntityRequest registrationRequestSent = null;
         RequestDeputyOwnerApprovalRequest deputyOwnerApprovalRequested = null;
-        var workerOptions = new TemporalWorkerOptions("test");  
+        var workerOptions = new TemporalWorkerOptions("test");
         workerOptions.LoggerFactory = LoggerFactory;
-        workerOptions.AddWorkflow<OnboardEntity>(); 
-        
+        workerOptions.AddWorkflow<OnboardEntity>();
+
         [Activity]
         Task RegisterCrmEntity(RegisterCrmEntityRequest req)
         {
@@ -186,6 +177,7 @@ public class OnboardEntityTests : TestBase
             deputyOwnerApprovalRequested = req;
             throw new NotImplementedException();
         }
+
         workerOptions.AddActivity(RegisterCrmEntity);
         workerOptions.AddActivity(RequestDeputyOwnerApproval);
 
@@ -196,7 +188,6 @@ public class OnboardEntityTests : TestBase
 
         await worker.ExecuteAsync(async () =>
         {
-
             var handle = await env.Client.StartWorkflowAsync<OnboardEntity>(wf => wf.ExecuteAsync(args),
                 new WorkflowOptions(args.Id, worker.Options.TaskQueue!));
 
@@ -210,25 +201,26 @@ public class OnboardEntityTests : TestBase
             Assert.Null(deputyOwnerApprovalRequested);
         });
     }
-    
+
     [Fact]
-    public async Task ExecuteAsync_GivenOwnerApprovalNotMetTimely_WithDeputyOwnerNotResponding_ShouldCancelWithFailureOnboardingWithoutRegisteringEntity()
+    public async Task
+        ExecuteAsync_GivenOwnerApprovalNotMetTimely_WithDeputyOwnerNotResponding_ShouldCancelWithFailureOnboardingWithoutRegisteringEntity()
     {
         await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
         var args = new OnboardEntityRequest
         {
-            Id = Guid.NewGuid().ToString(), 
-            Value = Guid.NewGuid().ToString(), 
+            Id = Guid.NewGuid().ToString(),
+            Value = Guid.NewGuid().ToString(),
             SkipApproval = false,
             DeputyOwnerEmail = "deputy@dawg.com",
             CompletionTimeoutSeconds = OnboardEntity.DefaultCompletionTimeoutSeconds,
         };
-        
+
         RegisterCrmEntityRequest? registrationRequestSent = null;
         RequestDeputyOwnerApprovalRequest? deputyOwnerApprovalRequested = null;
         var workerOptions = new TemporalWorkerOptions("test") { LoggerFactory = LoggerFactory };
-        workerOptions.AddWorkflow<OnboardEntity>(); 
-        
+        workerOptions.AddWorkflow<OnboardEntity>();
+
         [Activity]
         Task RegisterCrmEntity(RegisterCrmEntityRequest? req)
         {
@@ -242,6 +234,7 @@ public class OnboardEntityTests : TestBase
             deputyOwnerApprovalRequested = req;
             return Task.CompletedTask;
         }
+
         workerOptions.AddActivity(RegisterCrmEntity);
         workerOptions.AddActivity(RequestDeputyOwnerApproval);
 
@@ -257,9 +250,9 @@ public class OnboardEntityTests : TestBase
 
             var e = await Assert.ThrowsAsync<WorkflowContinuedAsNewException>(async () =>
             {
-                await handle.GetResultAsync(followRuns:false);
+                await handle.GetResultAsync(followRuns: false);
             });
-            
+
             var canHandle = env.Client.GetWorkflowHandle<OnboardEntity>(handle.Id, e.NewRunId);
 
             var canInput = canHandle.FetchHistoryEventsAsync()
@@ -271,30 +264,31 @@ public class OnboardEntityTests : TestBase
                 .Select(p => new EncodedRawValue(env.Client.Options.DataConverter, p))
                 .First()
                 .ToValueAsync<OnboardEntityRequest>().Result;
-            
+
             Assert.NotNull(canInput);
             Assert.False(canInput.HasDeputyOwnerEmail);
-            Assert.Null(registrationRequestSent); 
+            Assert.Null(registrationRequestSent);
             Assert.NotNull(deputyOwnerApprovalRequested);
         });
     }
+
     [Fact]
     public async Task ApproveOnboardingEntity_GivenAwaitingApproval_ShouldRegisterEntityWithCrm()
     {
         await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
         var args = new OnboardEntityRequest
         {
-            Id= Guid.NewGuid().ToString(),
-            Value= Guid.NewGuid().ToString(),
-            CompletionTimeoutSeconds= (ulong)TimeSpan.FromSeconds(3).Seconds,
+            Id = Guid.NewGuid().ToString(),
+            Value = Guid.NewGuid().ToString(),
+            CompletionTimeoutSeconds = (ulong)TimeSpan.FromSeconds(3).Seconds,
         };
-        
-        
+
+
         RegisterCrmEntityRequest registrationRequestSent = null;
         RequestDeputyOwnerApprovalRequest deputyOwnerApprovalRequested = null;
         var workerOptions = new TemporalWorkerOptions("test") { LoggerFactory = LoggerFactory };
-        workerOptions.AddWorkflow<OnboardEntity>(); 
-        
+        workerOptions.AddWorkflow<OnboardEntity>();
+
         [Activity]
         Task RegisterCrmEntity(RegisterCrmEntityRequest req)
         {
@@ -308,6 +302,7 @@ public class OnboardEntityTests : TestBase
             deputyOwnerApprovalRequested = req;
             return Task.CompletedTask;
         }
+
         workerOptions.AddActivity(RegisterCrmEntity);
         workerOptions.AddActivity(RequestDeputyOwnerApproval);
 
@@ -321,27 +316,29 @@ public class OnboardEntityTests : TestBase
             var handle = await env.Client.StartWorkflowAsync<OnboardEntity>(wf => wf.ExecuteAsync(args),
                 new WorkflowOptions(args.Id, worker.Options.TaskQueue!));
             await env.DelayAsync(TimeSpan.FromSeconds(2));
-            await handle.SignalAsync(wf => wf.ApproveAsync(new ApproveEntityRequest { Comment = "beep"}));
-            await handle.GetResultAsync(followRuns:false);
-            Assert.NotNull(registrationRequestSent); 
+            await handle.SignalAsync(wf => wf.ApproveAsync(new ApproveEntityRequest { Comment = "beep" }));
+            await handle.GetResultAsync(followRuns: false);
+            Assert.NotNull(registrationRequestSent);
             Assert.Null(deputyOwnerApprovalRequested);
         });
     }
+
     [Fact]
     public async Task RejectOnboardingEntity_GivenAwaitingApproval_ShouldNotRegisterEntityWithCrm()
     {
         await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
-        var args = new OnboardEntityRequest{
-            Id= Guid.NewGuid().ToString(),
-            Value= Guid.NewGuid().ToString(),
-            CompletionTimeoutSeconds= (ulong)TimeSpan.FromSeconds(3).Seconds,
+        var args = new OnboardEntityRequest
+        {
+            Id = Guid.NewGuid().ToString(),
+            Value = Guid.NewGuid().ToString(),
+            CompletionTimeoutSeconds = (ulong)TimeSpan.FromSeconds(3).Seconds,
         };
-        
+
         RegisterCrmEntityRequest registrationRequestSent = null;
         RequestDeputyOwnerApprovalRequest deputyOwnerApprovalRequested = null;
         var workerOptions = new TemporalWorkerOptions("test") { LoggerFactory = LoggerFactory };
-        workerOptions.AddWorkflow<OnboardEntity>(); 
-        
+        workerOptions.AddWorkflow<OnboardEntity>();
+
         [Activity]
         Task RegisterCrmEntity(RegisterCrmEntityRequest req)
         {
@@ -355,6 +352,7 @@ public class OnboardEntityTests : TestBase
             deputyOwnerApprovalRequested = req;
             return Task.CompletedTask;
         }
+
         workerOptions.AddActivity(RegisterCrmEntity);
         workerOptions.AddActivity(RequestDeputyOwnerApproval);
 
@@ -368,29 +366,30 @@ public class OnboardEntityTests : TestBase
             var handle = await env.Client.StartWorkflowAsync<OnboardEntity>(wf => wf.ExecuteAsync(args),
                 new WorkflowOptions(args.Id, worker.Options.TaskQueue!));
             await env.DelayAsync(TimeSpan.FromSeconds(2));
-            await handle.SignalAsync(wf => wf.RejectAsync(new RejectEntityRequest { Comment = "beep"}));
-            await handle.GetResultAsync(followRuns:false);
-            Assert.Null(registrationRequestSent); 
+            await handle.SignalAsync(wf => wf.RejectAsync(new RejectEntityRequest { Comment = "beep" }));
+            await handle.GetResultAsync(followRuns: false);
+            Assert.Null(registrationRequestSent);
             Assert.Null(deputyOwnerApprovalRequested);
         });
     }
+
     [Fact]
     public async Task SetValue_GivenPendingApproval_ShouldUpdateValue()
     {
         await using var env = await WorkflowEnvironment.StartLocalAsync();
-        var args = new OnboardEntityRequest { 
-            
-                Id= Guid.NewGuid().ToString(),
-                Value= Guid.NewGuid().ToString(),
-                CompletionTimeoutSeconds= (ulong)TimeSpan.FromSeconds(5).Seconds,
-            };
-            
-        
+        var args = new OnboardEntityRequest
+        {
+            Id = Guid.NewGuid().ToString(),
+            Value = Guid.NewGuid().ToString(),
+            CompletionTimeoutSeconds = (ulong)TimeSpan.FromSeconds(5).Seconds,
+        };
+
+
         RegisterCrmEntityRequest registrationRequestSent = null;
         RequestDeputyOwnerApprovalRequest deputyOwnerApprovalRequested = null;
         var workerOptions = new TemporalWorkerOptions("test") { LoggerFactory = LoggerFactory };
-        workerOptions.AddWorkflow<OnboardEntity>(); 
-        
+        workerOptions.AddWorkflow<OnboardEntity>();
+
         [Activity]
         Task RegisterCrmEntity(RegisterCrmEntityRequest req)
         {
@@ -404,6 +403,7 @@ public class OnboardEntityTests : TestBase
             deputyOwnerApprovalRequested = req;
             return Task.CompletedTask;
         }
+
         workerOptions.AddActivity(RegisterCrmEntity);
         workerOptions.AddActivity(RequestDeputyOwnerApproval);
 
@@ -412,7 +412,7 @@ public class OnboardEntityTests : TestBase
             workerOptions
         );
 
-        
+
         await worker.ExecuteAsync(async () =>
         {
             var handle = await env.Client.StartWorkflowAsync<OnboardEntity>(wf => wf.ExecuteAsync(args),
@@ -420,40 +420,39 @@ public class OnboardEntityTests : TestBase
             await env.DelayAsync(TimeSpan.FromSeconds(1));
 
             var actual = await handle.ExecuteUpdateAsync<OnboardEntity, GetEntityOnboardingStateResponse>(wf =>
-                wf.SetValueAsync(new SetValueRequest { Value="boop"}));
+                wf.SetValueAsync(new SetValueRequest { Value = "boop" }));
             Assert.Equal("boop", actual.CurrentValue);
             await handle.CancelAsync();
         });
-        
-        Assert.Null(registrationRequestSent); 
+
+        Assert.Null(registrationRequestSent);
         Assert.Null(deputyOwnerApprovalRequested);
     }
-    // [Fact(Skip = "Update with test server is broken")]
+
     [Fact]
     public async Task SetValue_GivenApprovedEntity_ShouldNotUpdateValue()
     {
-        await using var env = await WorkflowEnvironment.StartLocalAsync(options:new WorkflowEnvironmentStartLocalOptions
+        // we are not using TimeSkipping Server here so we can just us Task.Delay directly
+        // If you decide to use TimeSkipping, then be sure to use `env.DelayAsync`
+        await using var env = await WorkflowEnvironment.StartLocalAsync();
+        var args = new OnboardEntityRequest
         {
-            DevServerOptions = new DevServerOptions
-            {
-                ExistingPath = "/opt/homebrew/bin/temporal"
-            }
-        });
-        var args = new OnboardEntityRequest { 
-            
-            Id= Guid.NewGuid().ToString(),
-            Value= Guid.NewGuid().ToString(),
-            CompletionTimeoutSeconds= (ulong)TimeSpan.FromSeconds(5).Seconds,
+            Id = Guid.NewGuid().ToString(),
+            Value = Guid.NewGuid().ToString(),
+            CompletionTimeoutSeconds = (ulong)TimeSpan.FromSeconds(20).Seconds,
+            SkipApproval = false,
         };
-        
+
         RegisterCrmEntityRequest registrationRequestSent = null;
-        RequestDeputyOwnerApprovalRequest deputyOwnerApprovalRequested = null;
         var workerOptions = new TemporalWorkerOptions("test") { LoggerFactory = LoggerFactory };
-        workerOptions.AddWorkflow<OnboardEntity>(); 
-        
+        workerOptions.AddWorkflow<OnboardEntity>();
+
         [Activity]
         Task RegisterCrmEntity(RegisterCrmEntityRequest req)
         {
+            // slow things down to allow the update to be attempted
+            // If you decide to use TimeSkipping server, then be sure to use `env.DelayAsync` 
+            Task.Delay(2000).Wait();
             registrationRequestSent = req;
             return Task.CompletedTask;
         }
@@ -461,9 +460,9 @@ public class OnboardEntityTests : TestBase
         [Activity]
         Task RequestDeputyOwnerApproval(RequestDeputyOwnerApprovalRequest req)
         {
-            deputyOwnerApprovalRequested = req;
             return Task.CompletedTask;
         }
+
         workerOptions.AddActivity(RegisterCrmEntity);
         workerOptions.AddActivity(RequestDeputyOwnerApproval);
 
@@ -471,51 +470,47 @@ public class OnboardEntityTests : TestBase
             env.Client,
             workerOptions
         );
-
-
-        Exception? validationFailure = null;
         GetEntityOnboardingStateResponse? currentState = null;
-        try
+        WorkflowUpdateFailedException? updateFailure = null;
+
+        await worker.ExecuteAsync(async () =>
         {
-            
-            await worker.ExecuteAsync(async () =>
+            try
             {
                 var handle = await env.Client.StartWorkflowAsync<OnboardEntity>(wf => wf.ExecuteAsync(args),
                     new WorkflowOptions(args.Id, worker.Options.TaskQueue!));
                 await env.DelayAsync(TimeSpan.FromSeconds(1));
                 await handle.SignalAsync(wf => wf.ApproveAsync(new ApproveEntityRequest { Comment = "" }));
-                try
-                {
-                    await handle.StartUpdateAsync<OnboardEntity, GetEntityOnboardingStateResponse>(wf =>
-                        wf.SetValueAsync(new SetValueRequest { Value = "boop" }),
-                        new (waitForStage:WorkflowUpdateStage.Completed)
-                        );
-                    await handle.GetResultAsync();
-                }
-                catch (Exception? e)
-                {
-                    validationFailure = e;
-                    LoggerFactory.CreateLogger("update").LogInformation($"Got exception {e.GetType()}");
-                }
+                await env.DelayAsync(TimeSpan.FromSeconds(1));
 
-                currentState = await handle.QueryAsync<OnboardEntity, GetEntityOnboardingStateResponse>(wf => wf.GetEntityOnboardingStateAsync(new ()));
-                // await handle.GetResultAsync();
-            });
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.StackTrace);
-            // gulp
-        }
+                await handle.ExecuteUpdateAsync<OnboardEntity, GetEntityOnboardingStateResponse>(wf =>
+                        wf.SetValueAsync(new SetValueRequest { Value = "boop" }),
+                    new WorkflowUpdateOptions(Guid.NewGuid().ToString())
+                );
+            }
+            catch (WorkflowUpdateFailedException ex)
+            {
+                updateFailure = ex;
+                var handle = env.Client.GetWorkflowHandle<OnboardEntity>(args.Id);
+                currentState =
+                    await handle.QueryAsync<GetEntityOnboardingStateResponse>(wf =>
+                        wf.GetEntityOnboardingStateAsync(new()));
+            }
+        });
+                
+        Assert.NotNull(updateFailure);
+        Assert.NotNull(updateFailure.InnerException);
+        Assert.Equal("Only pending approval is allowed", updateFailure.InnerException.Message);
         Assert.NotNull(currentState);
         Assert.Equal(args.Value, currentState.CurrentValue);
 
-        Assert.NotNull(validationFailure);
-        Assert.Null(registrationRequestSent); 
-        Assert.Null(deputyOwnerApprovalRequested);
+        Assert.NotNull(registrationRequestSent);
+        Assert.Equal(args.Value, registrationRequestSent.Value);
     }
-    public OnboardEntityTests(ITestOutputHelper output, ITestOutputHelper testOutputHelper) : base(output)
-    {
-        _testOutputHelper = testOutputHelper;
-    }
+
+public OnboardEntityTests(ITestOutputHelper output, ITestOutputHelper testOutputHelper) : base(output)
+{
+    _testOutputHelper = testOutputHelper;
+}
+
 }
