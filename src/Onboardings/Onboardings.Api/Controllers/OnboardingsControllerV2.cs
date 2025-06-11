@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Onboardings.Api.Messages;
+using Onboardings.Api.V1;
 using Onboardings.Domain.Clients.Temporal;
 using Onboardings.Domain.Commands.V1;
-using Onboardings.Domain.Orchestrations;
+using Onboardings.Domain.Queries.V2;
 using Onboardings.Domain.Values.V1;
+using Onboardings.Domain.Workflows;
 using Onboardings.Domain.Workflows.V2;
 using Temporalio.Api.Enums.V1;
 using Temporalio.Client;
@@ -57,7 +59,7 @@ public class OnboardingsControllerV2(
             }
              await handle.SignalAsync<OnboardEntity>(signalCall);
              // poor man's uri template. prefer RFC 6570 implementation
-             var location = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/onboardings/{id}";
+             var location = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/v2/onboardings/{id}";
              return Accepted(location);
         } catch (RpcException e)
         {
@@ -127,31 +129,12 @@ public class OnboardingsControllerV2(
         Debug.Assert(httpContextAccessor.HttpContext != null, "httpContextAccessor.HttpContext != null");
         var temporalClient = httpContextAccessor.HttpContext.Features.GetRequiredFeature<ITemporalClient>();
 
-        // this is relatively advanced use of the TemporalClient but is shown here to 
-        // illustrate how to interact with the lower-level gRPC API for extracting details
-        // about the WorkflowExecution. 
-        // We will be replacing this usage with a `Query` invocation to be simpler and more explicit.
-        // This module will not overly explain this interaction but will be valuable later when we
-        // want to reason about our Executions with more detail.
-        var handle = temporalClient.GetWorkflowHandle(id);
-        var result = new OnboardingsGet
-        {
-            Id = handle.Id
-        };
         try
         {
-            var describe = await handle.DescribeAsync();
-            result = result with { ExecutionStatus = describe.Status.ToString() };
-            var hist = await handle.FetchHistoryAsync();
-            var started = hist.Events.First(e => e.EventType == EventType.WorkflowExecutionStarted);
-            result = started.WorkflowExecutionStartedEventAttributes.Input.Payloads_.Aggregate(result,
-                (current, payload) => current with
-                {
-                    Input = (OnboardEntityRequest?)DataConverter.Default.PayloadConverter.ToValue(payload,
-                        typeof(OnboardEntityRequest)) ?? throw new InvalidOperationException()
-                });
-
-            return Ok(result);
+            var handle = temporalClient.GetWorkflowHandle<OnboardEntity>(id);
+            var q = await handle.QueryAsync<GetEntityOnboardingStateResponse>(wf =>  
+                wf.GetEntityOnboardingStateAsync(new ()));
+            return Ok(new OnboardingsGet { Id = q.Id, CurrentValue = q.CurrentValue, Approval = q.Approval, });
         }
         catch (RpcException e)
         {

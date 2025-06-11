@@ -2,7 +2,7 @@ using System.Diagnostics;
 using Onboardings.Domain.Clients.Crm;
 using Onboardings.Domain.Clients.Email;
 using Onboardings.Domain.Clients.Temporal;
-using Onboardings.Domain.Orchestrations;
+using Onboardings.Domain.Workflows;
 using Temporalio.Extensions.Hosting;
 using IntegrationsHandlers = Onboardings.Domain.Integrations.Handlers;
 using NotificationHandlers = Onboardings.Domain.Notifications.Handlers;

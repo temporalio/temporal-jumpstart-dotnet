@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Onboardings.Domain.Commands.V1;
-using Onboardings.Domain.Orchestrations;
 using Onboardings.Domain.Queries.V2;
+using Onboardings.Domain.Workflows;
 using Onboardings.Domain.Workflows.V2;
 using Temporalio.Activities;
 using Temporalio.Api.Enums.V1;
@@ -11,7 +11,7 @@ using Temporalio.Exceptions;
 using Temporalio.Testing;
 using Temporalio.Worker;
 using Xunit.Abstractions;
-using Errors = Onboardings.Domain.Orchestrations.Errors;
+using Errors = Onboardings.Domain.Workflows.Errors;
 using IntegrationErrors = Onboardings.Domain.Integrations.Errors;
 
 namespace Onboardings.Domain.Tests.Orchestrations;

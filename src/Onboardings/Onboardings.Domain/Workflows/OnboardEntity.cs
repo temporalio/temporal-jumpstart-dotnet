@@ -9,7 +9,7 @@ using Temporalio.Common;
 using Temporalio.Exceptions;
 using Temporalio.Workflows;
 using NotificationHandlers = Onboardings.Domain.Notifications.Handlers;
-namespace Onboardings.Domain.Orchestrations;
+namespace Onboardings.Domain.Workflows;
 
 public static class Errors
 {

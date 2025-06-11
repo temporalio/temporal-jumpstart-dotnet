@@ -28,20 +28,22 @@ namespace Onboardings.Api.V1 {
             "Z3MuYXBpLnYxGipvbmJvYXJkaW5ncy9kb21haW4vdmFsdWVzL3YxL21lc3Nh",
             "Z2UucHJvdG8iYgoMQXBwcm92YWxzUHV0Eg4KAmlkGAEgASgJUgJpZBJCCghh",
             "cHByb3ZhbBgCIAEoCzImLm9uYm9hcmRpbmdzLmRvbWFpbi52YWx1ZXMudjEu",
-            "QXBwcm92YWxSCGFwcHJvdmFsIlIKDk9uYm9hcmRpbmdzUHV0EhQKBXZhbHVl",
-            "GAEgASgJUgV2YWx1ZRIqChBkZXB1dHlPd25lckVtYWlsGAIgASgJUhBkZXB1",
-            "dHlPd25lckVtYWlsIokBCg5PbmJvYXJkaW5nc0dldBIOCgJpZBgBIAEoCVIC",
-            "aWQSIwoNY3VycmVudF92YWx1ZRgCIAEoCVIMY3VycmVudFZhbHVlEkIKCGFw",
-            "cHJvdmFsGAMgASgLMiYub25ib2FyZGluZ3MuZG9tYWluLnZhbHVlcy52MS5B",
-            "cHByb3ZhbFIIYXBwcm92YWxCkAEKFmNvbS5vbmJvYXJkaW5ncy5hcGkudjFC",
-            "DE1lc3NhZ2VQcm90b1ABogIDT0FYqgIST25ib2FyZGluZ3MuQXBpLlYxygIS",
-            "T25ib2FyZGluZ3NcQXBpXFYx4gIeT25ib2FyZGluZ3NcQXBpXFYxXEdQQk1l",
-            "dGFkYXRh6gIUT25ib2FyZGluZ3M6OkFwaTo6VjFiBnByb3RvMw=="));
+            "QXBwcm92YWxSCGFwcHJvdmFsIpYBCg5PbmJvYXJkaW5nc1B1dBIUCgV2YWx1",
+            "ZRgBIAEoCVIFdmFsdWUSKgoQZGVwdXR5T3duZXJFbWFpbBgCIAEoCVIQZGVw",
+            "dXR5T3duZXJFbWFpbBJCCghhcHByb3ZhbBgDIAEoCzImLm9uYm9hcmRpbmdz",
+            "LmRvbWFpbi52YWx1ZXMudjEuQXBwcm92YWxSCGFwcHJvdmFsIokBCg5PbmJv",
+            "YXJkaW5nc0dldBIOCgJpZBgBIAEoCVICaWQSIwoNY3VycmVudF92YWx1ZRgC",
+            "IAEoCVIMY3VycmVudFZhbHVlEkIKCGFwcHJvdmFsGAMgASgLMiYub25ib2Fy",
+            "ZGluZ3MuZG9tYWluLnZhbHVlcy52MS5BcHByb3ZhbFIIYXBwcm92YWxCkAEK",
+            "FmNvbS5vbmJvYXJkaW5ncy5hcGkudjFCDE1lc3NhZ2VQcm90b1ABogIDT0FY",
+            "qgIST25ib2FyZGluZ3MuQXBpLlYxygIST25ib2FyZGluZ3NcQXBpXFYx4gIe",
+            "T25ib2FyZGluZ3NcQXBpXFYxXEdQQk1ldGFkYXRh6gIUT25ib2FyZGluZ3M6",
+            "OkFwaTo6VjFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Onboardings.Domain.Values.V1.MessageReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Onboardings.Api.V1.ApprovalsPut), global::Onboardings.Api.V1.ApprovalsPut.Parser, new[]{ "Id", "Approval" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Onboardings.Api.V1.OnboardingsPut), global::Onboardings.Api.V1.OnboardingsPut.Parser, new[]{ "Value", "DeputyOwnerEmail" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Onboardings.Api.V1.OnboardingsPut), global::Onboardings.Api.V1.OnboardingsPut.Parser, new[]{ "Value", "DeputyOwnerEmail", "Approval" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Onboardings.Api.V1.OnboardingsGet), global::Onboardings.Api.V1.OnboardingsGet.Parser, new[]{ "Id", "CurrentValue", "Approval" }, null, null, null, null)
           }));
     }
@@ -330,6 +332,7 @@ namespace Onboardings.Api.V1 {
     public OnboardingsPut(OnboardingsPut other) : this() {
       value_ = other.value_;
       deputyOwnerEmail_ = other.deputyOwnerEmail_;
+      approval_ = other.approval_ != null ? other.approval_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -363,6 +366,18 @@ namespace Onboardings.Api.V1 {
       }
     }
 
+    /// <summary>Field number for the "approval" field.</summary>
+    public const int ApprovalFieldNumber = 3;
+    private global::Onboardings.Domain.Values.V1.Approval approval_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Onboardings.Domain.Values.V1.Approval Approval {
+      get { return approval_; }
+      set {
+        approval_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -380,6 +395,7 @@ namespace Onboardings.Api.V1 {
       }
       if (Value != other.Value) return false;
       if (DeputyOwnerEmail != other.DeputyOwnerEmail) return false;
+      if (!object.Equals(Approval, other.Approval)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -389,6 +405,7 @@ namespace Onboardings.Api.V1 {
       int hash = 1;
       if (Value.Length != 0) hash ^= Value.GetHashCode();
       if (DeputyOwnerEmail.Length != 0) hash ^= DeputyOwnerEmail.GetHashCode();
+      if (approval_ != null) hash ^= Approval.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -415,6 +432,10 @@ namespace Onboardings.Api.V1 {
         output.WriteRawTag(18);
         output.WriteString(DeputyOwnerEmail);
       }
+      if (approval_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(Approval);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -433,6 +454,10 @@ namespace Onboardings.Api.V1 {
         output.WriteRawTag(18);
         output.WriteString(DeputyOwnerEmail);
       }
+      if (approval_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(Approval);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -448,6 +473,9 @@ namespace Onboardings.Api.V1 {
       }
       if (DeputyOwnerEmail.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(DeputyOwnerEmail);
+      }
+      if (approval_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Approval);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -466,6 +494,12 @@ namespace Onboardings.Api.V1 {
       }
       if (other.DeputyOwnerEmail.Length != 0) {
         DeputyOwnerEmail = other.DeputyOwnerEmail;
+      }
+      if (other.approval_ != null) {
+        if (approval_ == null) {
+          Approval = new global::Onboardings.Domain.Values.V1.Approval();
+        }
+        Approval.MergeFrom(other.Approval);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -494,6 +528,13 @@ namespace Onboardings.Api.V1 {
             DeputyOwnerEmail = input.ReadString();
             break;
           }
+          case 26: {
+            if (approval_ == null) {
+              Approval = new global::Onboardings.Domain.Values.V1.Approval();
+            }
+            input.ReadMessage(Approval);
+            break;
+          }
         }
       }
     #endif
@@ -519,6 +560,13 @@ namespace Onboardings.Api.V1 {
           }
           case 18: {
             DeputyOwnerEmail = input.ReadString();
+            break;
+          }
+          case 26: {
+            if (approval_ == null) {
+              Approval = new global::Onboardings.Domain.Values.V1.Approval();
+            }
+            input.ReadMessage(Approval);
             break;
           }
         }

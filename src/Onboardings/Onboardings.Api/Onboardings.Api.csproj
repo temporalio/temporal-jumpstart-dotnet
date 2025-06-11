@@ -11,6 +11,8 @@
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
         <PackageReference Include="Temporalio" Version="1.7.0" />
+        <PackageReference Include="Temporalio.Extensions.Hosting" Version="1.7.0" />
+
     </ItemGroup>
 
     <ItemGroup>
