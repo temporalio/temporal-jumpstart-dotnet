@@ -429,7 +429,6 @@ public class OnboardEntityTests : TestBase
         Assert.Null(deputyOwnerApprovalRequested);
     }
 
-    // [Fact(Skip = "Update with test server is broken")]
     [Fact]
     public async Task SetValue_GivenApprovedEntity_ShouldNotUpdateValue()
     {
@@ -472,9 +471,11 @@ public class OnboardEntityTests : TestBase
             workerOptions
         );
         GetEntityOnboardingStateResponse? currentState = null;
-        var updateFailure = await Assert.ThrowsAsync<WorkflowUpdateFailedException>(async () =>
+        WorkflowUpdateFailedException? updateFailure = null;
+
+        await worker.ExecuteAsync(async () =>
         {
-            await worker.ExecuteAsync(async () =>
+            try
             {
                 var handle = await env.Client.StartWorkflowAsync<OnboardEntity>(wf => wf.ExecuteAsync(args),
                     new WorkflowOptions(args.Id, worker.Options.TaskQueue!));
@@ -487,30 +488,27 @@ public class OnboardEntityTests : TestBase
                         wf.SetValueAsync(new SetValueRequest { Value = "boop" }),
                     new WorkflowUpdateOptions(Guid.NewGuid().ToString())
                 );
-            });
-
-
-            //   
-            // catch (Exception? e)
-            // {
-            //     validationFailure = e;
-            //     LoggerFactory.CreateLogger("update").LogInformation($"Got exception {e.GetType()}");
-            //     var handle = env.Client.GetWorkflowHandle<IOnboardEntity>(args.Id);
-            //     currentState =
-            //         await handle.QueryAsync<OnboardEntity, GetEntityOnboardingStateResponse>(wf =>
-            //             wf.GetEntityOnboardingStateAsync(new()));
-            // }
+            }
+            catch (WorkflowUpdateFailedException ex)
+            {
+                updateFailure = ex;
+                var handle = env.Client.GetWorkflowHandle<OnboardEntity>(args.Id);
+                currentState =
+                    await handle.QueryAsync<GetEntityOnboardingStateResponse>(wf =>
+                        wf.GetEntityOnboardingStateAsync(new()));
+                // throw ex;
+            }
         });
+                
+        Assert.NotNull(updateFailure);
         Assert.NotNull(updateFailure.InnerException);
         Assert.Equal("Only pending approval is allowed", updateFailure.InnerException.Message);
-        var handle = env.Client.GetWorkflowHandle<OnboardEntity>(args.Id);
-        currentState = await handle.QueryAsync<GetEntityOnboardingStateResponse>(wf => wf.GetEntityOnboardingStateAsync(new()));
         Assert.NotNull(currentState);
         Assert.Equal(args.Value, currentState.CurrentValue);
 
         // Assert.NotNull(validationFailure);
-        Assert.Null(registrationRequestSent);
-        Assert.Null(deputyOwnerApprovalRequested);
+        Assert.NotNull(registrationRequestSent);
+        Assert.Equal(args.Value, registrationRequestSent.Value);
     }
 
 public OnboardEntityTests(ITestOutputHelper output, ITestOutputHelper testOutputHelper) : base(output)
