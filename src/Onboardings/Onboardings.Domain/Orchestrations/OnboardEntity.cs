@@ -33,6 +33,10 @@ public interface IOnboardEntity
      */
     // ReSharper disable once UnusedMemberInSuper.Global
     Task ExecuteAsync(OnboardEntityRequest args);
+    Task ApproveAsync(ApproveEntityRequest approveEntityRequest);
+    Task RejectAsync(RejectEntityRequest rejectEntityRequest);
+    Task<GetEntityOnboardingStateResponse> SetValueAsync(SetValueRequest cmd);
+    GetEntityOnboardingStateResponse GetEntityOnboardingStateAsync(GetEntityOnboardingStateRequest q);
 }
 
 [Workflow]
@@ -41,16 +45,24 @@ public class OnboardEntity : IOnboardEntity
 {
     private GetEntityOnboardingStateResponse _state;
     public static ulong DefaultCompletionTimeoutSeconds =  7 * 86400;
+    
     [WorkflowRun]
     public async Task ExecuteAsync(OnboardEntityRequest args)
     {
         args = AssertValidRequest(args);
-        _state = new GetEntityOnboardingStateResponse{
+        _state = new GetEntityOnboardingStateResponse
+        {
             Args = args,
             Id = args.Id,
             CurrentValue = args.Value,
-            Approval = new Approval{Status = args.SkipApproval ? ApprovalStatus.Approved : ApprovalStatus.Pending}};
-        var logger = Workflow.Logger;
+            Approval = new Approval
+            {
+                Status = args.SkipApproval ? ApprovalStatus.Approved : ApprovalStatus.Pending
+            }
+        };
+      
+
+    var logger = Workflow.Logger;
         logger.LogInformation($"onboardingentity with runid {Workflow.Info.RunId}");
         AssertValidRequest(args);
 

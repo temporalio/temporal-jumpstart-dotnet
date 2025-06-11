@@ -5,14 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Onboardings.Api.Messages;
 using Onboardings.Domain.Clients.Temporal;
-using Onboardings.Domain.Messages.Commands;
-using Onboardings.Domain.Messages.Orchestrations;
+using Onboardings.Domain.Commands.V1;
 using Onboardings.Domain.Orchestrations;
+using Onboardings.Domain.Values.V1;
+using Onboardings.Domain.Workflows.V2;
 using Temporalio.Api.Enums.V1;
 using Temporalio.Client;
 using Temporalio.Converters;
 using Temporalio.Exceptions;
-using DomainValues = Onboardings.Domain.Messages.Values;
 
 namespace Onboardings.Api.Controllers;
 
@@ -33,7 +33,7 @@ public class OnboardingsControllerV2(
     {
         var temporalClient = httpContextAccessor.HttpContext?.Features.GetRequiredFeature<ITemporalClient>();
 
-        if (req.Approval.Status.Equals(DomainValues.ApprovalStatus.Pending))
+        if (req.Approval.Status.Equals(ApprovalStatus.Pending))
         {
             return await StartWorkflow(id, req, temporalClient);
         }
@@ -46,11 +46,11 @@ public class OnboardingsControllerV2(
             Expression<Func<OnboardEntity, Task>> signalCall = null;
             switch (req.Approval.Status)
             {
-                case DomainValues.ApprovalStatus.Approved:
-                    signalCall = wf => wf.ApproveAsync(new ApproveEntityRequest(req.Approval.Comment));
+                case ApprovalStatus.Approved:
+                    signalCall = wf => wf.ApproveAsync(new ApproveEntityRequest { Comment = req.Approval.Comment});
                     break;
-                case DomainValues.ApprovalStatus.Rejected:
-                    signalCall = wf => wf.RejectAsync(new RejectEntityRequest(req.Approval.Comment));
+                case ApprovalStatus.Rejected:
+                    signalCall = wf => wf.RejectAsync(new RejectEntityRequest{Comment = req.Approval.Comment});
                     break;
                 default:
                     return BadRequest();
@@ -94,7 +94,7 @@ public class OnboardingsControllerV2(
         var alreadyStarted = false;
         try
         {
-            var args = new OnboardEntityRequest(id, req.Value);
+            var args = new OnboardEntityRequest { Id = id, Value = req.Value };
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
             handle = await temporalClient.StartWorkflowAsync(
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
