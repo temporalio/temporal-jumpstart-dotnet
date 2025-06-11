@@ -63,7 +63,7 @@ public class OnboardEntity : IOnboardEntity
       
 
     var logger = Workflow.Logger;
-        logger.LogInformation($"onboardingentity with runid {Workflow.Info.RunId}");
+        logger.LogInformation($"onboarding entity with runid {Workflow.Info.RunId}");
         AssertValidRequest(args);
 
         var opts = new ActivityOptions {
@@ -224,6 +224,7 @@ public class OnboardEntity : IOnboardEntity
     {
         if (_state.Approval.Status != ApprovalStatus.Pending )
         {
+            Workflow.Logger.LogWarning($"rejecting the value since Workflow is not pending approval");
             throw new InvalidOperationException("Only pending approval is allowed");
         }
     }

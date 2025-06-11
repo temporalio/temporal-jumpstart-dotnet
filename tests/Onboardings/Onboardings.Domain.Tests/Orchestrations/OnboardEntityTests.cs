@@ -432,26 +432,27 @@ public class OnboardEntityTests : TestBase
     [Fact]
     public async Task SetValue_GivenApprovedEntity_ShouldNotUpdateValue()
     {
-        await using var env = await WorkflowEnvironment.StartLocalAsync(
-            options: new WorkflowEnvironmentStartLocalOptions
-            {
-                DevServerOptions = new DevServerOptions { ExistingPath = "/opt/homebrew/bin/temporal" }
-            });
+        // we are not using TimeSkipping Server here so we can just us Task.Delay directly
+        // If you decide to use TimeSkipping, then be sure to use `env.DelayAsync`
+        await using var env = await WorkflowEnvironment.StartLocalAsync();
         var args = new OnboardEntityRequest
         {
             Id = Guid.NewGuid().ToString(),
             Value = Guid.NewGuid().ToString(),
-            CompletionTimeoutSeconds = (ulong)TimeSpan.FromSeconds(10).Seconds,
+            CompletionTimeoutSeconds = (ulong)TimeSpan.FromSeconds(20).Seconds,
+            SkipApproval = false,
         };
 
         RegisterCrmEntityRequest registrationRequestSent = null;
-        RequestDeputyOwnerApprovalRequest deputyOwnerApprovalRequested = null;
         var workerOptions = new TemporalWorkerOptions("test") { LoggerFactory = LoggerFactory };
         workerOptions.AddWorkflow<OnboardEntity>();
 
         [Activity]
         Task RegisterCrmEntity(RegisterCrmEntityRequest req)
         {
+            // slow things down to allow the update to be attempted
+            // If you decide to use TimeSkipping server, then be sure to use `env.DelayAsync` 
+            Task.Delay(2000).Wait();
             registrationRequestSent = req;
             return Task.CompletedTask;
         }
@@ -459,7 +460,6 @@ public class OnboardEntityTests : TestBase
         [Activity]
         Task RequestDeputyOwnerApproval(RequestDeputyOwnerApprovalRequest req)
         {
-            deputyOwnerApprovalRequested = req;
             return Task.CompletedTask;
         }
 
@@ -481,9 +481,8 @@ public class OnboardEntityTests : TestBase
                     new WorkflowOptions(args.Id, worker.Options.TaskQueue!));
                 await env.DelayAsync(TimeSpan.FromSeconds(1));
                 await handle.SignalAsync(wf => wf.ApproveAsync(new ApproveEntityRequest { Comment = "" }));
-                // await env.DelayAsync(TimeSpan.FromSeconds(1));
+                await env.DelayAsync(TimeSpan.FromSeconds(1));
 
-                // var handle = env.Client.GetWorkflowHandle<IOnboardEntity>(args.Id);
                 await handle.ExecuteUpdateAsync<OnboardEntity, GetEntityOnboardingStateResponse>(wf =>
                         wf.SetValueAsync(new SetValueRequest { Value = "boop" }),
                     new WorkflowUpdateOptions(Guid.NewGuid().ToString())
@@ -496,7 +495,6 @@ public class OnboardEntityTests : TestBase
                 currentState =
                     await handle.QueryAsync<GetEntityOnboardingStateResponse>(wf =>
                         wf.GetEntityOnboardingStateAsync(new()));
-                // throw ex;
             }
         });
                 
@@ -506,7 +504,6 @@ public class OnboardEntityTests : TestBase
         Assert.NotNull(currentState);
         Assert.Equal(args.Value, currentState.CurrentValue);
 
-        // Assert.NotNull(validationFailure);
         Assert.NotNull(registrationRequestSent);
         Assert.Equal(args.Value, registrationRequestSent.Value);
     }
