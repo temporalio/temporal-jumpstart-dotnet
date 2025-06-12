@@ -1,18 +1,12 @@
 using System.Diagnostics;
-using System.Linq.Expressions;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Onboardings.Api.Messages;
 using Onboardings.Api.V1;
 using Onboardings.Domain.Clients.Temporal;
-using Onboardings.Domain.Commands.V1;
-using Onboardings.Domain.Values.V1;
 using Onboardings.Domain.Workflows;
-using Onboardings.Domain.Workflows.V2;
-using Temporalio.Api.Enums.V1;
 using Temporalio.Client;
-using Temporalio.Converters;
 using Temporalio.Exceptions;
 
 namespace Onboardings.Api.Controllers;
@@ -40,6 +34,7 @@ public class PingsControllerV1(
         {
             var handle = await temporalClient.StartWorkflowAsync<Ping>(wf => wf.ExecuteAsync(req.Ping), opts);
             // poor man's uri template. prefer RFC 6570 implementation
+            _logger.LogInformation("started workflow {id}", handle.Id);
             var location = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/v1/pings/{id}";
             return Accepted(location);
         }
@@ -49,6 +44,7 @@ public class PingsControllerV1(
         }
         catch (Exception e)
         {
+            _logger.LogError(e, "failed to start workflow");
             return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }
     }
@@ -62,7 +58,7 @@ public class PingsControllerV1(
         
         try
         {
-            var handle = temporalClient.GetWorkflowHandle<Ping>(id);
+            var handle = temporalClient.GetWorkflowHandle<Ping>(id, null, null);
             var result = await handle.QueryAsync<string>(wf => wf.GetState());
             
             return Ok(result);
