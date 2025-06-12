@@ -51,7 +51,7 @@ public class PingsControllerV1(
 
     [HttpGet("{id}")]
     [Produces("application/json")]
-    public async Task<ActionResult<OnboardingsGet>> GetOnboardingStatus(string id)
+    public async Task<ActionResult<OnboardingsGet>> GetPingAsync(string id)
     {
         Debug.Assert(httpContextAccessor.HttpContext != null, "httpContextAccessor.HttpContext != null");
         var temporalClient = httpContextAccessor.HttpContext.Features.GetRequiredFeature<ITemporalClient>();

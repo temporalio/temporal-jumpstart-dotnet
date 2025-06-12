@@ -50,11 +50,31 @@ public class PingsControllerV1Tests : TestBase
         return controller;
     }
 
+    public class MockableClientOutboundInterceptor : ClientOutboundInterceptor
+    {
+
+        public MockableClientOutboundInterceptor(): base(null!) { }
+    }
     [Fact]
     public async Task PutPingAsync_ReturnsAccepted()
     {
+        // var mc = new Mock<ITemporalClient>();
+        // var ic = new Mock<MockableClientOutboundInterceptor>();
+        // var handle = new WorkflowHandleTestDouble<Ping, string>(mc.Object, "ping1");
+        // mc.Setup(m => m.StartWorkflowAsync<Ping>(
+        //     // wf => wf.ExecuteAsync("hi"),
+        //     It.IsAny<Expression<Func<Ping, Task>>>(),
+        //     It.IsAny<WorkflowOptions>())).
+        //     Callback(Expression<Func<Ping,Task>>, WorkflowOptions(Expr)
+        //     ReturnsAsync(handle);   
+        //
+        // mc.Setup(m =>
+        //     m.StartWorkflowAsync<Ping>(wf => wf.ExecuteAsync("hi"),
+        //         It.Is<WorkflowOptions>(o => o.TaskQueue == "test"))).ReturnsAsync(handle);
+        //
+        // ic.Setup(i => i.StartWorkflowAsync<Ping, string>(new StartWorkflowInput(
+        //     )))
         var mockClient = new MockTemporalClient();
-        
         var sut = CreateController(mockClient);
         var result = await sut.PutPingAsync("ping1", new PutPing("hi"));
         var arg = mockClient.CapturedCalls.First(c => c.MethodName == "ExecuteAsync").Arguments.First();
@@ -65,84 +85,18 @@ public class PingsControllerV1Tests : TestBase
         var accepted = Assert.IsType<AcceptedResult>(result);
         Assert.Equal("http://localhost/v1/pings/ping1", accepted.Location);
     }
-
-    
-    public class IC : ClientOutboundInterceptor
-    {
-        public IC() : base(null!)
-        {
-        }
-
-       
-    }
-
-    public record MockWorkflowHandle<TWorkflow,TResult> : WorkflowHandle<TWorkflow,TResult>
-    {
-        public MockWorkflowHandle(ITemporalClient Client, string Id, string? RunId = null, string? ResultRunId = null, string? FirstExecutionRunId = null) : base(Client, Id, RunId, ResultRunId, FirstExecutionRunId)
-        {
-        }
-
-        public override Task<TQueryResult> QueryAsync<TQueryResult>(string query, IReadOnlyCollection<object?> args, WorkflowQueryOptions? options = null)
-        {
-            return Task.FromResult<TQueryResult>(Result is TQueryResult ? (TQueryResult)Result : default);
-        }
-
-        public object Result { get; set; }
-    }
-
-    public record MockWorkflowHandle2<TWorkflow, TResult> : WorkflowHandle<TWorkflow, TResult>
-    {
-        public MockWorkflowHandle2() : base(null!, "") { }
-
-        public MockWorkflowHandle2(ITemporalClient Client, string Id, string? RunId = null, string? ResultRunId = null, string? FirstExecutionRunId = null) : base(Client, Id, RunId, ResultRunId, FirstExecutionRunId)
-        {
-        }
-
-        public override Task<TQueryResult> QueryAsync<TQueryResult>(string query, IReadOnlyCollection<object?> args, WorkflowQueryOptions? options = null) => ((WorkflowHandle)this).QueryAsync<TQueryResult>(query, args, options);
-    }
     
     [Fact]
     public async Task GetPing_ReturnsOk()
     {
-        // System.Object[] args = new System.Object[0];
-        // var qi = new QueryWorkflowInput(
-        //     Id: "ping1",
-        //     RunId: null,
-        //     Query: "GetState",
-        //     Args:null,
-        //     Options: null,
-        //     Headers: null
-        //     );
         var mc = new Mock<ITemporalClient>(MockBehavior.Strict);
-        
-        // var handle2 = new Mock<MockWorkflowHandle2<Ping, string>>();
-        // handle2.Setup(h => 
-        //     h.QueryAsync<string>(wf => wf.GetState(), It.IsAny<WorkflowQueryOptions>()))
-        //     .ReturnsAsync("pong");
-        var handle = new MockWorkflowHandle<Ping,string>(mc.Object, "ping1");
-        handle.Result = "pong";
+        var handle = new WorkflowHandleTestDouble<Ping,string>(mc.Object, "ping1") { Result = "pong" };
         mc.Setup(c => c.GetWorkflowHandle<Ping>("ping1", null, null)).Returns(handle);
-
-        // mc.Setup(c => c.OutboundInterceptor).Returns(interceptor.Object);
-        // var handle = new WorkflowHandle<Ping, string>(mc.Object, "ping1", "run1", "run1");
-        // mc.Setup(c => c.GetWorkflowHandle<Ping, string>("ping1", null, null)).Returns(handle);
         var sut = CreateController(mc.Object); 
-        var result = await sut.GetOnboardingStatus("ping1");
+        var result = await sut.GetPingAsync("ping1");
         
         var ok = Assert.IsType<OkObjectResult>(result.Result);
         Assert.Equal("pong", ok.Value);
         
     }
-    // Helper method to extract the argument
-    private static string ExtractArgumentFromExpression(Expression<Func<Ping, Task>> expression)
-    {
-        if (expression.Body is MethodCallExpression methodCall && 
-            methodCall.Arguments.Count > 0 &&
-            methodCall.Arguments[0] is ConstantExpression constantExpr)
-        {
-            return constantExpr.Value?.ToString();
-        }
-        return null;
-    }
 }
-
