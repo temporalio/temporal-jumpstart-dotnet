@@ -58,27 +58,54 @@ public class PingsControllerV1Tests : TestBase
     [Fact]
     public async Task PutPingAsync_ReturnsAccepted()
     {
-        // var mc = new Mock<ITemporalClient>();
-        // var ic = new Mock<MockableClientOutboundInterceptor>();
-        // var handle = new WorkflowHandleTestDouble<Ping, string>(mc.Object, "ping1");
-        // mc.Setup(m => m.StartWorkflowAsync<Ping>(
-        //     // wf => wf.ExecuteAsync("hi"),
-        //     It.IsAny<Expression<Func<Ping, Task>>>(),
-        //     It.IsAny<WorkflowOptions>())).
-        //     Callback(Expression<Func<Ping,Task>>, WorkflowOptions(Expr)
-        //     ReturnsAsync(handle);   
-        //
+        var mc = new Mock<ITemporalClient>();
+        var handle = new WorkflowHandleTestDouble<Ping, string>(mc.Object, "ping1");
+        // This won't fail as expected...the Expression is not comparable :( 
         // mc.Setup(m =>
         //     m.StartWorkflowAsync<Ping>(wf => wf.ExecuteAsync("hi"),
         //         It.Is<WorkflowOptions>(o => o.TaskQueue == "test"))).ReturnsAsync(handle);
-        //
-        // ic.Setup(i => i.StartWorkflowAsync<Ping, string>(new StartWorkflowInput(
-        //     )))
-        var mockClient = new MockTemporalClient();
-        var sut = CreateController(mockClient);
+        var capturedExpression = default(Expression<Func<Ping, Task>>);
+        var capturedOptions = default(WorkflowOptions);
+        mc.Setup(m => m.StartWorkflowAsync<Ping>(
+            It.IsAny<Expression<Func<Ping, Task>>>(),
+            It.IsAny<WorkflowOptions>())).
+            Callback<Expression<Func<Ping,Task>>, WorkflowOptions>((expr, opts) =>
+            {
+                capturedExpression = expr;
+                capturedOptions = opts;
+            }).
+            ReturnsAsync(handle);   
+        
+        // Assert
+
+        var sut = CreateController(mc.Object);
         var result = await sut.PutPingAsync("ping1", new PutPing("hi"));
-        var arg = mockClient.CapturedCalls.First(c => c.MethodName == "ExecuteAsync").Arguments.First();
-        var opts = mockClient.CapturedCalls.First(c => c.MethodName == "ExecuteAsync").Options;
+        var accepted = Assert.IsType<AcceptedResult>(result);
+        Assert.NotNull(capturedExpression);
+        Assert.NotNull(capturedOptions);
+    
+        // Verify the expression calls the correct method
+        var methodCall = (MethodCallExpression)capturedExpression.Body;
+        Assert.Equal("ExecuteAsync", methodCall.Method.Name);
+    
+        // Extract and verify arguments from a helper method
+        var arguments = ExtractArgumentValues.From(methodCall);
+        Assert.Equal("hi", arguments[0]);
+        // Verify workflow options
+        Assert.Equal("ping1",capturedOptions.Id);
+        Assert.Equal("test",capturedOptions.TaskQueue);
+        
+        Assert.Equal("http://localhost/v1/pings/ping1", accepted.Location);
+    }
+    
+    [Fact]
+    public async Task PutPingAsync_ReturnsAccepted2()
+    {
+        var mc = new MockTemporalClient();
+        var sut = CreateController(mc);
+        var result = await sut.PutPingAsync("ping1", new PutPing("hi"));
+        var arg = mc.CapturedCalls.First(c => c.MethodName == "ExecuteAsync").Arguments.First();
+        var opts = mc.CapturedCalls.First(c => c.MethodName == "ExecuteAsync").Options;
         Assert.IsType<string>(arg);
         Assert.Equal(arg,"hi");
         Assert.Equal("test",opts?.TaskQueue);
