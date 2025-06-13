@@ -38,7 +38,8 @@ namespace Onboardings.Workers
                 .ConfigureOptions(o => { o.ConfigureService(temporalConfig); })
                 .AddScopedActivities<IntegrationsHandlers>()
                 .AddScopedActivities<NotificationHandlers>()
-                .AddWorkflow<OnboardEntity>();
+                .AddWorkflow<OnboardEntity>()
+                .AddWorkflow<Ping>();
 
             var host = builder.Build();
             var lf = host.Services.GetService<ILoggerFactory>();

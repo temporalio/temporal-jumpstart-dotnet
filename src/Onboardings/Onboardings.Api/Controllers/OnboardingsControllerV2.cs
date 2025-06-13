@@ -146,4 +146,47 @@ public class OnboardingsControllerV2(
 
         return new StatusCodeResult(StatusCodes.Status500InternalServerError);
     }
+    // This demonstrates using the gRPC API to extract details about the WorkflowExecution.
+    // Prefer using Query instead.
+    public record OnboardingsGetVerbose(string? Id = null, string? ExecutionStatus = null, OnboardEntityRequest? Input = null);
+    [HttpGet("/thehardway/{id}")]
+    [Produces("application/json")]
+    public async Task<ActionResult<OnboardingsGetVerbose>> GetOnboardingStatusTheHardWay(string id)
+    {
+        var temporalClient = httpContextAccessor.HttpContext?.Features.GetRequiredFeature<ITemporalClient>();
+
+        // this is relatively advanced use of the TemporalClient but is shown here to 
+        // illustrate how to interact with the lower-level gRPC API for extracting details
+        // about the WorkflowExecution. 
+        // We will be replacing this usage with a `Query` invocation to be simpler and more explicit.
+        // This module will not overly explain this interaction but will be valuable later when we
+        // want to reason about our Executions with more detail.
+        var handle = temporalClient.GetWorkflowHandle(id);
+        var result = new OnboardingsGetVerbose
+        {
+            Id = handle.Id
+        };
+
+        try
+        {
+            var describe = await handle.DescribeAsync();
+            result = result with { ExecutionStatus = describe.Status.ToString() };
+            var hist = await handle.FetchHistoryAsync();
+            var started = hist.Events.First(e => e.EventType == EventType.WorkflowExecutionStarted);
+            foreach (var payload in started.WorkflowExecutionStartedEventAttributes.Input.Payloads_)
+                result = result with
+                {
+                    Input = (OnboardEntityRequest?)DataConverter.Default.PayloadConverter.ToValue(payload,
+                        typeof(OnboardEntityRequest)) ?? throw new InvalidOperationException()
+                };
+
+            return Ok(result);
+        }
+        catch (RpcException e)
+        {
+            if (e.Code.Equals(RpcException.StatusCode.NotFound)) return NotFound();
+        }
+
+        return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+    }
 }
