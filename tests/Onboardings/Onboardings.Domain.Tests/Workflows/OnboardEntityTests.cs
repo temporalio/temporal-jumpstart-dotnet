@@ -12,7 +12,9 @@ using Temporalio.Testing;
 using Temporalio.Worker;
 using Xunit.Abstractions;
 using Errors = Onboardings.Domain.Workflows.Errors;
+using ProtoErrors = Onboardings.Domain.Values.V1.Errors;
 using IntegrationErrors = Onboardings.Domain.Integrations.Errors;
+
 
 namespace Onboardings.Domain.Tests.Workflows;
 
@@ -33,12 +35,14 @@ public class OnboardEntityTests : TestBase
 
         await worker.ExecuteAsync(async () =>
         {
-            await Assert.ThrowsAsync<WorkflowFailedException>(async () =>
+            var e = await Assert.ThrowsAsync<WorkflowFailedException>(async () =>
             {
                 await env.Client.ExecuteWorkflowAsync(
                     (OnboardEntity wf) => wf.ExecuteAsync(args),
                     new WorkflowOptions(id: args.Id, taskQueue: worker.Options.TaskQueue!));
             });
+            var ae = Assert.IsType<ApplicationFailureException>(e.InnerException);
+            Assert.Equal(nameof(ProtoErrors.InvalidArguments), ae.ErrorType);
         });
     }
 

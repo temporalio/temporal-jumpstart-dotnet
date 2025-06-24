@@ -28,22 +28,23 @@ namespace Onboardings.Api.V1 {
             "Z3MuYXBpLnYxGipvbmJvYXJkaW5ncy9kb21haW4vdmFsdWVzL3YxL21lc3Nh",
             "Z2UucHJvdG8iYgoMQXBwcm92YWxzUHV0Eg4KAmlkGAEgASgJUgJpZBJCCghh",
             "cHByb3ZhbBgCIAEoCzImLm9uYm9hcmRpbmdzLmRvbWFpbi52YWx1ZXMudjEu",
-            "QXBwcm92YWxSCGFwcHJvdmFsIpYBCg5PbmJvYXJkaW5nc1B1dBIUCgV2YWx1",
-            "ZRgBIAEoCVIFdmFsdWUSKgoQZGVwdXR5T3duZXJFbWFpbBgCIAEoCVIQZGVw",
-            "dXR5T3duZXJFbWFpbBJCCghhcHByb3ZhbBgDIAEoCzImLm9uYm9hcmRpbmdz",
-            "LmRvbWFpbi52YWx1ZXMudjEuQXBwcm92YWxSCGFwcHJvdmFsIokBCg5PbmJv",
-            "YXJkaW5nc0dldBIOCgJpZBgBIAEoCVICaWQSIwoNY3VycmVudF92YWx1ZRgC",
-            "IAEoCVIMY3VycmVudFZhbHVlEkIKCGFwcHJvdmFsGAMgASgLMiYub25ib2Fy",
-            "ZGluZ3MuZG9tYWluLnZhbHVlcy52MS5BcHByb3ZhbFIIYXBwcm92YWxCkAEK",
-            "FmNvbS5vbmJvYXJkaW5ncy5hcGkudjFCDE1lc3NhZ2VQcm90b1ABogIDT0FY",
-            "qgIST25ib2FyZGluZ3MuQXBpLlYxygIST25ib2FyZGluZ3NcQXBpXFYx4gIe",
-            "T25ib2FyZGluZ3NcQXBpXFYxXEdQQk1ldGFkYXRh6gIUT25ib2FyZGluZ3M6",
-            "OkFwaTo6VjFiBnByb3RvMw=="));
+            "QXBwcm92YWxSCGFwcHJvdmFsIsIBCg5PbmJvYXJkaW5nc1B1dBIUCgV2YWx1",
+            "ZRgBIAEoCVIFdmFsdWUSLwoQZGVwdXR5T3duZXJFbWFpbBgCIAEoCUgAUhBk",
+            "ZXB1dHlPd25lckVtYWlsiAEBEkcKCGFwcHJvdmFsGAMgASgLMiYub25ib2Fy",
+            "ZGluZ3MuZG9tYWluLnZhbHVlcy52MS5BcHByb3ZhbEgBUghhcHByb3ZhbIgB",
+            "AUITChFfZGVwdXR5T3duZXJFbWFpbEILCglfYXBwcm92YWwiiQEKDk9uYm9h",
+            "cmRpbmdzR2V0Eg4KAmlkGAEgASgJUgJpZBIjCg1jdXJyZW50X3ZhbHVlGAIg",
+            "ASgJUgxjdXJyZW50VmFsdWUSQgoIYXBwcm92YWwYAyABKAsyJi5vbmJvYXJk",
+            "aW5ncy5kb21haW4udmFsdWVzLnYxLkFwcHJvdmFsUghhcHByb3ZhbEKQAQoW",
+            "Y29tLm9uYm9hcmRpbmdzLmFwaS52MUIMTWVzc2FnZVByb3RvUAGiAgNPQViq",
+            "AhJPbmJvYXJkaW5ncy5BcGkuVjHKAhJPbmJvYXJkaW5nc1xBcGlcVjHiAh5P",
+            "bmJvYXJkaW5nc1xBcGlcVjFcR1BCTWV0YWRhdGHqAhRPbmJvYXJkaW5nczo6",
+            "QXBpOjpWMWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Onboardings.Domain.Values.V1.MessageReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Onboardings.Api.V1.ApprovalsPut), global::Onboardings.Api.V1.ApprovalsPut.Parser, new[]{ "Id", "Approval" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Onboardings.Api.V1.OnboardingsPut), global::Onboardings.Api.V1.OnboardingsPut.Parser, new[]{ "Value", "DeputyOwnerEmail", "Approval" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Onboardings.Api.V1.OnboardingsPut), global::Onboardings.Api.V1.OnboardingsPut.Parser, new[]{ "Value", "DeputyOwnerEmail", "Approval" }, new[]{ "DeputyOwnerEmail", "Approval" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Onboardings.Api.V1.OnboardingsGet), global::Onboardings.Api.V1.OnboardingsGet.Parser, new[]{ "Id", "CurrentValue", "Approval" }, null, null, null, null)
           }));
     }
@@ -356,14 +357,28 @@ namespace Onboardings.Api.V1 {
 
     /// <summary>Field number for the "deputyOwnerEmail" field.</summary>
     public const int DeputyOwnerEmailFieldNumber = 2;
-    private string deputyOwnerEmail_ = "";
+    private readonly static string DeputyOwnerEmailDefaultValue = "";
+
+    private string deputyOwnerEmail_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string DeputyOwnerEmail {
-      get { return deputyOwnerEmail_; }
+      get { return deputyOwnerEmail_ ?? DeputyOwnerEmailDefaultValue; }
       set {
         deputyOwnerEmail_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
+    }
+    /// <summary>Gets whether the "deputyOwnerEmail" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasDeputyOwnerEmail {
+      get { return deputyOwnerEmail_ != null; }
+    }
+    /// <summary>Clears the value of the "deputyOwnerEmail" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearDeputyOwnerEmail() {
+      deputyOwnerEmail_ = null;
     }
 
     /// <summary>Field number for the "approval" field.</summary>
@@ -404,7 +419,7 @@ namespace Onboardings.Api.V1 {
     public override int GetHashCode() {
       int hash = 1;
       if (Value.Length != 0) hash ^= Value.GetHashCode();
-      if (DeputyOwnerEmail.Length != 0) hash ^= DeputyOwnerEmail.GetHashCode();
+      if (HasDeputyOwnerEmail) hash ^= DeputyOwnerEmail.GetHashCode();
       if (approval_ != null) hash ^= Approval.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -428,7 +443,7 @@ namespace Onboardings.Api.V1 {
         output.WriteRawTag(10);
         output.WriteString(Value);
       }
-      if (DeputyOwnerEmail.Length != 0) {
+      if (HasDeputyOwnerEmail) {
         output.WriteRawTag(18);
         output.WriteString(DeputyOwnerEmail);
       }
@@ -450,7 +465,7 @@ namespace Onboardings.Api.V1 {
         output.WriteRawTag(10);
         output.WriteString(Value);
       }
-      if (DeputyOwnerEmail.Length != 0) {
+      if (HasDeputyOwnerEmail) {
         output.WriteRawTag(18);
         output.WriteString(DeputyOwnerEmail);
       }
@@ -471,7 +486,7 @@ namespace Onboardings.Api.V1 {
       if (Value.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Value);
       }
-      if (DeputyOwnerEmail.Length != 0) {
+      if (HasDeputyOwnerEmail) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(DeputyOwnerEmail);
       }
       if (approval_ != null) {
@@ -492,7 +507,7 @@ namespace Onboardings.Api.V1 {
       if (other.Value.Length != 0) {
         Value = other.Value;
       }
-      if (other.DeputyOwnerEmail.Length != 0) {
+      if (other.HasDeputyOwnerEmail) {
         DeputyOwnerEmail = other.DeputyOwnerEmail;
       }
       if (other.approval_ != null) {

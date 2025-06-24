@@ -31,14 +31,16 @@ namespace Onboardings.Domain.Values.V1 {
             "bnQqigEKDkFwcHJvdmFsU3RhdHVzEh8KG0FQUFJPVkFMX1NUQVRVU19VTlNQ",
             "RUNJRklFRBAAEhsKF0FQUFJPVkFMX1NUQVRVU19QRU5ESU5HEAESHAoYQVBQ",
             "Uk9WQUxfU1RBVFVTX1JFSkVDVEVEEAISHAoYQVBQUk9WQUxfU1RBVFVTX0FQ",
-            "UFJPVkVEEANCwwEKIGNvbS5vbmJvYXJkaW5ncy5kb21haW4udmFsdWVzLnYx",
-            "QgxNZXNzYWdlUHJvdG9QAaICA09EVqoCHE9uYm9hcmRpbmdzLkRvbWFpbi5W",
-            "YWx1ZXMuVjHKAhxPbmJvYXJkaW5nc1xEb21haW5cVmFsdWVzXFYx4gIoT25i",
-            "b2FyZGluZ3NcRG9tYWluXFZhbHVlc1xWMVxHUEJNZXRhZGF0YeoCH09uYm9h",
-            "cmRpbmdzOjpEb21haW46OlZhbHVlczo6VjFiBnByb3RvMw=="));
+            "UFJPVkVEEAMqPgoGRXJyb3JzEhYKEkVSUk9SU19VTlNQRUNJRklFRBAAEhwK",
+            "GEVSUk9SU19JTlZBTElEX0FSR1VNRU5UUxABQsMBCiBjb20ub25ib2FyZGlu",
+            "Z3MuZG9tYWluLnZhbHVlcy52MUIMTWVzc2FnZVByb3RvUAGiAgNPRFaqAhxP",
+            "bmJvYXJkaW5ncy5Eb21haW4uVmFsdWVzLlYxygIcT25ib2FyZGluZ3NcRG9t",
+            "YWluXFZhbHVlc1xWMeICKE9uYm9hcmRpbmdzXERvbWFpblxWYWx1ZXNcVjFc",
+            "R1BCTWV0YWRhdGHqAh9PbmJvYXJkaW5nczo6RG9tYWluOjpWYWx1ZXM6OlYx",
+            "YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Onboardings.Domain.Values.V1.ApprovalStatus), }, null, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Onboardings.Domain.Values.V1.ApprovalStatus), typeof(global::Onboardings.Domain.Values.V1.Errors), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Onboardings.Domain.Values.V1.Approval), global::Onboardings.Domain.Values.V1.Approval.Parser, new[]{ "Status", "Comment" }, null, null, null, null)
           }));
     }
@@ -51,6 +53,11 @@ namespace Onboardings.Domain.Values.V1 {
     [pbr::OriginalName("APPROVAL_STATUS_PENDING")] Pending = 1,
     [pbr::OriginalName("APPROVAL_STATUS_REJECTED")] Rejected = 2,
     [pbr::OriginalName("APPROVAL_STATUS_APPROVED")] Approved = 3,
+  }
+
+  public enum Errors {
+    [pbr::OriginalName("ERRORS_UNSPECIFIED")] Unspecified = 0,
+    [pbr::OriginalName("ERRORS_INVALID_ARGUMENTS")] InvalidArguments = 1,
   }
 
   #endregion

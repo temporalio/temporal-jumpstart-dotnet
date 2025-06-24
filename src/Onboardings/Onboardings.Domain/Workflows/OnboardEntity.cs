@@ -109,6 +109,7 @@ public class OnboardEntity : IOnboardEntity
 
             throw;
         }
+        
     }
 
     private async Task AwaitApproval(OnboardEntityRequest args)
@@ -185,16 +186,16 @@ public class OnboardEntity : IOnboardEntity
              * Note that `WorkflowFailedException` will count towards the `workflow_failed` SDK Metric (https://docs.temporal.io/references/sdk-metrics#workflow_failed).
              */
         {
-            throw new ApplicationFailureException("OnboardEntity.Id and OnboardEntity.Value is required");
+            throw new ApplicationFailureException("OnboardEntity.Id and OnboardEntity.Value is required", nameof(Values.V1.Errors.InvalidArguments));
         }
 
         if (args is { SkipApproval: true, HasDeputyOwnerEmail: true })
         {
-            throw new ApplicationFailureException("Either skip approval or provide a Deputy Owner email, not both.");
+            throw new ApplicationFailureException("Either skip approval or provide a Deputy Owner email, not both.",nameof(Values.V1.Errors.InvalidArguments));
         }
         if(!string.IsNullOrEmpty(args.DeputyOwnerEmail) && (TimeSpan.FromSeconds(args.CompletionTimeoutSeconds) < TimeSpan.FromDays(4)))
         {
-            throw new ApplicationFailureException("Give at least four days to receive approval");
+            throw new ApplicationFailureException("Give at least four days to receive approval",nameof(Values.V1.Errors.InvalidArguments));
         }
         if (args.CompletionTimeoutSeconds < 1)
         {
