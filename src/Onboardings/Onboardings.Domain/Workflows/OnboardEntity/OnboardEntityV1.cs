@@ -11,8 +11,7 @@ using Temporalio.Workflows;
 using NotificationHandlers = Onboardings.Domain.Notifications.Handlers;
 namespace Onboardings.Domain.Workflows.OnboardEntity;
 
-// This is a way identify the Workflow for discovery
-[Workflow]
+[Workflow("OnboardEntity")]
 // ReSharper disable once ClassNeverInstantiated.Global
 public class OnboardEntityV1 : IOnboardEntity
 {
