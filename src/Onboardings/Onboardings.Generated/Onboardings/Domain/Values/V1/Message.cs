@@ -31,13 +31,13 @@ namespace Onboardings.Domain.Values.V1 {
             "bnQqigEKDkFwcHJvdmFsU3RhdHVzEh8KG0FQUFJPVkFMX1NUQVRVU19VTlNQ",
             "RUNJRklFRBAAEhsKF0FQUFJPVkFMX1NUQVRVU19QRU5ESU5HEAESHAoYQVBQ",
             "Uk9WQUxfU1RBVFVTX1JFSkVDVEVEEAISHAoYQVBQUk9WQUxfU1RBVFVTX0FQ",
-            "UFJPVkVEEAMqPgoGRXJyb3JzEhYKEkVSUk9SU19VTlNQRUNJRklFRBAAEhwK",
-            "GEVSUk9SU19JTlZBTElEX0FSR1VNRU5UUxABQsMBCiBjb20ub25ib2FyZGlu",
-            "Z3MuZG9tYWluLnZhbHVlcy52MUIMTWVzc2FnZVByb3RvUAGiAgNPRFaqAhxP",
-            "bmJvYXJkaW5ncy5Eb21haW4uVmFsdWVzLlYxygIcT25ib2FyZGluZ3NcRG9t",
-            "YWluXFZhbHVlc1xWMeICKE9uYm9hcmRpbmdzXERvbWFpblxWYWx1ZXNcVjFc",
-            "R1BCTWV0YWRhdGHqAh9PbmJvYXJkaW5nczo6RG9tYWluOjpWYWx1ZXM6OlYx",
-            "YgZwcm90bzM="));
+            "UFJPVkVEEAMqYwoGRXJyb3JzEhYKEkVSUk9SU19VTlNQRUNJRklFRBAAEhwK",
+            "GEVSUk9SU19JTlZBTElEX0FSR1VNRU5UUxABEiMKH0VSUk9SU19PTkJPQVJE",
+            "X0VOVElUWV9USU1FRF9PVVQQAkLDAQogY29tLm9uYm9hcmRpbmdzLmRvbWFp",
+            "bi52YWx1ZXMudjFCDE1lc3NhZ2VQcm90b1ABogIDT0RWqgIcT25ib2FyZGlu",
+            "Z3MuRG9tYWluLlZhbHVlcy5WMcoCHE9uYm9hcmRpbmdzXERvbWFpblxWYWx1",
+            "ZXNcVjHiAihPbmJvYXJkaW5nc1xEb21haW5cVmFsdWVzXFYxXEdQQk1ldGFk",
+            "YXRh6gIfT25ib2FyZGluZ3M6OkRvbWFpbjo6VmFsdWVzOjpWMWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Onboardings.Domain.Values.V1.ApprovalStatus), typeof(global::Onboardings.Domain.Values.V1.Errors), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -58,6 +58,7 @@ namespace Onboardings.Domain.Values.V1 {
   public enum Errors {
     [pbr::OriginalName("ERRORS_UNSPECIFIED")] Unspecified = 0,
     [pbr::OriginalName("ERRORS_INVALID_ARGUMENTS")] InvalidArguments = 1,
+    [pbr::OriginalName("ERRORS_ONBOARD_ENTITY_TIMED_OUT")] OnboardEntityTimedOut = 2,
   }
 
   #endregion

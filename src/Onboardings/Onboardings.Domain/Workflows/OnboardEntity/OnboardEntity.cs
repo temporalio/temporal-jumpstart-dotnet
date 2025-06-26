@@ -9,37 +9,11 @@ using Temporalio.Common;
 using Temporalio.Exceptions;
 using Temporalio.Workflows;
 using NotificationHandlers = Onboardings.Domain.Notifications.Handlers;
-namespace Onboardings.Domain.Workflows;
+namespace Onboardings.Domain.Workflows.OnboardEntity;
 
-public static class Errors
-{
-    public const string ErrOnboardEntityTimedOut = "Entity onboarding timed out.";
-}
-// This interface is only used for Documentation purposes.
-// It is not required for Temporal Workflow implementations.
-public interface IOnboardEntity
-{
-    /* ExecuteAsync */
-    /*
-     * 1. Validate input params for format
-     * 2. Validate the args. Id must be unique in Application. Value must be alphanumeric and non-empty.
-     * 3. Support Query for OnboardingState
-     * 4. Execute Activity that writes to EntityStorage
-     * 5. Await approval via `Approval` Signal for maximum of 7 days.
-     *     i. If Approval.Rejected OR Approval period expires, then Cancel Onboarding; Compensate by DELETEing Entity in storage
-     *     ii. If Approval.Approved then proceed with Onboarding
-     * 6. Execute RegisterCRMEntity Activity
-     *     i. If RegisterCRMEntity cannot succeed, Compensate
-     */
-    // ReSharper disable once UnusedMemberInSuper.Global
-    Task ExecuteAsync(OnboardEntityRequest args);
-    Task ApproveAsync(ApproveEntityRequest approveEntityRequest);
-    Task RejectAsync(RejectEntityRequest rejectEntityRequest);
-    Task<GetEntityOnboardingStateResponse> SetValueAsync(SetValueRequest cmd);
-    GetEntityOnboardingStateResponse GetEntityOnboardingStateAsync(GetEntityOnboardingStateRequest q);
-}
 
-[Workflow]
+// This is one way to identify the Workflow for discovery
+[Workflow("OnboardEntity")]
 // ReSharper disable once ClassNeverInstantiated.Global
 public class OnboardEntity : IOnboardEntity
 {
@@ -137,7 +111,7 @@ public class OnboardEntity : IOnboardEntity
                 var message = $"Onboarding {args.Id} failed to be approved in {args.CompletionTimeoutSeconds} seconds.";
                 logger.LogError(message);
                 // We never received approval from Deputy or primary owners, so we just fail the workflow
-                throw new ApplicationFailureException(message, Errors.ErrOnboardEntityTimedOut);
+                throw new ApplicationFailureException(message, nameof(Values.V1.Errors.OnboardEntityTimedOut));
             }
               
             // Since we are delivering an message, we want to restrict the number of retry attempts we make 
@@ -158,7 +132,7 @@ public class OnboardEntity : IOnboardEntity
                 Id = args.Id,
                 Value = _state.CurrentValue,
                 // DeputyOwnerEmail = null,
-                CompletionTimeoutSeconds = (ulong)(args.CompletionTimeoutSeconds - waitApprovalSecs),
+                CompletionTimeoutSeconds = args.CompletionTimeoutSeconds - waitApprovalSecs,
                 Email = args.Email,
             };
             throw Workflow.CreateContinueAsNewException<OnboardEntity>(wf => wf.ExecuteAsync(newArgs),
