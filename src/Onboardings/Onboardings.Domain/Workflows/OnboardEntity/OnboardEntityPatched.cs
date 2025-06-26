@@ -11,9 +11,11 @@ using Temporalio.Workflows;
 using NotificationHandlers = Onboardings.Domain.Notifications.Handlers;
 namespace Onboardings.Domain.Workflows.OnboardEntity;
 
+
+// This is one way to identify the Workflow for discovery
 [Workflow("OnboardEntity")]
 // ReSharper disable once ClassNeverInstantiated.Global
-public class OnboardEntityV1 : IOnboardEntity
+public class OnboardEntityPatched : IOnboardEntity
 {
     private GetEntityOnboardingStateResponse _state;
     public static ulong DefaultCompletionTimeoutSeconds =  7 * 86400;
@@ -81,7 +83,13 @@ public class OnboardEntityV1 : IOnboardEntity
 
             throw;
         }
-        
+        var v2 = Workflow.Patched("v2");
+        if (!v2)
+        {
+            return;
+        }
+        await Workflow.ExecuteActivityAsync("NotifyOnboardEntityCompleted", new string[]{args.Id},
+            new ActivityOptions { StartToCloseTimeout = TimeSpan.FromSeconds(10), });
     }
 
     private async Task AwaitApproval(OnboardEntityRequest args)
