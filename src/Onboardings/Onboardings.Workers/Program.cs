@@ -5,6 +5,7 @@ using Onboardings.Domain.Clients.Temporal;
 using Onboardings.Domain.Workflows;
 using Onboardings.Domain.Workflows.OnboardEntity;
 using Temporalio.Extensions.Hosting;
+using Temporalio.Workflows;
 using IntegrationsHandlers = Onboardings.Domain.Integrations.Handlers;
 using NotificationHandlers = Onboardings.Domain.Notifications.Handlers;
 namespace Onboardings.Workers
