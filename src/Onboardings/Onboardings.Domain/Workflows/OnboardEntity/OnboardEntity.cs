@@ -175,6 +175,7 @@ public class OnboardEntity : IOnboardEntity
         {
             args.CompletionTimeoutSeconds = DefaultCompletionTimeoutSeconds;
         }
+        
         return args;
     }
 

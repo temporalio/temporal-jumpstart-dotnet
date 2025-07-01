@@ -83,11 +83,15 @@ public class OnboardEntityPatched : IOnboardEntity
 
             throw;
         }
+        
         var v2 = Workflow.Patched("v2");
         if (!v2)
         {
             return;
         }
+        // patched early return is required to prevent NDE here
+        // even Activities at the end of a Workflow need versioning
+        // since queries will cause replays on the Workflow and cause NDE 
         await Workflow.ExecuteActivityAsync("NotifyOnboardEntityCompleted", new string[]{args.Id},
             new ActivityOptions { StartToCloseTimeout = TimeSpan.FromSeconds(10), });
     }
