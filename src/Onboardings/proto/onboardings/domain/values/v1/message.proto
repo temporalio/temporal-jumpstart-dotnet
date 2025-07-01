@@ -17,4 +17,5 @@ message Approval {
 enum Errors {
   ERRORS_UNSPECIFIED = 0;
   ERRORS_INVALID_ARGUMENTS = 1;
+  ERRORS_ONBOARD_ENTITY_TIMED_OUT = 2;
 }

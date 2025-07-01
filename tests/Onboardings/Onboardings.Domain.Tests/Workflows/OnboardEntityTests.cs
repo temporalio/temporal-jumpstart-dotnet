@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using Onboardings.Domain.Commands.V1;
 using Onboardings.Domain.Queries.V2;
 using Onboardings.Domain.Workflows;
+using Onboardings.Domain.Workflows.OnboardEntity;
 using Onboardings.Domain.Workflows.V2;
 using Temporalio.Activities;
 using Temporalio.Api.Enums.V1;
@@ -11,7 +12,6 @@ using Temporalio.Exceptions;
 using Temporalio.Testing;
 using Temporalio.Worker;
 using Xunit.Abstractions;
-using Errors = Onboardings.Domain.Workflows.Errors;
 using ProtoErrors = Onboardings.Domain.Values.V1.Errors;
 using IntegrationErrors = Onboardings.Domain.Integrations.Errors;
 
@@ -200,7 +200,7 @@ public class OnboardEntityTests : TestBase
                 await handle.GetResultAsync();
             });
             var appEx = Assert.IsType<ApplicationFailureException>(e.InnerException);
-            Assert.Equal(Errors.ErrOnboardEntityTimedOut, appEx.ErrorType);
+            Assert.Equal(nameof(ProtoErrors.OnboardEntityTimedOut), appEx.ErrorType);
             Assert.Null(registrationRequestSent);
             Assert.Null(deputyOwnerApprovalRequested);
         });
@@ -511,6 +511,7 @@ public class OnboardEntityTests : TestBase
         Assert.NotNull(registrationRequestSent);
         Assert.Equal(args.Value, registrationRequestSent.Value);
     }
+    
 
 public OnboardEntityTests(ITestOutputHelper output, ITestOutputHelper testOutputHelper) : base(output)
 {

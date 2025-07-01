@@ -10,6 +10,7 @@ using Onboardings.Domain.Commands.V1;
 using Onboardings.Domain.Queries.V2;
 using Onboardings.Domain.Values.V1;
 using Onboardings.Domain.Workflows;
+using Onboardings.Domain.Workflows.OnboardEntity;
 using Onboardings.Domain.Workflows.V2;
 using Temporalio.Api.Enums.V1;
 using Temporalio.Client;
