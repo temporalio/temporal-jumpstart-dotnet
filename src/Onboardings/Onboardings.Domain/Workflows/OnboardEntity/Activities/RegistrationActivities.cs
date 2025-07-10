@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Onboardings.Domain.Clients.Crm;
 using Onboardings.Domain.Commands.V1;
+using Onboardings.Domain.Values.V1;
 using Temporalio.Activities;
 using Temporalio.Exceptions;
 
@@ -44,7 +45,7 @@ public class RegistrationActivities(ICrmClient crmClient)
                     throw new ApplicationFailureException(
                         ex.Message,
                         ex,
-                        Errors.ErrServiceUnrecoverable,
+                        nameof(Errors.ServiceUnavailable),
                         true);
                 }
 

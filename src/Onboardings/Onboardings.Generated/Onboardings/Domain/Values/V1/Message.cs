@@ -31,13 +31,14 @@ namespace Onboardings.Domain.Values.V1 {
             "bnQqigEKDkFwcHJvdmFsU3RhdHVzEh8KG0FQUFJPVkFMX1NUQVRVU19VTlNQ",
             "RUNJRklFRBAAEhsKF0FQUFJPVkFMX1NUQVRVU19QRU5ESU5HEAESHAoYQVBQ",
             "Uk9WQUxfU1RBVFVTX1JFSkVDVEVEEAISHAoYQVBQUk9WQUxfU1RBVFVTX0FQ",
-            "UFJPVkVEEAMqYwoGRXJyb3JzEhYKEkVSUk9SU19VTlNQRUNJRklFRBAAEhwK",
-            "GEVSUk9SU19JTlZBTElEX0FSR1VNRU5UUxABEiMKH0VSUk9SU19PTkJPQVJE",
-            "X0VOVElUWV9USU1FRF9PVVQQAkLDAQogY29tLm9uYm9hcmRpbmdzLmRvbWFp",
-            "bi52YWx1ZXMudjFCDE1lc3NhZ2VQcm90b1ABogIDT0RWqgIcT25ib2FyZGlu",
-            "Z3MuRG9tYWluLlZhbHVlcy5WMcoCHE9uYm9hcmRpbmdzXERvbWFpblxWYWx1",
-            "ZXNcVjHiAihPbmJvYXJkaW5nc1xEb21haW5cVmFsdWVzXFYxXEdQQk1ldGFk",
-            "YXRh6gIfT25ib2FyZGluZ3M6OkRvbWFpbjo6VmFsdWVzOjpWMWIGcHJvdG8z"));
+            "UFJPVkVEEAMqgwEKBkVycm9ycxIWChJFUlJPUlNfVU5TUEVDSUZJRUQQABIc",
+            "ChhFUlJPUlNfSU5WQUxJRF9BUkdVTUVOVFMQARIjCh9FUlJPUlNfT05CT0FS",
+            "RF9FTlRJVFlfVElNRURfT1VUEAISHgoaRVJST1JTX1NFUlZJQ0VfVU5BVkFJ",
+            "TEFCTEUQA0LDAQogY29tLm9uYm9hcmRpbmdzLmRvbWFpbi52YWx1ZXMudjFC",
+            "DE1lc3NhZ2VQcm90b1ABogIDT0RWqgIcT25ib2FyZGluZ3MuRG9tYWluLlZh",
+            "bHVlcy5WMcoCHE9uYm9hcmRpbmdzXERvbWFpblxWYWx1ZXNcVjHiAihPbmJv",
+            "YXJkaW5nc1xEb21haW5cVmFsdWVzXFYxXEdQQk1ldGFkYXRh6gIfT25ib2Fy",
+            "ZGluZ3M6OkRvbWFpbjo6VmFsdWVzOjpWMWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Onboardings.Domain.Values.V1.ApprovalStatus), typeof(global::Onboardings.Domain.Values.V1.Errors), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -59,6 +60,7 @@ namespace Onboardings.Domain.Values.V1 {
     [pbr::OriginalName("ERRORS_UNSPECIFIED")] Unspecified = 0,
     [pbr::OriginalName("ERRORS_INVALID_ARGUMENTS")] InvalidArguments = 1,
     [pbr::OriginalName("ERRORS_ONBOARD_ENTITY_TIMED_OUT")] OnboardEntityTimedOut = 2,
+    [pbr::OriginalName("ERRORS_SERVICE_UNAVAILABLE")] ServiceUnavailable = 3,
   }
 
   #endregion

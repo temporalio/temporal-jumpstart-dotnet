@@ -5,9 +5,9 @@ using Onboardings.Domain.Values.V1;
 using Onboardings.Domain.Workflows.OnboardEntity.Activities;
 using Onboardings.Domain.Workflows.V2;
 using Temporalio.Api.Enums.V1;
-using Temporalio.Common;
 using Temporalio.Exceptions;
 using Temporalio.Workflows;
+using RetryPolicy = Temporalio.Common.RetryPolicy;
 
 namespace Onboardings.Domain.Workflows.OnboardEntity;
 
@@ -120,7 +120,7 @@ public class OnboardEntity : IOnboardEntity
                     StartToCloseTimeout = TimeSpan.FromSeconds(60),
                     RetryPolicy = new RetryPolicy() { MaximumAttempts = 2, }
                 };
-            await Workflow.ExecuteActivityAsync((NotificationActivities act) =>
+            await Workflow.ExecuteActivityAsync((Activities.NotificationActivities act) =>
                     act.RequestDeputyOwnerApproval(
                         new RequestDeputyOwnerApprovalRequest { Id=args.Id, DeputyOwnerEmail = args.DeputyOwnerEmail! }),
                 notificationOptions);
@@ -137,6 +137,7 @@ public class OnboardEntity : IOnboardEntity
             throw Workflow.CreateContinueAsNewException<OnboardEntity>(wf => wf.ExecuteAsync(newArgs),
                 new ContinueAsNewOptions() { TaskQueue = Workflow.Info.TaskQueue, });
         }
+        
     }
 
     private static OnboardEntityRequest AssertValidRequest(OnboardEntityRequest args)
@@ -216,4 +217,5 @@ public class OnboardEntity : IOnboardEntity
     {
         return _state;
     }
+    
 }

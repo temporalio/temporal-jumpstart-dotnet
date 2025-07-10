@@ -122,7 +122,7 @@ public class OnboardEntityUnpatched : IOnboardEntity
                     StartToCloseTimeout = TimeSpan.FromSeconds(60),
                     RetryPolicy = new RetryPolicy() { MaximumAttempts = 2, }
                 };
-            await Workflow.ExecuteActivityAsync((NotificationActivities act) =>
+            await Workflow.ExecuteActivityAsync((Activities.NotificationActivities act) =>
                     act.RequestDeputyOwnerApproval(
                         new RequestDeputyOwnerApprovalRequest { Id=args.Id, DeputyOwnerEmail = args.DeputyOwnerEmail! }),
                 notificationOptions);
