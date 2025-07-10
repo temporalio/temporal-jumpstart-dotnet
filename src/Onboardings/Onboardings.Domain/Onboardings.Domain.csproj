@@ -16,4 +16,9 @@
       <ProjectReference Include="..\Onboardings.Generated\Onboardings.Generated.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Integrations\" />
+      <Folder Include="Notifications\" />
+    </ItemGroup>
+
 </Project>

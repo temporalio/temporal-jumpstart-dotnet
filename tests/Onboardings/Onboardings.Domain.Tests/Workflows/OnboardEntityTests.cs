@@ -13,7 +13,7 @@ using Temporalio.Testing;
 using Temporalio.Worker;
 using Xunit.Abstractions;
 using ProtoErrors = Onboardings.Domain.Values.V1.Errors;
-using IntegrationErrors = Onboardings.Domain.Integrations.Errors;
+using IntegrationErrors = Onboardings.Domain.Workflows.OnboardEntity.Errors;
 
 
 namespace Onboardings.Domain.Tests.Workflows;

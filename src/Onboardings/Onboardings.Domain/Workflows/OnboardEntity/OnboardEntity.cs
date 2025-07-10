@@ -1,14 +1,14 @@
 using Microsoft.Extensions.Logging;
 using Onboardings.Domain.Commands.V1;
-using Onboardings.Domain.Integrations;
 using Onboardings.Domain.Queries.V2;
 using Onboardings.Domain.Values.V1;
+using Onboardings.Domain.Workflows.OnboardEntity.Activities;
 using Onboardings.Domain.Workflows.V2;
 using Temporalio.Api.Enums.V1;
 using Temporalio.Common;
 using Temporalio.Exceptions;
 using Temporalio.Workflows;
-using NotificationHandlers = Onboardings.Domain.Notifications.Handlers;
+
 namespace Onboardings.Domain.Workflows.OnboardEntity;
 
 
@@ -49,7 +49,6 @@ public class OnboardEntity : IOnboardEntity
             // to the TaskQueue this Workflow execution is using. 
             TaskQueue = Workflow.Info.TaskQueue
         };
-
         if (!args.SkipApproval)
         {
             await AwaitApproval(args);
@@ -68,7 +67,7 @@ public class OnboardEntity : IOnboardEntity
              // Now that we have implemented the Activity, though, we will replace it with the strongly typed invocation.
                 await Workflow.ExecuteActivityAsync("RegisterCrmEntity", new []{new RegisterCrmEntityRequest(args.Id, args.Value)}, opts);
             */
-            await Workflow.ExecuteActivityAsync((Handlers act) =>
+            await Workflow.ExecuteActivityAsync((RegistrationActivities act) =>
                     act.RegisterCrmEntity(new RegisterCrmEntityRequest { Id = args.Id, Value=args.Value}),
                 opts);
         }
@@ -121,7 +120,7 @@ public class OnboardEntity : IOnboardEntity
                     StartToCloseTimeout = TimeSpan.FromSeconds(60),
                     RetryPolicy = new RetryPolicy() { MaximumAttempts = 2, }
                 };
-            await Workflow.ExecuteActivityAsync((NotificationHandlers act) =>
+            await Workflow.ExecuteActivityAsync((NotificationActivities act) =>
                     act.RequestDeputyOwnerApproval(
                         new RequestDeputyOwnerApprovalRequest { Id=args.Id, DeputyOwnerEmail = args.DeputyOwnerEmail! }),
                 notificationOptions);

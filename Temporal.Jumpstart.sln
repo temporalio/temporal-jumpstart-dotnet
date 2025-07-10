@@ -1,29 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Workflows.Domain", "src\Temporal.Curriculum.Workflows\Temporal.Curriculum.Workflows.Domain\Temporal.Curriculum.Workflows.Domain.csproj", "{6FC824FF-658E-4CC0-A464-978BB39F9778}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Workflows.Api", "src\Temporal.Curriculum.Workflows\Temporal.Curriculum.Workflows.Api\Temporal.Curriculum.Workflows.Api.csproj", "{1161D114-C7C1-4AA8-A769-7E23E52D350A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Workflows.Messages", "src\Temporal.Curriculum.Workflows\Temporal.Curriculum.Workflows.Messages\Temporal.Curriculum.Workflows.Messages.csproj", "{C706CD21-B03F-4F2E-81DD-C35694D1CD3F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Workflows.Tests", "tests\Temporal.Curriculum.Workflows\Temporal.Curriculum.Workflows.Tests\Temporal.Curriculum.Workflows.Tests.csproj", "{E52765E3-192F-4DFB-B4C3-B56BCD68B116}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Timers.Tests", "tests\Temporal.Curriculum.Timers\Temporal.Curriculum.Timers.Tests\Temporal.Curriculum.Timers.Tests.csproj", "{FC48BBA4-AB7A-4D31-A1C9-45F36B29BD25}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Writes.Tests", "tests\Temporal.Curriculum.Writes\Temporal.Curriculum.Writes.Tests\Temporal.Curriculum.Writes.Tests.csproj", "{EDA5B2B5-2EEA-4313-B096-CB2677C338BF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Reads.Api", "src\Temporal.Curriculum.Reads\Temporal.Curriculum.Reads.Api\Temporal.Curriculum.Reads.Api.csproj", "{B6E7B80C-0DBF-4AE6-9D6C-0BA8718DE13B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Reads.Messages", "src\Temporal.Curriculum.Reads\Temporal.Curriculum.Reads.Messages\Temporal.Curriculum.Reads.Messages.csproj", "{917BCB94-A613-4F41-8816-E116C137E429}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Reads.Domain", "src\Temporal.Curriculum.Reads\Temporal.Curriculum.Reads.Domain\Temporal.Curriculum.Reads.Domain.csproj", "{01163400-5B5D-4CF2-BD5A-4AF20903F3B9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Reads.Services", "src\Temporal.Curriculum.Reads\Temporal.Curriculum.Reads.Services\Temporal.Curriculum.Reads.Services.csproj", "{974A36EF-D980-4B72-8B7D-975744275E2A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Curriculum.Reads.Tests", "tests\Temporal.Curriculum.Reads\Temporal.Curriculum.Reads.Tests\Temporal.Curriculum.Reads.Tests.csproj", "{0FB4FA0F-4677-4B1C-8E4F-FA4920BCAE2F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temporal.Jumpstart.App.Tests", "tests\Temporal.Jumpstart.App\Temporal.Jumpstart.App.Tests\Temporal.Jumpstart.App.Tests.csproj", "{AB4483DA-6028-4F52-B1A2-46C9167997A1}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Onboardings.Api", "src\Onboardings\Onboardings.Api\Onboardings.Api.csproj", "{5D465544-EF32-4EDF-A8F1-4F9A6CCA5E41}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Onboardings.Domain", "src\Onboardings\Onboardings.Domain\Onboardings.Domain.csproj", "{AD6D55A5-E74D-4281-98D5-A622AEAD6868}"

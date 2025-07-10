@@ -2,13 +2,13 @@ using Onboardings.Domain.Clients.Email;
 using Onboardings.Domain.Commands.V1;
 using Temporalio.Activities;
 
-namespace Onboardings.Domain.Notifications;
+namespace Onboardings.Domain.Workflows.OnboardEntity.Activities;
 
-public class Handlers
+public class NotificationActivities
 {
     private IEmailClient _emailClient;
 
-    public Handlers(IEmailClient emailClient)
+    public NotificationActivities(IEmailClient emailClient)
     {
         _emailClient = emailClient;
     }

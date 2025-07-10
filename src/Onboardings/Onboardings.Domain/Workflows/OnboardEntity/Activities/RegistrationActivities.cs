@@ -4,16 +4,11 @@ using Onboardings.Domain.Commands.V1;
 using Temporalio.Activities;
 using Temporalio.Exceptions;
 
-namespace Onboardings.Domain.Integrations;
-
-public static class Errors
-{
-    public const string ErrServiceUnrecoverable = "CRM Service is not recoverable";
-}
+namespace Onboardings.Domain.Workflows.OnboardEntity.Activities;
 
 // Handlers wraps underlying integrations clients to meet Workflow singular message contracts
 // ReSharper disable once ClassNeverInstantiated.Global
-public class Handlers(ICrmClient crmClient)
+public class RegistrationActivities(ICrmClient crmClient)
 {
     [Activity]
     public async Task RegisterCrmEntity(RegisterCrmEntityRequest args)
