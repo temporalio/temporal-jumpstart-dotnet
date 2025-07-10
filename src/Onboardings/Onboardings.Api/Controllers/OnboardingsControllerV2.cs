@@ -35,7 +35,10 @@ public class OnboardingsControllerV2(
     public async Task<IActionResult> OnboardEntityAsync(string id, OnboardingsPut req)
     {
         var temporalClient = httpContextAccessor.HttpContext?.Features.GetRequiredFeature<ITemporalClient>();
-
+        if (req.Approval == null)
+        {
+            req.Approval = new Approval { Status = ApprovalStatus.Pending, };
+        }
         if (req.Approval.Status.Equals(ApprovalStatus.Pending))
         {
             return await StartWorkflow(id, req, temporalClient);

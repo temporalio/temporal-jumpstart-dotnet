@@ -28,7 +28,10 @@ public class Startup
         services.AddHttpContextAccessor();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
-        services.AddTemporalClient(o => { o.ConfigureClient(temporalConfig); }).Configure<ITemporalClient>(c =>
+        services.AddTemporalClient(o =>
+        {
+            o.ConfigureClient(temporalConfig);
+        }).Configure<ITemporalClient>(c =>
         {
             // connect when container is built
             c.Connection.ConnectAsync();
