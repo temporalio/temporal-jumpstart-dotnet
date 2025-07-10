@@ -4,19 +4,19 @@ using Temporalio.Activities;
 
 namespace Onboardings.Domain.Workflows.OnboardEntity.Activities;
 
-public class NotificationActivities
+public class NotificationActivities(IEmailClient emailClient)
 {
-    private IEmailClient _emailClient;
-
-    public NotificationActivities(IEmailClient emailClient)
-    {
-        _emailClient = emailClient;
-    }
 
     [Activity]
     public async Task RequestDeputyOwnerApproval(RequestDeputyOwnerApprovalRequest args)
     {   
-        await _emailClient.SendEmailAsync(args.DeputyOwnerEmail,
+        await emailClient.SendEmailAsync(args.DeputyOwnerEmail,
             body: $"Entity onboarding requests your approval for id {args.Id}");
     }
+    [Activity]
+    public void NotifyOnboardEntityCompleted(string id)
+    {
+        
+    }
+    
 }

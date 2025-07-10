@@ -26,4 +26,5 @@ public interface IOnboardEntity
     Task RejectAsync(RejectEntityRequest rejectEntityRequest);
     Task<GetEntityOnboardingStateResponse> SetValueAsync(SetValueRequest cmd);
     GetEntityOnboardingStateResponse GetEntityOnboardingStateAsync(GetEntityOnboardingStateRequest q);
+
 }
