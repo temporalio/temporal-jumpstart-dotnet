@@ -31,5 +31,8 @@
         <ProjectReference Include="..\..\..\src\Onboardings\Onboardings.Domain\Onboardings.Domain.csproj" />
         <ProjectReference Include="..\..\..\src\Onboardings\Onboardings.Generated\Onboardings.Generated.csproj" />
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Clients\Temporal\" />
+    </ItemGroup>
 
 </Project>

@@ -31,12 +31,17 @@ public class Startup
         services.AddHttpContextAccessor();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
-        services.AddSingleton<IPayloadConverter>(DataConverter.Default.PayloadConverter);
-        
         services.AddTemporalClient(o =>
         {
             o.ConfigureClient(temporalConfig);
-            
+            o.Interceptors =
+            [
+                new ContextPropagationInterceptor<Identity>(
+                    IdentityContext.User,
+                    DataConverter.Default.PayloadConverter),
+                new ApplicationContextInterceptor(),
+            ];
+
         }).Configure<ITemporalClient>(c =>
         {
             // connect when container is built
