@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Onboardings.Api.Middleware;
 using Onboardings.Domain.Clients.Temporal;
+using Onboardings.Domain.Workflows;
 using Temporalio.Client;
 using Temporalio.Client.Interceptors;
+using Temporalio.Converters;
 
 namespace Onboardings.Api;
 
@@ -29,6 +31,7 @@ public class Startup
         services.AddHttpContextAccessor();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+        services.AddSingleton<IPayloadConverter>(DataConverter.Default.PayloadConverter);
         
         services.AddTemporalClient(o =>
         {
