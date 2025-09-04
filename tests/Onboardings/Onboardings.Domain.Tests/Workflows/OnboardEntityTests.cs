@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Onboardings.Domain.Commands.V1;
 using Onboardings.Domain.Queries.V2;
-using Onboardings.Domain.Workflows;
 using Onboardings.Domain.Workflows.OnboardEntity;
 using Onboardings.Domain.Workflows.V2;
 using Temporalio.Activities;
@@ -13,7 +12,6 @@ using Temporalio.Testing;
 using Temporalio.Worker;
 using Xunit.Abstractions;
 using ProtoErrors = Onboardings.Domain.Values.V1.Errors;
-using IntegrationErrors = Onboardings.Domain.Workflows.OnboardEntity.Activities.Errors;
 
 
 namespace Onboardings.Domain.Tests.Workflows;
@@ -117,9 +115,8 @@ public class OnboardEntityTests : TestBase
                 Task.FromCanceled(new CancellationToken(true)).Exception);
             throw new ApplicationFailureException(
                 message: "test failure",
-                // providing this seems to override the bubbling up of the ERR_SERVICE_UNRECOVERABLE ErrorType
                 inner: inner,
-                errorType: IntegrationErrors.ErrServiceUnrecoverable,
+                errorType: nameof(ProtoErrors.ServiceUnavailable),
                 nonRetryable: true);
         }
 
@@ -142,7 +139,7 @@ public class OnboardEntityTests : TestBase
             // Notice that the caller must have foreknowledge that it was an Activity that raised this ErrorType.
             var actEx = Assert.IsType<ActivityFailureException>(e.InnerException);
             var appEx = Assert.IsType<ApplicationFailureException>(actEx.InnerException);
-            Assert.Equal(IntegrationErrors.ErrServiceUnrecoverable, appEx.ErrorType);
+            Assert.Equal(nameof(ProtoErrors.ServiceUnavailable), appEx.ErrorType);
 
             // To get to the underlying Exception root cause, you must walk the BaseException .
             var baseEx = Assert.IsType<ApplicationFailureException>(e.GetBaseException());

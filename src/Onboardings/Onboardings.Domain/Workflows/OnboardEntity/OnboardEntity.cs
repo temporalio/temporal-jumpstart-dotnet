@@ -19,6 +19,25 @@ public class OnboardEntity : IOnboardEntity
 {
     private GetEntityOnboardingStateResponse _state;
     public static ulong DefaultCompletionTimeoutSeconds =  7 * 86400;
+
+    // Since Signals and Updates could be run before the `_state` it initialized 
+    // (the WorkflowRun method has not been invoked yet) we want to assign the
+    // _state to zero-value in the WorkflowInit to avoid Null reference exceptions.
+    // See this doc for more details: https://docs.temporal.io/handling-messages#workflow-initializers
+    [WorkflowInit]
+    public OnboardEntity(OnboardEntityRequest args)
+    {
+        _state = new GetEntityOnboardingStateResponse
+        {
+            Args = args,
+            Id = args.Id,
+            CurrentValue = args.Value,
+            Approval = new Approval
+            {
+                Status = args.SkipApproval ? ApprovalStatus.Approved : ApprovalStatus.Pending
+            }
+        };   
+    }
     
     [WorkflowRun]
     public async Task ExecuteAsync(OnboardEntityRequest args)
