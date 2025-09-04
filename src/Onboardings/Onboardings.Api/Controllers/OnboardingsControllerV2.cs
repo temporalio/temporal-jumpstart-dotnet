@@ -32,7 +32,10 @@ public class OnboardingsControllerV2(
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> OnboardEntityAsync(string id, OnboardingsPut req)
+    public async Task<IActionResult> OnboardEntityAsync(
+        [FromHeader(Name = "X-User-Id")] string userId,
+        string id, 
+        OnboardingsPut req)
     {
         var temporalClient = httpContextAccessor.HttpContext?.Features.GetRequiredFeature<ITemporalClient>();
         if (req.Approval == null)

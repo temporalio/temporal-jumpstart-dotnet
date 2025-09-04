@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Onboardings.Api.Middleware;
 using Onboardings.Domain.Clients.Temporal;
 using Temporalio.Client;
+using Temporalio.Client.Interceptors;
 
 namespace Onboardings.Api;
 
@@ -28,9 +29,11 @@ public class Startup
         services.AddHttpContextAccessor();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+        
         services.AddTemporalClient(o =>
         {
             o.ConfigureClient(temporalConfig);
+            
         }).Configure<ITemporalClient>(c =>
         {
             // connect when container is built
