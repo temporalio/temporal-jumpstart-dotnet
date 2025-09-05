@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Onboardings.Api.Attributes;
 using Onboardings.Api.Messages;
 using Onboardings.Api.V1;
 using Onboardings.Domain.Clients.Temporal;
@@ -30,10 +31,10 @@ public class OnboardingsControllerV2(
     private readonly ILogger _logger = logger.CreateLogger<OnboardingsControllerV2>();
 
     [HttpPut("{id}")]
+    [AddHeaderParameter(Name = "x-user-id", Required = true)]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> OnboardEntityAsync(
-        [FromHeader(Name = "X-User-Id")] string userId,
         string id, 
         OnboardingsPut req)
     {

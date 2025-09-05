@@ -3,6 +3,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Onboardings.Api.Attributes;
 using Onboardings.Api.Middleware;
 using Onboardings.Domain.Clients.Temporal;
 using Onboardings.Domain.Workflows;
@@ -30,7 +31,10 @@ public class Startup
         services.AddOptions<TemporalConfig>().BindConfiguration(temporalConfigSection);
         services.AddHttpContextAccessor();
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
+        services.AddSwaggerGen(c =>
+        {
+            c.OperationFilter<AddHeaderParameterFilter>();
+        });
         services.AddTemporalClient(o =>
         {
             o.ConfigureClient(temporalConfig);
