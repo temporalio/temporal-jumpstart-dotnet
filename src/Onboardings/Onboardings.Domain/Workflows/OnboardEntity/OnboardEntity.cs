@@ -120,7 +120,13 @@ public class OnboardEntity : IOnboardEntity
 
         // this blocks until we flip the `ApprovalStatus` bit on our state object
         var conditionMet =
-            await Workflow.WaitConditionAsync(() => !_state.Approval.Status.Equals(ApprovalStatus.Pending), TimeSpan.FromSeconds(waitApprovalSecs));
+            await Workflow.WaitConditionWithOptionsAsync(
+                new WaitConditionOptions
+                {
+                    ConditionCheck = () => !_state.Approval.Status.Equals(ApprovalStatus.Pending),
+                    Timeout = TimeSpan.FromSeconds(waitApprovalSecs),
+                    TimeoutSummary = "AwaitApproval",
+                });
         if (!conditionMet)
         {
             logger.LogInformation("entered failure to receive approval");
