@@ -11,6 +11,9 @@ public class OnboardEntityActivities
     {
         const ulong DefaultCompletionTimeoutSeconds =  7 * 86400;
 
-        return new GetOnboardEntityExecutionOptionsResponse();
+        return new GetOnboardEntityExecutionOptionsResponse
+        {
+            
+        };
     }
 }
