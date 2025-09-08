@@ -11,8 +11,4 @@
       <PackageReference Include="Grpc" Version="2.46.6" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Jumpstart\Domain\" />
-    </ItemGroup>
-
 </Project>

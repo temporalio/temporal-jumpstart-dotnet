@@ -11,9 +11,6 @@ The messages used in the `onboardings` and `snailforce` services will be generat
 
 ```sh
 cd {SolutionRoot}/src/Onboardings
-# generate onboardings messages
-buf generate --path proto/onboardings --template buf.gen.onboardings.yaml
-
-# generate snailforce messages and service
-buf generate --path proto/snailforce --template buf.gen.snailforce.yaml
+# generate messages
+buf generate
 ```
