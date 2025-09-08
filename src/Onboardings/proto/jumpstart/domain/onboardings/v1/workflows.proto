@@ -1,0 +1,53 @@
+// workflows.proto
+// contains contracts for inputs/outputs to Workflows and related primitives 
+syntax = "proto3";
+
+import "jumpstart/domain/onboardings/v1/values.proto";
+import "google/protobuf/timestamp.proto";
+
+package jumpstart.domain.onboardings.workflows.v1;
+
+message OnboardEntityRequest {
+  optional jumpstart.domain.onboardings.values.v1.OnboardEntityExecutionOptions options = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  string id = 3;
+  string value = 4;
+  string deputy_owner_email = 5;
+  // this field is introduced per v2 product requirements
+  // so we are _adding_ it to avoid conflict with old message versions
+  optional string email = 6;
+}
+
+// activity contracts
+
+message RegisterCrmEntityRequest {
+  string id = 1;
+  string value = 2;
+}
+message RequestDeputyOwnerApprovalRequest {
+  string id = 1;
+  string deputy_owner_email = 2;
+}
+message ApproveEntityRequest {
+  string comment = 1;
+}
+message RejectEntityRequest {
+  string comment = 1;
+}
+message SetValueRequest {
+  string value = 1;
+}
+message GetOnboardEntityExecutionOptionsRequest {
+  jumpstart.domain.onboardings.values.v1.OnboardEntityExecutionOptions options = 1;
+}
+message GetOnboardEntityExecutionOptionsResponse {
+  jumpstart.domain.onboardings.values.v1.OnboardEntityExecutionOptions options = 1;
+}
+
+// support v2 requirement for notifying onboard completion
+message NotifyOnboardEntityCompletedRequest {
+  string id = 1;
+  string email = 2;
+  string value = 3;
+  jumpstart.domain.onboardings.values.v1.Approval approval = 4;
+}

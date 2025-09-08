@@ -43,6 +43,32 @@ public class OnboardEntityTests : TestBase
             Assert.Equal(nameof(ProtoErrors.InvalidArguments), ae.ErrorType);
         });
     }
+    [Fact]
+    public async Task ExecuteAsync_SimpleRun_GivenValidArgs_TimesOutPerDefaults()
+    {
+        await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
+        var wid = Guid.NewGuid();
+        var emptyValue = "";
+        var args = new OnboardEntityRequest
+        {
+            Id = wid.ToString(), Value = emptyValue, SkipApproval = false,
+        };
+        using var worker = new TemporalWorker(
+            env.Client,
+            new TemporalWorkerOptions("test").AddWorkflow<OnboardEntity>());
+
+        await worker.ExecuteAsync(async () =>
+        {
+            var e = await Assert.ThrowsAsync<WorkflowFailedException>(async () =>
+            {
+                await env.Client.ExecuteWorkflowAsync(
+                    (OnboardEntity wf) => wf.ExecuteAsync(args),
+                    new WorkflowOptions(id: args.Id, taskQueue: worker.Options.TaskQueue!));
+            });
+            var ae = Assert.IsType<ApplicationFailureException>(e.InnerException);
+            Assert.Equal(nameof(ProtoErrors.InvalidArguments), ae.ErrorType);
+        });
+    }
 
     [Fact]
     public async Task ExecuteAsync_GivenHealthyService_RegistersCrmEntity()

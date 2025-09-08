@@ -1,3 +1,6 @@
+using Jumpstart.Domain.Onboardings.Queries.V1;
+using Jumpstart.Domain.Onboardings.Values.V1;
+using Jumpstart.Domain.Onboardings.Workflows.V1;
 using Microsoft.Extensions.Logging;
 using Onboardings.Domain.Commands.V1;
 using Onboardings.Domain.Queries.V2;
