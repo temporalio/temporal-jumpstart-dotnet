@@ -1,5 +1,6 @@
 syntax = "proto3";
 
+import "onboardings/domain/values/v1/message.proto";
 import "google/protobuf/timestamp.proto";
 
 // introduce our new v2 package of our message.
