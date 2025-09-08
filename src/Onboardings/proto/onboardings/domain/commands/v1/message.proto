@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "onboardings/domain/values/v1/message.proto";
+
 package onboardings.domain.commands.v1;
 
 message RegisterCrmEntityRequest {
@@ -18,4 +20,10 @@ message RejectEntityRequest {
 }
 message SetValueRequest {
   string value = 1;
+}
+message GetOnboardEntityExecutionOptionsRequest {
+  onboardings.domain.values.v1.OnboardEntityExecutionOptions options = 1;
+}
+message GetOnboardEntityExecutionOptionsResponse {
+  onboardings.domain.values.v1.OnboardEntityExecutionOptions options = 1;
 }

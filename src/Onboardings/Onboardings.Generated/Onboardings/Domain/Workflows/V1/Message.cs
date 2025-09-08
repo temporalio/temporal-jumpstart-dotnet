@@ -26,25 +26,26 @@ namespace Onboardings.Domain.Workflows.V1 {
           string.Concat(
             "Ci1vbmJvYXJkaW5ncy9kb21haW4vd29ya2Zsb3dzL3YxL21lc3NhZ2UucHJv",
             "dG8SH29uYm9hcmRpbmdzLmRvbWFpbi53b3JrZmxvd3MudjEaH2dvb2dsZS9w",
-            "cm90b2J1Zi90aW1lc3RhbXAucHJvdG8ihwIKFE9uYm9hcmRFbnRpdHlSZXF1",
-            "ZXN0EjgKCXRpbWVzdGFtcBgBIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1l",
-            "c3RhbXBSCXRpbWVzdGFtcBIOCgJpZBgCIAEoCVICaWQSFAoFdmFsdWUYAyAB",
-            "KAlSBXZhbHVlEjwKGmNvbXBsZXRpb25fdGltZW91dF9zZWNvbmRzGAQgASgE",
-            "Uhhjb21wbGV0aW9uVGltZW91dFNlY29uZHMSLAoSZGVwdXR5X293bmVyX2Vt",
-            "YWlsGAUgASgJUhBkZXB1dHlPd25lckVtYWlsEiMKDXNraXBfYXBwcm92YWwY",
-            "BiABKAhSDHNraXBBcHByb3ZhbCp5CgZFcnJvcnMSIwofRVJST1JTX09OQk9B",
-            "UkRfRU5USVRZX1RJTUVEX09VVBAAEiYKIkVSUk9SU19PTkJPQVJEX0VOVElU",
-            "WV9JTlZBTElEX0FSR1MQARIiCh5FUlJPUlNfT05CT0FSRF9FTlRJVFlfUkVK",
-            "RUNURUQQAkLSAQojY29tLm9uYm9hcmRpbmdzLmRvbWFpbi53b3JrZmxvd3Mu",
-            "djFCDE1lc3NhZ2VQcm90b1ABogIDT0RXqgIfT25ib2FyZGluZ3MuRG9tYWlu",
-            "LldvcmtmbG93cy5WMcoCH09uYm9hcmRpbmdzXERvbWFpblxXb3JrZmxvd3Nc",
-            "VjHiAitPbmJvYXJkaW5nc1xEb21haW5cV29ya2Zsb3dzXFYxXEdQQk1ldGFk",
-            "YXRh6gIiT25ib2FyZGluZ3M6OkRvbWFpbjo6V29ya2Zsb3dzOjpWMWIGcHJv",
-            "dG8z"));
+            "cm90b2J1Zi90aW1lc3RhbXAucHJvdG8aKm9uYm9hcmRpbmdzL2RvbWFpbi92",
+            "YWx1ZXMvdjEvbWVzc2FnZS5wcm90byKMAgoUT25ib2FyZEVudGl0eVJlcXVl",
+            "c3QSWgoHb3B0aW9ucxgBIAEoCzI7Lm9uYm9hcmRpbmdzLmRvbWFpbi52YWx1",
+            "ZXMudjEuT25ib2FyZEVudGl0eUV4ZWN1dGlvbk9wdGlvbnNIAFIHb3B0aW9u",
+            "c4gBARI4Cgl0aW1lc3RhbXAYAiABKAsyGi5nb29nbGUucHJvdG9idWYuVGlt",
+            "ZXN0YW1wUgl0aW1lc3RhbXASDgoCaWQYAyABKAlSAmlkEhQKBXZhbHVlGAQg",
+            "ASgJUgV2YWx1ZRIsChJkZXB1dHlfb3duZXJfZW1haWwYBSABKAlSEGRlcHV0",
+            "eU93bmVyRW1haWxCCgoIX29wdGlvbnMqeQoGRXJyb3JzEiMKH0VSUk9SU19P",
+            "TkJPQVJEX0VOVElUWV9USU1FRF9PVVQQABImCiJFUlJPUlNfT05CT0FSRF9F",
+            "TlRJVFlfSU5WQUxJRF9BUkdTEAESIgoeRVJST1JTX09OQk9BUkRfRU5USVRZ",
+            "X1JFSkVDVEVEEAJC0gEKI2NvbS5vbmJvYXJkaW5ncy5kb21haW4ud29ya2Zs",
+            "b3dzLnYxQgxNZXNzYWdlUHJvdG9QAaICA09EV6oCH09uYm9hcmRpbmdzLkRv",
+            "bWFpbi5Xb3JrZmxvd3MuVjHKAh9PbmJvYXJkaW5nc1xEb21haW5cV29ya2Zs",
+            "b3dzXFYx4gIrT25ib2FyZGluZ3NcRG9tYWluXFdvcmtmbG93c1xWMVxHUEJN",
+            "ZXRhZGF0YeoCIk9uYm9hcmRpbmdzOjpEb21haW46OldvcmtmbG93czo6VjFi",
+            "BnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::Onboardings.Domain.Values.V1.MessageReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Onboardings.Domain.Workflows.V1.Errors), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Onboardings.Domain.Workflows.V1.OnboardEntityRequest), global::Onboardings.Domain.Workflows.V1.OnboardEntityRequest.Parser, new[]{ "Timestamp", "Id", "Value", "CompletionTimeoutSeconds", "DeputyOwnerEmail", "SkipApproval" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Onboardings.Domain.Workflows.V1.OnboardEntityRequest), global::Onboardings.Domain.Workflows.V1.OnboardEntityRequest.Parser, new[]{ "Options", "Timestamp", "Id", "Value", "DeputyOwnerEmail" }, new[]{ "Options" }, null, null, null)
           }));
     }
     #endregion
@@ -95,12 +96,11 @@ namespace Onboardings.Domain.Workflows.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public OnboardEntityRequest(OnboardEntityRequest other) : this() {
+      options_ = other.options_ != null ? other.options_.Clone() : null;
       timestamp_ = other.timestamp_ != null ? other.timestamp_.Clone() : null;
       id_ = other.id_;
       value_ = other.value_;
-      completionTimeoutSeconds_ = other.completionTimeoutSeconds_;
       deputyOwnerEmail_ = other.deputyOwnerEmail_;
-      skipApproval_ = other.skipApproval_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -110,8 +110,20 @@ namespace Onboardings.Domain.Workflows.V1 {
       return new OnboardEntityRequest(this);
     }
 
+    /// <summary>Field number for the "options" field.</summary>
+    public const int OptionsFieldNumber = 1;
+    private global::Onboardings.Domain.Values.V1.OnboardEntityExecutionOptions options_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Onboardings.Domain.Values.V1.OnboardEntityExecutionOptions Options {
+      get { return options_; }
+      set {
+        options_ = value;
+      }
+    }
+
     /// <summary>Field number for the "timestamp" field.</summary>
-    public const int TimestampFieldNumber = 1;
+    public const int TimestampFieldNumber = 2;
     private global::Google.Protobuf.WellKnownTypes.Timestamp timestamp_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -123,7 +135,7 @@ namespace Onboardings.Domain.Workflows.V1 {
     }
 
     /// <summary>Field number for the "id" field.</summary>
-    public const int IdFieldNumber = 2;
+    public const int IdFieldNumber = 3;
     private string id_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -135,7 +147,7 @@ namespace Onboardings.Domain.Workflows.V1 {
     }
 
     /// <summary>Field number for the "value" field.</summary>
-    public const int ValueFieldNumber = 3;
+    public const int ValueFieldNumber = 4;
     private string value_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -143,18 +155,6 @@ namespace Onboardings.Domain.Workflows.V1 {
       get { return value_; }
       set {
         value_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "completion_timeout_seconds" field.</summary>
-    public const int CompletionTimeoutSecondsFieldNumber = 4;
-    private ulong completionTimeoutSeconds_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ulong CompletionTimeoutSeconds {
-      get { return completionTimeoutSeconds_; }
-      set {
-        completionTimeoutSeconds_ = value;
       }
     }
 
@@ -167,18 +167,6 @@ namespace Onboardings.Domain.Workflows.V1 {
       get { return deputyOwnerEmail_; }
       set {
         deputyOwnerEmail_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "skip_approval" field.</summary>
-    public const int SkipApprovalFieldNumber = 6;
-    private bool skipApproval_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool SkipApproval {
-      get { return skipApproval_; }
-      set {
-        skipApproval_ = value;
       }
     }
 
@@ -197,12 +185,11 @@ namespace Onboardings.Domain.Workflows.V1 {
       if (ReferenceEquals(other, this)) {
         return true;
       }
+      if (!object.Equals(Options, other.Options)) return false;
       if (!object.Equals(Timestamp, other.Timestamp)) return false;
       if (Id != other.Id) return false;
       if (Value != other.Value) return false;
-      if (CompletionTimeoutSeconds != other.CompletionTimeoutSeconds) return false;
       if (DeputyOwnerEmail != other.DeputyOwnerEmail) return false;
-      if (SkipApproval != other.SkipApproval) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -210,12 +197,11 @@ namespace Onboardings.Domain.Workflows.V1 {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
+      if (options_ != null) hash ^= Options.GetHashCode();
       if (timestamp_ != null) hash ^= Timestamp.GetHashCode();
       if (Id.Length != 0) hash ^= Id.GetHashCode();
       if (Value.Length != 0) hash ^= Value.GetHashCode();
-      if (CompletionTimeoutSeconds != 0UL) hash ^= CompletionTimeoutSeconds.GetHashCode();
       if (DeputyOwnerEmail.Length != 0) hash ^= DeputyOwnerEmail.GetHashCode();
-      if (SkipApproval != false) hash ^= SkipApproval.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -234,29 +220,25 @@ namespace Onboardings.Domain.Workflows.V1 {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (timestamp_ != null) {
+      if (options_ != null) {
         output.WriteRawTag(10);
+        output.WriteMessage(Options);
+      }
+      if (timestamp_ != null) {
+        output.WriteRawTag(18);
         output.WriteMessage(Timestamp);
       }
       if (Id.Length != 0) {
-        output.WriteRawTag(18);
+        output.WriteRawTag(26);
         output.WriteString(Id);
       }
       if (Value.Length != 0) {
-        output.WriteRawTag(26);
+        output.WriteRawTag(34);
         output.WriteString(Value);
-      }
-      if (CompletionTimeoutSeconds != 0UL) {
-        output.WriteRawTag(32);
-        output.WriteUInt64(CompletionTimeoutSeconds);
       }
       if (DeputyOwnerEmail.Length != 0) {
         output.WriteRawTag(42);
         output.WriteString(DeputyOwnerEmail);
-      }
-      if (SkipApproval != false) {
-        output.WriteRawTag(48);
-        output.WriteBool(SkipApproval);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -268,29 +250,25 @@ namespace Onboardings.Domain.Workflows.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (timestamp_ != null) {
+      if (options_ != null) {
         output.WriteRawTag(10);
+        output.WriteMessage(Options);
+      }
+      if (timestamp_ != null) {
+        output.WriteRawTag(18);
         output.WriteMessage(Timestamp);
       }
       if (Id.Length != 0) {
-        output.WriteRawTag(18);
+        output.WriteRawTag(26);
         output.WriteString(Id);
       }
       if (Value.Length != 0) {
-        output.WriteRawTag(26);
+        output.WriteRawTag(34);
         output.WriteString(Value);
-      }
-      if (CompletionTimeoutSeconds != 0UL) {
-        output.WriteRawTag(32);
-        output.WriteUInt64(CompletionTimeoutSeconds);
       }
       if (DeputyOwnerEmail.Length != 0) {
         output.WriteRawTag(42);
         output.WriteString(DeputyOwnerEmail);
-      }
-      if (SkipApproval != false) {
-        output.WriteRawTag(48);
-        output.WriteBool(SkipApproval);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -302,6 +280,9 @@ namespace Onboardings.Domain.Workflows.V1 {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
+      if (options_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Options);
+      }
       if (timestamp_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Timestamp);
       }
@@ -311,14 +292,8 @@ namespace Onboardings.Domain.Workflows.V1 {
       if (Value.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Value);
       }
-      if (CompletionTimeoutSeconds != 0UL) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(CompletionTimeoutSeconds);
-      }
       if (DeputyOwnerEmail.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(DeputyOwnerEmail);
-      }
-      if (SkipApproval != false) {
-        size += 1 + 1;
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -332,6 +307,12 @@ namespace Onboardings.Domain.Workflows.V1 {
       if (other == null) {
         return;
       }
+      if (other.options_ != null) {
+        if (options_ == null) {
+          Options = new global::Onboardings.Domain.Values.V1.OnboardEntityExecutionOptions();
+        }
+        Options.MergeFrom(other.Options);
+      }
       if (other.timestamp_ != null) {
         if (timestamp_ == null) {
           Timestamp = new global::Google.Protobuf.WellKnownTypes.Timestamp();
@@ -344,14 +325,8 @@ namespace Onboardings.Domain.Workflows.V1 {
       if (other.Value.Length != 0) {
         Value = other.Value;
       }
-      if (other.CompletionTimeoutSeconds != 0UL) {
-        CompletionTimeoutSeconds = other.CompletionTimeoutSeconds;
-      }
       if (other.DeputyOwnerEmail.Length != 0) {
         DeputyOwnerEmail = other.DeputyOwnerEmail;
-      }
-      if (other.SkipApproval != false) {
-        SkipApproval = other.SkipApproval;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -373,30 +348,29 @@ namespace Onboardings.Domain.Workflows.V1 {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
+            if (options_ == null) {
+              Options = new global::Onboardings.Domain.Values.V1.OnboardEntityExecutionOptions();
+            }
+            input.ReadMessage(Options);
+            break;
+          }
+          case 18: {
             if (timestamp_ == null) {
               Timestamp = new global::Google.Protobuf.WellKnownTypes.Timestamp();
             }
             input.ReadMessage(Timestamp);
             break;
           }
-          case 18: {
+          case 26: {
             Id = input.ReadString();
             break;
           }
-          case 26: {
+          case 34: {
             Value = input.ReadString();
-            break;
-          }
-          case 32: {
-            CompletionTimeoutSeconds = input.ReadUInt64();
             break;
           }
           case 42: {
             DeputyOwnerEmail = input.ReadString();
-            break;
-          }
-          case 48: {
-            SkipApproval = input.ReadBool();
             break;
           }
         }
@@ -419,30 +393,29 @@ namespace Onboardings.Domain.Workflows.V1 {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 10: {
+            if (options_ == null) {
+              Options = new global::Onboardings.Domain.Values.V1.OnboardEntityExecutionOptions();
+            }
+            input.ReadMessage(Options);
+            break;
+          }
+          case 18: {
             if (timestamp_ == null) {
               Timestamp = new global::Google.Protobuf.WellKnownTypes.Timestamp();
             }
             input.ReadMessage(Timestamp);
             break;
           }
-          case 18: {
+          case 26: {
             Id = input.ReadString();
             break;
           }
-          case 26: {
+          case 34: {
             Value = input.ReadString();
-            break;
-          }
-          case 32: {
-            CompletionTimeoutSeconds = input.ReadUInt64();
             break;
           }
           case 42: {
             DeputyOwnerEmail = input.ReadString();
-            break;
-          }
-          case 48: {
-            SkipApproval = input.ReadBool();
             break;
           }
         }

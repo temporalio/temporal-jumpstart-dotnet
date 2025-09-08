@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
+import "onboardings/domain/values/v1/message.proto";
 
 package onboardings.domain.workflows.v1;
 
@@ -11,10 +12,9 @@ enum Errors {
 }
 
 message OnboardEntityRequest {
-  google.protobuf.Timestamp timestamp = 1;
-  string id = 2;
-  string value = 3;
-  uint64 completion_timeout_seconds = 4;
+  optional onboardings.domain.values.v1.OnboardEntityExecutionOptions options = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  string id = 3;
+  string value = 4;
   string deputy_owner_email = 5;
-  bool skip_approval = 6;
 }

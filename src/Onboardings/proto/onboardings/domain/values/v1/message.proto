@@ -20,3 +20,8 @@ enum Errors {
   ERRORS_ONBOARD_ENTITY_TIMED_OUT = 2;
   ERRORS_SERVICE_UNAVAILABLE = 3;
 }
+
+message OnboardEntityExecutionOptions {
+  uint64 completion_timeout_seconds = 1;
+  bool skip_approval = 2;
+}

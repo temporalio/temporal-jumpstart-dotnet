@@ -40,6 +40,7 @@ namespace Onboardings.Workers
                 .ConfigureOptions(o => { o.ConfigureService(temporalConfig); })
                 .AddScopedActivities<RegistrationActivities>()
                 .AddScopedActivities<NotificationActivities>()
+                .AddScopedActivities<OnboardEntityActivities>()
                 .AddWorkflow<OnboardEntity>()
                 .AddWorkflow<Ping>();
 
