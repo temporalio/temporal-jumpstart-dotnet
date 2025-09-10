@@ -1,5 +1,5 @@
 using Microsoft.Extensions.Logging;
-using Onboardings.Domain.Commands.V1;
+using Jumpstart.Domain.Onboardings.Commands.V1;
 using Onboardings.Domain.Queries.V2;
 using Onboardings.Domain.Workflows.OnboardEntity;
 using Onboardings.Domain.Workflows.V2;
@@ -11,7 +11,7 @@ using Temporalio.Exceptions;
 using Temporalio.Testing;
 using Temporalio.Worker;
 using Xunit.Abstractions;
-using ProtoErrors = Onboardings.Domain.Values.V1.Errors;
+using ProtoErrors = Jumpstart.Domain.Onboardings.Values.V1.Errors;
 
 
 namespace Onboardings.Domain.Tests.Workflows;

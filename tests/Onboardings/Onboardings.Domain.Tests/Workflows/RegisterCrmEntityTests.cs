@@ -1,6 +1,6 @@
 using Onboardings.Domain.Clients;
 using Onboardings.Domain.Clients.Crm;
-using Onboardings.Domain.Commands.V1;
+using Jumpstart.Domain.Onboardings.Commands.V1;
 using Onboardings.Domain.Workflows.OnboardEntity;
 using Onboardings.Domain.Workflows.OnboardEntity.Activities;
 using Temporalio.Testing;

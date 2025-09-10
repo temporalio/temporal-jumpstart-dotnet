@@ -12,8 +12,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Onboardings.Api.Tests", "te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Onboardings.Generated", "src\Onboardings\Onboardings.Generated\Onboardings.Generated.csproj", "{ADCA9D65-4BDC-480B-8005-204AC617D72A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generated", "src\Onboardings\Generated\Generated.csproj", "{C2D77DE4-F9DA-4FA3-AC8C-17A647B5C8C7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -96,9 +94,5 @@ Global
 		{ADCA9D65-4BDC-480B-8005-204AC617D72A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADCA9D65-4BDC-480B-8005-204AC617D72A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADCA9D65-4BDC-480B-8005-204AC617D72A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C2D77DE4-F9DA-4FA3-AC8C-17A647B5C8C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C2D77DE4-F9DA-4FA3-AC8C-17A647B5C8C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C2D77DE4-F9DA-4FA3-AC8C-17A647B5C8C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C2D77DE4-F9DA-4FA3-AC8C-17A647B5C8C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

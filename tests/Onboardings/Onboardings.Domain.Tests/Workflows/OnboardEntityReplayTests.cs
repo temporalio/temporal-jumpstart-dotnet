@@ -1,4 +1,4 @@
-using Onboardings.Domain.Commands.V1;
+using Jumpstart.Domain.Onboardings.Commands.V1;
 using Onboardings.Domain.Workflows.OnboardEntity;
 using Onboardings.Domain.Workflows.V2;
 using Temporalio.Activities;
