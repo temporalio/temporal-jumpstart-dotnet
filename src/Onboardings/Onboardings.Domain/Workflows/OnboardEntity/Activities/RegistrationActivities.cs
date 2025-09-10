@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Onboardings.Domain.Clients.Crm;
-using Onboardings.Domain.Commands.V1;
-using Onboardings.Domain.Values.V1;
+using Jumpstart.Domain.Onboardings.Values.V1;
+using Jumpstart.Domain.Onboardings.Workflows.V1;
 using Temporalio.Activities;
 using Temporalio.Exceptions;
 

@@ -1,5 +1,5 @@
 using Onboardings.Domain.Clients.Email;
-using Onboardings.Domain.Commands.V1;
+using Jumpstart.Domain.Onboardings.Workflows.V1;
 using Temporalio.Activities;
 
 namespace Onboardings.Domain.Workflows.OnboardEntity.Activities;
