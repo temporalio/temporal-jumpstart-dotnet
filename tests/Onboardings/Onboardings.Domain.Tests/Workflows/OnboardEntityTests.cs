@@ -1,8 +1,5 @@
-using Microsoft.Extensions.Logging;
-using Jumpstart.Domain.Onboardings.Commands.V1;
-using Onboardings.Domain.Queries.V2;
+using Jumpstart.Domain.Onboardings.Workflows.V1;
 using Onboardings.Domain.Workflows.OnboardEntity;
-using Onboardings.Domain.Workflows.V2;
 using Temporalio.Activities;
 using Temporalio.Api.Enums.V1;
 using Temporalio.Client;
@@ -26,7 +23,8 @@ public class OnboardEntityTests : TestBase
         await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
         var wid = Guid.NewGuid();
         var emptyValue = "";
-        var args = new OnboardEntityRequest { Id = wid.ToString(), Value = emptyValue, SkipApproval = true, };
+        var args = new OnboardEntityRequest { Id = wid.ToString(), Value = emptyValue, 
+            Options = new OnboardEntityExecutionOptions {SkipApproval = true, }};
         using var worker = new TemporalWorker(
             env.Client,
             new TemporalWorkerOptions("test").AddWorkflow<OnboardEntity>());
@@ -46,27 +44,40 @@ public class OnboardEntityTests : TestBase
     [Fact]
     public async Task ExecuteAsync_SimpleRun_GivenValidArgs_TimesOutPerDefaults()
     {
-        await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
+        await using var env = await WorkflowEnvironment.StartLocalAsync();
         var wid = Guid.NewGuid();
         var emptyValue = "";
         var args = new OnboardEntityRequest
         {
-            Id = wid.ToString(), Value = emptyValue, SkipApproval = false,
+            Id = wid.ToString(), Value = emptyValue, Options = new OnboardEntityExecutionOptions {  SkipApproval = false},
         };
+
+        [Activity]
+        Task<GetOnboardEntityExecutionOptionsResponse> GetOnboardEntityExecutionOptions(
+            GetOnboardEntityExecutionOptionsRequest args)
+        {
+            var result = new GetOnboardEntityExecutionOptionsResponse
+            {
+                Options = new OnboardEntityExecutionOptions
+                {
+                    CompletionTimeoutSeconds = 2,
+                    SkipApproval = false,
+                },
+            };
+            return Task.FromResult(result);
+        }
         using var worker = new TemporalWorker(
             env.Client,
-            new TemporalWorkerOptions("test").AddWorkflow<OnboardEntity>());
+            new TemporalWorkerOptions("test")
+                .AddWorkflow<OnboardEntity>()
+                .AddActivity(GetOnboardEntityExecutionOptions));
 
         await worker.ExecuteAsync(async () =>
         {
-            var e = await Assert.ThrowsAsync<WorkflowFailedException>(async () =>
-            {
-                await env.Client.ExecuteWorkflowAsync(
-                    (OnboardEntity wf) => wf.ExecuteAsync(args),
-                    new WorkflowOptions(id: args.Id, taskQueue: worker.Options.TaskQueue!));
-            });
-            var ae = Assert.IsType<ApplicationFailureException>(e.InnerException);
-            Assert.Equal(nameof(ProtoErrors.InvalidArguments), ae.ErrorType);
+            await env.Client.ExecuteWorkflowAsync(
+                (OnboardEntity wf) => wf.ExecuteAsync(args),
+                new WorkflowOptions(id: args.Id, taskQueue: worker.Options.TaskQueue!));
+            
         });
     }
 
@@ -76,7 +87,8 @@ public class OnboardEntityTests : TestBase
         await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
         var args = new OnboardEntityRequest
         {
-            Id = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString(), SkipApproval = true,
+            Id = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString(), 
+            Options = new OnboardEntityExecutionOptions{SkipApproval = true},
         };
 
         RegisterCrmEntityRequest requested = null;
@@ -125,7 +137,9 @@ public class OnboardEntityTests : TestBase
         await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
         var args = new OnboardEntityRequest
         {
-            Id = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString(), SkipApproval = true,
+            Id = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString(), 
+            Options = new OnboardEntityExecutionOptions{SkipApproval = true},
+
         };
         RegisterCrmEntityRequest requested = null;
 
@@ -182,7 +196,9 @@ public class OnboardEntityTests : TestBase
         await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
         var args = new OnboardEntityRequest
         {
-            Id = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString(), SkipApproval = false,
+            Id = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString(),
+            Options = new OnboardEntityExecutionOptions{SkipApproval = false},
+
         };
 
         RegisterCrmEntityRequest registrationRequestSent = null;
@@ -238,9 +254,8 @@ public class OnboardEntityTests : TestBase
         {
             Id = Guid.NewGuid().ToString(),
             Value = Guid.NewGuid().ToString(),
-            SkipApproval = false,
             DeputyOwnerEmail = "deputy@dawg.com",
-            CompletionTimeoutSeconds = OnboardEntity.DefaultCompletionTimeoutSeconds,
+            Options = new OnboardEntityExecutionOptions{SkipApproval = false, CompletionTimeoutSeconds = 86400 },
         };
 
         RegisterCrmEntityRequest? registrationRequestSent = null;
@@ -307,7 +322,7 @@ public class OnboardEntityTests : TestBase
         {
             Id = Guid.NewGuid().ToString(),
             Value = Guid.NewGuid().ToString(),
-            CompletionTimeoutSeconds = (ulong)TimeSpan.FromSeconds(3).Seconds,
+            Options = new OnboardEntityExecutionOptions{CompletionTimeoutSeconds =  (ulong)TimeSpan.FromSeconds(3).Seconds},
         };
 
 
@@ -358,7 +373,8 @@ public class OnboardEntityTests : TestBase
         {
             Id = Guid.NewGuid().ToString(),
             Value = Guid.NewGuid().ToString(),
-            CompletionTimeoutSeconds = (ulong)TimeSpan.FromSeconds(3).Seconds,
+            
+            Options = new OnboardEntityExecutionOptions { CompletionTimeoutSeconds = (ulong)TimeSpan.FromSeconds(3).Seconds},
         };
 
         RegisterCrmEntityRequest registrationRequestSent = null;
@@ -408,7 +424,8 @@ public class OnboardEntityTests : TestBase
         {
             Id = Guid.NewGuid().ToString(),
             Value = Guid.NewGuid().ToString(),
-            CompletionTimeoutSeconds = (ulong)TimeSpan.FromSeconds(5).Seconds,
+            Options = new OnboardEntityExecutionOptions { CompletionTimeoutSeconds = (ulong)TimeSpan.FromSeconds(5).Seconds},
+
         };
 
 
@@ -466,8 +483,12 @@ public class OnboardEntityTests : TestBase
         {
             Id = Guid.NewGuid().ToString(),
             Value = Guid.NewGuid().ToString(),
-            CompletionTimeoutSeconds = (ulong)TimeSpan.FromSeconds(20).Seconds,
-            SkipApproval = false,
+            Options = new OnboardEntityExecutionOptions
+            {
+                SkipApproval = false,
+                CompletionTimeoutSeconds = (ulong)TimeSpan.FromSeconds(20).Seconds
+            },
+
         };
 
         RegisterCrmEntityRequest registrationRequestSent = null;

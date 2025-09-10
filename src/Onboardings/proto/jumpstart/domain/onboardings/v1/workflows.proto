@@ -7,15 +7,35 @@ import "google/protobuf/timestamp.proto";
 
 package jumpstart.domain.onboardings.workflows.v1;
 
+
 message OnboardEntityRequest {
-  optional jumpstart.domain.onboardings.values.v1.OnboardEntityExecutionOptions options = 1;
+  optional OnboardEntityExecutionOptions options = 1;
   google.protobuf.Timestamp timestamp = 2;
   string id = 3;
   string value = 4;
-  string deputy_owner_email = 5;
+  optional string deputy_owner_email = 5;
   // this field is introduced per v2 product requirements
   // so we are _adding_ it to avoid conflict with old message versions
   optional string email = 6;
+}
+
+
+message OnboardEntityExecutionOptions {
+  uint64 completion_timeout_seconds = 1;
+  bool skip_approval = 2;
+}
+
+
+// queries
+message GetEntityOnboardingStateRequest {}
+
+message GetEntityOnboardingStateResponse {
+  string id = 1;
+  jumpstart.domain.onboardings.workflows.v1.OnboardEntityRequest args = 2;
+  OnboardEntityExecutionOptions options = 3;
+  jumpstart.domain.onboardings.values.v1.Approval approval = 4;
+  string current_value = 5;
+  optional uint64 approval_time_remaining_seconds = 6;
 }
 
 // activity contracts
@@ -28,6 +48,23 @@ message RequestDeputyOwnerApprovalRequest {
   string id = 1;
   string deputy_owner_email = 2;
 }
+message GetOnboardEntityExecutionOptionsRequest {
+  OnboardEntityExecutionOptions options = 1;
+}
+message GetOnboardEntityExecutionOptionsResponse {
+  OnboardEntityExecutionOptions options = 1;
+}
+
+
+// support v2 requirement for notifying onboard completion
+message NotifyOnboardEntityCompletedRequest {
+  string id = 1;
+  string email = 2;
+  string value = 3;
+  jumpstart.domain.onboardings.values.v1.Approval approval = 4;
+}
+
+// write contracts (updates, signals)
 message ApproveEntityRequest {
   string comment = 1;
 }
@@ -36,18 +73,4 @@ message RejectEntityRequest {
 }
 message SetValueRequest {
   string value = 1;
-}
-message GetOnboardEntityExecutionOptionsRequest {
-  jumpstart.domain.onboardings.values.v1.OnboardEntityExecutionOptions options = 1;
-}
-message GetOnboardEntityExecutionOptionsResponse {
-  jumpstart.domain.onboardings.values.v1.OnboardEntityExecutionOptions options = 1;
-}
-
-// support v2 requirement for notifying onboard completion
-message NotifyOnboardEntityCompletedRequest {
-  string id = 1;
-  string email = 2;
-  string value = 3;
-  jumpstart.domain.onboardings.values.v1.Approval approval = 4;
 }

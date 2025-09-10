@@ -28,27 +28,23 @@ namespace Jumpstart.Domain.Onboardings.Values.V1 {
             "bxImanVtcHN0YXJ0LmRvbWFpbi5vbmJvYXJkaW5ncy52YWx1ZXMudjEidAoI",
             "QXBwcm92YWwSTgoGc3RhdHVzGAEgASgOMjYuanVtcHN0YXJ0LmRvbWFpbi5v",
             "bmJvYXJkaW5ncy52YWx1ZXMudjEuQXBwcm92YWxTdGF0dXNSBnN0YXR1cxIY",
-            "Cgdjb21tZW50GAIgASgJUgdjb21tZW50IoIBCh1PbmJvYXJkRW50aXR5RXhl",
-            "Y3V0aW9uT3B0aW9ucxI8Chpjb21wbGV0aW9uX3RpbWVvdXRfc2Vjb25kcxgB",
-            "IAEoBFIYY29tcGxldGlvblRpbWVvdXRTZWNvbmRzEiMKDXNraXBfYXBwcm92",
-            "YWwYAiABKAhSDHNraXBBcHByb3ZhbCqKAQoOQXBwcm92YWxTdGF0dXMSHwob",
-            "QVBQUk9WQUxfU1RBVFVTX1VOU1BFQ0lGSUVEEAASGwoXQVBQUk9WQUxfU1RB",
-            "VFVTX1BFTkRJTkcQARIcChhBUFBST1ZBTF9TVEFUVVNfUkVKRUNURUQQAhIc",
-            "ChhBUFBST1ZBTF9TVEFUVVNfQVBQUk9WRUQQAyqDAQoGRXJyb3JzEhYKEkVS",
-            "Uk9SU19VTlNQRUNJRklFRBAAEhwKGEVSUk9SU19JTlZBTElEX0FSR1VNRU5U",
-            "UxABEiMKH0VSUk9SU19PTkJPQVJEX0VOVElUWV9USU1FRF9PVVQQAhIeChpF",
-            "UlJPUlNfU0VSVklDRV9VTkFWQUlMQUJMRRADQvYBCipjb20uanVtcHN0YXJ0",
-            "LmRvbWFpbi5vbmJvYXJkaW5ncy52YWx1ZXMudjFCC1ZhbHVlc1Byb3RvUAGi",
-            "AgRKRE9WqgImSnVtcHN0YXJ0LkRvbWFpbi5PbmJvYXJkaW5ncy5WYWx1ZXMu",
-            "VjHKAiZKdW1wc3RhcnRcRG9tYWluXE9uYm9hcmRpbmdzXFZhbHVlc1xWMeIC",
-            "Mkp1bXBzdGFydFxEb21haW5cT25ib2FyZGluZ3NcVmFsdWVzXFYxXEdQQk1l",
-            "dGFkYXRh6gIqSnVtcHN0YXJ0OjpEb21haW46Ok9uYm9hcmRpbmdzOjpWYWx1",
-            "ZXM6OlYxYgZwcm90bzM="));
+            "Cgdjb21tZW50GAIgASgJUgdjb21tZW50KooBCg5BcHByb3ZhbFN0YXR1cxIf",
+            "ChtBUFBST1ZBTF9TVEFUVVNfVU5TUEVDSUZJRUQQABIbChdBUFBST1ZBTF9T",
+            "VEFUVVNfUEVORElORxABEhwKGEFQUFJPVkFMX1NUQVRVU19SRUpFQ1RFRBAC",
+            "EhwKGEFQUFJPVkFMX1NUQVRVU19BUFBST1ZFRBADKoMBCgZFcnJvcnMSFgoS",
+            "RVJST1JTX1VOU1BFQ0lGSUVEEAASHAoYRVJST1JTX0lOVkFMSURfQVJHVU1F",
+            "TlRTEAESIwofRVJST1JTX09OQk9BUkRfRU5USVRZX1RJTUVEX09VVBACEh4K",
+            "GkVSUk9SU19TRVJWSUNFX1VOQVZBSUxBQkxFEANC9gEKKmNvbS5qdW1wc3Rh",
+            "cnQuZG9tYWluLm9uYm9hcmRpbmdzLnZhbHVlcy52MUILVmFsdWVzUHJvdG9Q",
+            "AaICBEpET1aqAiZKdW1wc3RhcnQuRG9tYWluLk9uYm9hcmRpbmdzLlZhbHVl",
+            "cy5WMcoCJkp1bXBzdGFydFxEb21haW5cT25ib2FyZGluZ3NcVmFsdWVzXFYx",
+            "4gIySnVtcHN0YXJ0XERvbWFpblxPbmJvYXJkaW5nc1xWYWx1ZXNcVjFcR1BC",
+            "TWV0YWRhdGHqAipKdW1wc3RhcnQ6OkRvbWFpbjo6T25ib2FyZGluZ3M6OlZh",
+            "bHVlczo6VjFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Jumpstart.Domain.Onboardings.Values.V1.ApprovalStatus), typeof(global::Jumpstart.Domain.Onboardings.Values.V1.Errors), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Jumpstart.Domain.Onboardings.Values.V1.Approval), global::Jumpstart.Domain.Onboardings.Values.V1.Approval.Parser, new[]{ "Status", "Comment" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Jumpstart.Domain.Onboardings.Values.V1.OnboardEntityExecutionOptions), global::Jumpstart.Domain.Onboardings.Values.V1.OnboardEntityExecutionOptions.Parser, new[]{ "CompletionTimeoutSeconds", "SkipApproval" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Jumpstart.Domain.Onboardings.Values.V1.Approval), global::Jumpstart.Domain.Onboardings.Values.V1.Approval.Parser, new[]{ "Status", "Comment" }, null, null, null, null)
           }));
     }
     #endregion
@@ -298,241 +294,6 @@ namespace Jumpstart.Domain.Onboardings.Values.V1 {
           }
           case 18: {
             Comment = input.ReadString();
-            break;
-          }
-        }
-      }
-    }
-    #endif
-
-  }
-
-  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class OnboardEntityExecutionOptions : pb::IMessage<OnboardEntityExecutionOptions>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
-    private static readonly pb::MessageParser<OnboardEntityExecutionOptions> _parser = new pb::MessageParser<OnboardEntityExecutionOptions>(() => new OnboardEntityExecutionOptions());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<OnboardEntityExecutionOptions> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Jumpstart.Domain.Onboardings.Values.V1.ValuesReflection.Descriptor.MessageTypes[1]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public OnboardEntityExecutionOptions() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public OnboardEntityExecutionOptions(OnboardEntityExecutionOptions other) : this() {
-      completionTimeoutSeconds_ = other.completionTimeoutSeconds_;
-      skipApproval_ = other.skipApproval_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public OnboardEntityExecutionOptions Clone() {
-      return new OnboardEntityExecutionOptions(this);
-    }
-
-    /// <summary>Field number for the "completion_timeout_seconds" field.</summary>
-    public const int CompletionTimeoutSecondsFieldNumber = 1;
-    private ulong completionTimeoutSeconds_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ulong CompletionTimeoutSeconds {
-      get { return completionTimeoutSeconds_; }
-      set {
-        completionTimeoutSeconds_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "skip_approval" field.</summary>
-    public const int SkipApprovalFieldNumber = 2;
-    private bool skipApproval_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool SkipApproval {
-      get { return skipApproval_; }
-      set {
-        skipApproval_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override bool Equals(object other) {
-      return Equals(other as OnboardEntityExecutionOptions);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(OnboardEntityExecutionOptions other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (CompletionTimeoutSeconds != other.CompletionTimeoutSeconds) return false;
-      if (SkipApproval != other.SkipApproval) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (CompletionTimeoutSeconds != 0UL) hash ^= CompletionTimeoutSeconds.GetHashCode();
-      if (SkipApproval != false) hash ^= SkipApproval.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      output.WriteRawMessage(this);
-    #else
-      if (CompletionTimeoutSeconds != 0UL) {
-        output.WriteRawTag(8);
-        output.WriteUInt64(CompletionTimeoutSeconds);
-      }
-      if (SkipApproval != false) {
-        output.WriteRawTag(16);
-        output.WriteBool(SkipApproval);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (CompletionTimeoutSeconds != 0UL) {
-        output.WriteRawTag(8);
-        output.WriteUInt64(CompletionTimeoutSeconds);
-      }
-      if (SkipApproval != false) {
-        output.WriteRawTag(16);
-        output.WriteBool(SkipApproval);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(ref output);
-      }
-    }
-    #endif
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CalculateSize() {
-      int size = 0;
-      if (CompletionTimeoutSeconds != 0UL) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(CompletionTimeoutSeconds);
-      }
-      if (SkipApproval != false) {
-        size += 1 + 1;
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(OnboardEntityExecutionOptions other) {
-      if (other == null) {
-        return;
-      }
-      if (other.CompletionTimeoutSeconds != 0UL) {
-        CompletionTimeoutSeconds = other.CompletionTimeoutSeconds;
-      }
-      if (other.SkipApproval != false) {
-        SkipApproval = other.SkipApproval;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 8: {
-            CompletionTimeoutSeconds = input.ReadUInt64();
-            break;
-          }
-          case 16: {
-            SkipApproval = input.ReadBool();
-            break;
-          }
-        }
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-          case 8: {
-            CompletionTimeoutSeconds = input.ReadUInt64();
-            break;
-          }
-          case 16: {
-            SkipApproval = input.ReadBool();
             break;
           }
         }

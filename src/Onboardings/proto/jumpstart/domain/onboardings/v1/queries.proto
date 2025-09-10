@@ -2,14 +2,8 @@ syntax = "proto3";
 
 package jumpstart.domain.onboardings.queries.v1;
 
-import "jumpstart/domain/onboardings/v1/workflows.proto";
-import "jumpstart/domain/onboardings/v1/values.proto";
 
-message GetEntityOnboardingStateRequest {}
-message GetEntityOnboardingStateResponse {
+message SomeApiReadRequest {
   string id = 1;
-  jumpstart.domain.onboardings.workflows.v1.OnboardEntityRequest args = 2;
-  jumpstart.domain.onboardings.values.v1.Approval approval = 3;
-  string current_value = 4;
-  optional uint64 approval_time_remaining_seconds = 5;
 }
+message SomeApiReadResponse {}

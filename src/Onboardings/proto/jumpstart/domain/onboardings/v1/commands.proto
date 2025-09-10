@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package jumpstart.domain.onboardings.commands.v1;
 
-message SomeApiRequest {
+message SomeApiWriteRequest {
   string id = 1;
 }
-message SomeApiResponse {}
+message SomeApiWriteResponse {}

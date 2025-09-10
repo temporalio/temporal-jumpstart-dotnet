@@ -26,19 +26,19 @@ namespace Jumpstart.Domain.Onboardings.Commands.V1 {
           string.Concat(
             "Ci5qdW1wc3RhcnQvZG9tYWluL29uYm9hcmRpbmdzL3YxL2NvbW1hbmRzLnBy",
             "b3RvEihqdW1wc3RhcnQuZG9tYWluLm9uYm9hcmRpbmdzLmNvbW1hbmRzLnYx",
-            "IiAKDlNvbWVBcGlSZXF1ZXN0Eg4KAmlkGAEgASgJUgJpZCIRCg9Tb21lQXBp",
-            "UmVzcG9uc2VCggIKLGNvbS5qdW1wc3RhcnQuZG9tYWluLm9uYm9hcmRpbmdz",
-            "LmNvbW1hbmRzLnYxQg1Db21tYW5kc1Byb3RvUAGiAgRKRE9DqgIoSnVtcHN0",
-            "YXJ0LkRvbWFpbi5PbmJvYXJkaW5ncy5Db21tYW5kcy5WMcoCKEp1bXBzdGFy",
-            "dFxEb21haW5cT25ib2FyZGluZ3NcQ29tbWFuZHNcVjHiAjRKdW1wc3RhcnRc",
-            "RG9tYWluXE9uYm9hcmRpbmdzXENvbW1hbmRzXFYxXEdQQk1ldGFkYXRh6gIs",
-            "SnVtcHN0YXJ0OjpEb21haW46Ok9uYm9hcmRpbmdzOjpDb21tYW5kczo6VjFi",
-            "BnByb3RvMw=="));
+            "IiUKE1NvbWVBcGlXcml0ZVJlcXVlc3QSDgoCaWQYASABKAlSAmlkIhYKFFNv",
+            "bWVBcGlXcml0ZVJlc3BvbnNlQoICCixjb20uanVtcHN0YXJ0LmRvbWFpbi5v",
+            "bmJvYXJkaW5ncy5jb21tYW5kcy52MUINQ29tbWFuZHNQcm90b1ABogIESkRP",
+            "Q6oCKEp1bXBzdGFydC5Eb21haW4uT25ib2FyZGluZ3MuQ29tbWFuZHMuVjHK",
+            "AihKdW1wc3RhcnRcRG9tYWluXE9uYm9hcmRpbmdzXENvbW1hbmRzXFYx4gI0",
+            "SnVtcHN0YXJ0XERvbWFpblxPbmJvYXJkaW5nc1xDb21tYW5kc1xWMVxHUEJN",
+            "ZXRhZGF0YeoCLEp1bXBzdGFydDo6RG9tYWluOjpPbmJvYXJkaW5nczo6Q29t",
+            "bWFuZHM6OlYxYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Jumpstart.Domain.Onboardings.Commands.V1.SomeApiRequest), global::Jumpstart.Domain.Onboardings.Commands.V1.SomeApiRequest.Parser, new[]{ "Id" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Jumpstart.Domain.Onboardings.Commands.V1.SomeApiResponse), global::Jumpstart.Domain.Onboardings.Commands.V1.SomeApiResponse.Parser, null, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Jumpstart.Domain.Onboardings.Commands.V1.SomeApiWriteRequest), global::Jumpstart.Domain.Onboardings.Commands.V1.SomeApiWriteRequest.Parser, new[]{ "Id" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Jumpstart.Domain.Onboardings.Commands.V1.SomeApiWriteResponse), global::Jumpstart.Domain.Onboardings.Commands.V1.SomeApiWriteResponse.Parser, null, null, null, null, null)
           }));
     }
     #endregion
@@ -46,16 +46,16 @@ namespace Jumpstart.Domain.Onboardings.Commands.V1 {
   }
   #region Messages
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class SomeApiRequest : pb::IMessage<SomeApiRequest>
+  public sealed partial class SomeApiWriteRequest : pb::IMessage<SomeApiWriteRequest>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<SomeApiRequest> _parser = new pb::MessageParser<SomeApiRequest>(() => new SomeApiRequest());
+    private static readonly pb::MessageParser<SomeApiWriteRequest> _parser = new pb::MessageParser<SomeApiWriteRequest>(() => new SomeApiWriteRequest());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<SomeApiRequest> Parser { get { return _parser; } }
+    public static pb::MessageParser<SomeApiWriteRequest> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -71,7 +71,7 @@ namespace Jumpstart.Domain.Onboardings.Commands.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public SomeApiRequest() {
+    public SomeApiWriteRequest() {
       OnConstruction();
     }
 
@@ -79,15 +79,15 @@ namespace Jumpstart.Domain.Onboardings.Commands.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public SomeApiRequest(SomeApiRequest other) : this() {
+    public SomeApiWriteRequest(SomeApiWriteRequest other) : this() {
       id_ = other.id_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public SomeApiRequest Clone() {
-      return new SomeApiRequest(this);
+    public SomeApiWriteRequest Clone() {
+      return new SomeApiWriteRequest(this);
     }
 
     /// <summary>Field number for the "id" field.</summary>
@@ -105,12 +105,12 @@ namespace Jumpstart.Domain.Onboardings.Commands.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as SomeApiRequest);
+      return Equals(other as SomeApiWriteRequest);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(SomeApiRequest other) {
+    public bool Equals(SomeApiWriteRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -183,7 +183,7 @@ namespace Jumpstart.Domain.Onboardings.Commands.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(SomeApiRequest other) {
+    public void MergeFrom(SomeApiWriteRequest other) {
       if (other == null) {
         return;
       }
@@ -244,16 +244,16 @@ namespace Jumpstart.Domain.Onboardings.Commands.V1 {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class SomeApiResponse : pb::IMessage<SomeApiResponse>
+  public sealed partial class SomeApiWriteResponse : pb::IMessage<SomeApiWriteResponse>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<SomeApiResponse> _parser = new pb::MessageParser<SomeApiResponse>(() => new SomeApiResponse());
+    private static readonly pb::MessageParser<SomeApiWriteResponse> _parser = new pb::MessageParser<SomeApiWriteResponse>(() => new SomeApiWriteResponse());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<SomeApiResponse> Parser { get { return _parser; } }
+    public static pb::MessageParser<SomeApiWriteResponse> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -269,7 +269,7 @@ namespace Jumpstart.Domain.Onboardings.Commands.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public SomeApiResponse() {
+    public SomeApiWriteResponse() {
       OnConstruction();
     }
 
@@ -277,25 +277,25 @@ namespace Jumpstart.Domain.Onboardings.Commands.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public SomeApiResponse(SomeApiResponse other) : this() {
+    public SomeApiWriteResponse(SomeApiWriteResponse other) : this() {
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public SomeApiResponse Clone() {
-      return new SomeApiResponse(this);
+    public SomeApiWriteResponse Clone() {
+      return new SomeApiWriteResponse(this);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as SomeApiResponse);
+      return Equals(other as SomeApiWriteResponse);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(SomeApiResponse other) {
+    public bool Equals(SomeApiWriteResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -355,7 +355,7 @@ namespace Jumpstart.Domain.Onboardings.Commands.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(SomeApiResponse other) {
+    public void MergeFrom(SomeApiWriteResponse other) {
       if (other == null) {
         return;
       }

@@ -25,29 +25,20 @@ namespace Jumpstart.Domain.Onboardings.Queries.V1 {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "Ci1qdW1wc3RhcnQvZG9tYWluL29uYm9hcmRpbmdzL3YxL3F1ZXJpZXMucHJv",
-            "dG8SJ2p1bXBzdGFydC5kb21haW4ub25ib2FyZGluZ3MucXVlcmllcy52MRov",
-            "anVtcHN0YXJ0L2RvbWFpbi9vbmJvYXJkaW5ncy92MS93b3JrZmxvd3MucHJv",
-            "dG8aLGp1bXBzdGFydC9kb21haW4vb25ib2FyZGluZ3MvdjEvdmFsdWVzLnBy",
-            "b3RvIiEKH0dldEVudGl0eU9uYm9hcmRpbmdTdGF0ZVJlcXVlc3Qi6gIKIEdl",
-            "dEVudGl0eU9uYm9hcmRpbmdTdGF0ZVJlc3BvbnNlEg4KAmlkGAEgASgJUgJp",
-            "ZBJTCgRhcmdzGAIgASgLMj8uanVtcHN0YXJ0LmRvbWFpbi5vbmJvYXJkaW5n",
-            "cy53b3JrZmxvd3MudjEuT25ib2FyZEVudGl0eVJlcXVlc3RSBGFyZ3MSTAoI",
-            "YXBwcm92YWwYAyABKAsyMC5qdW1wc3RhcnQuZG9tYWluLm9uYm9hcmRpbmdz",
-            "LnZhbHVlcy52MS5BcHByb3ZhbFIIYXBwcm92YWwSIwoNY3VycmVudF92YWx1",
-            "ZRgEIAEoCVIMY3VycmVudFZhbHVlEkoKH2FwcHJvdmFsX3RpbWVfcmVtYWlu",
-            "aW5nX3NlY29uZHMYBSABKARIAFIcYXBwcm92YWxUaW1lUmVtYWluaW5nU2Vj",
-            "b25kc4gBAUIiCiBfYXBwcm92YWxfdGltZV9yZW1haW5pbmdfc2Vjb25kc0L8",
-            "AQorY29tLmp1bXBzdGFydC5kb21haW4ub25ib2FyZGluZ3MucXVlcmllcy52",
-            "MUIMUXVlcmllc1Byb3RvUAGiAgRKRE9RqgInSnVtcHN0YXJ0LkRvbWFpbi5P",
-            "bmJvYXJkaW5ncy5RdWVyaWVzLlYxygInSnVtcHN0YXJ0XERvbWFpblxPbmJv",
-            "YXJkaW5nc1xRdWVyaWVzXFYx4gIzSnVtcHN0YXJ0XERvbWFpblxPbmJvYXJk",
-            "aW5nc1xRdWVyaWVzXFYxXEdQQk1ldGFkYXRh6gIrSnVtcHN0YXJ0OjpEb21h",
-            "aW46Ok9uYm9hcmRpbmdzOjpRdWVyaWVzOjpWMWIGcHJvdG8z"));
+            "dG8SJ2p1bXBzdGFydC5kb21haW4ub25ib2FyZGluZ3MucXVlcmllcy52MSIk",
+            "ChJTb21lQXBpUmVhZFJlcXVlc3QSDgoCaWQYASABKAlSAmlkIhUKE1NvbWVB",
+            "cGlSZWFkUmVzcG9uc2VC/AEKK2NvbS5qdW1wc3RhcnQuZG9tYWluLm9uYm9h",
+            "cmRpbmdzLnF1ZXJpZXMudjFCDFF1ZXJpZXNQcm90b1ABogIESkRPUaoCJ0p1",
+            "bXBzdGFydC5Eb21haW4uT25ib2FyZGluZ3MuUXVlcmllcy5WMcoCJ0p1bXBz",
+            "dGFydFxEb21haW5cT25ib2FyZGluZ3NcUXVlcmllc1xWMeICM0p1bXBzdGFy",
+            "dFxEb21haW5cT25ib2FyZGluZ3NcUXVlcmllc1xWMVxHUEJNZXRhZGF0YeoC",
+            "K0p1bXBzdGFydDo6RG9tYWluOjpPbmJvYXJkaW5nczo6UXVlcmllczo6VjFi",
+            "BnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::Jumpstart.Domain.Onboardings.Workflows.V1.WorkflowsReflection.Descriptor, global::Jumpstart.Domain.Onboardings.Values.V1.ValuesReflection.Descriptor, },
+          new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Jumpstart.Domain.Onboardings.Queries.V1.GetEntityOnboardingStateRequest), global::Jumpstart.Domain.Onboardings.Queries.V1.GetEntityOnboardingStateRequest.Parser, null, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Jumpstart.Domain.Onboardings.Queries.V1.GetEntityOnboardingStateResponse), global::Jumpstart.Domain.Onboardings.Queries.V1.GetEntityOnboardingStateResponse.Parser, new[]{ "Id", "Args", "Approval", "CurrentValue", "ApprovalTimeRemainingSeconds" }, new[]{ "ApprovalTimeRemainingSeconds" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Jumpstart.Domain.Onboardings.Queries.V1.SomeApiReadRequest), global::Jumpstart.Domain.Onboardings.Queries.V1.SomeApiReadRequest.Parser, new[]{ "Id" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Jumpstart.Domain.Onboardings.Queries.V1.SomeApiReadResponse), global::Jumpstart.Domain.Onboardings.Queries.V1.SomeApiReadResponse.Parser, null, null, null, null, null)
           }));
     }
     #endregion
@@ -55,16 +46,16 @@ namespace Jumpstart.Domain.Onboardings.Queries.V1 {
   }
   #region Messages
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class GetEntityOnboardingStateRequest : pb::IMessage<GetEntityOnboardingStateRequest>
+  public sealed partial class SomeApiReadRequest : pb::IMessage<SomeApiReadRequest>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<GetEntityOnboardingStateRequest> _parser = new pb::MessageParser<GetEntityOnboardingStateRequest>(() => new GetEntityOnboardingStateRequest());
+    private static readonly pb::MessageParser<SomeApiReadRequest> _parser = new pb::MessageParser<SomeApiReadRequest>(() => new SomeApiReadRequest());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<GetEntityOnboardingStateRequest> Parser { get { return _parser; } }
+    public static pb::MessageParser<SomeApiReadRequest> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -80,7 +71,7 @@ namespace Jumpstart.Domain.Onboardings.Queries.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public GetEntityOnboardingStateRequest() {
+    public SomeApiReadRequest() {
       OnConstruction();
     }
 
@@ -88,31 +79,45 @@ namespace Jumpstart.Domain.Onboardings.Queries.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public GetEntityOnboardingStateRequest(GetEntityOnboardingStateRequest other) : this() {
+    public SomeApiReadRequest(SomeApiReadRequest other) : this() {
+      id_ = other.id_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public GetEntityOnboardingStateRequest Clone() {
-      return new GetEntityOnboardingStateRequest(this);
+    public SomeApiReadRequest Clone() {
+      return new SomeApiReadRequest(this);
+    }
+
+    /// <summary>Field number for the "id" field.</summary>
+    public const int IdFieldNumber = 1;
+    private string id_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Id {
+      get { return id_; }
+      set {
+        id_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as GetEntityOnboardingStateRequest);
+      return Equals(other as SomeApiReadRequest);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(GetEntityOnboardingStateRequest other) {
+    public bool Equals(SomeApiReadRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
       if (ReferenceEquals(other, this)) {
         return true;
       }
+      if (Id != other.Id) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -120,6 +125,7 @@ namespace Jumpstart.Domain.Onboardings.Queries.V1 {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
+      if (Id.Length != 0) hash ^= Id.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -138,6 +144,10 @@ namespace Jumpstart.Domain.Onboardings.Queries.V1 {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
+      if (Id.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Id);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -148,6 +158,10 @@ namespace Jumpstart.Domain.Onboardings.Queries.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Id.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Id);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -158,6 +172,9 @@ namespace Jumpstart.Domain.Onboardings.Queries.V1 {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
+      if (Id.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Id);
+      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -166,9 +183,12 @@ namespace Jumpstart.Domain.Onboardings.Queries.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(GetEntityOnboardingStateRequest other) {
+    public void MergeFrom(SomeApiReadRequest other) {
       if (other == null) {
         return;
+      }
+      if (other.Id.Length != 0) {
+        Id = other.Id;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -189,6 +209,10 @@ namespace Jumpstart.Domain.Onboardings.Queries.V1 {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
+          case 10: {
+            Id = input.ReadString();
+            break;
+          }
         }
       }
     #endif
@@ -208,6 +232,10 @@ namespace Jumpstart.Domain.Onboardings.Queries.V1 {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
+          case 10: {
+            Id = input.ReadString();
+            break;
+          }
         }
       }
     }
@@ -216,17 +244,16 @@ namespace Jumpstart.Domain.Onboardings.Queries.V1 {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class GetEntityOnboardingStateResponse : pb::IMessage<GetEntityOnboardingStateResponse>
+  public sealed partial class SomeApiReadResponse : pb::IMessage<SomeApiReadResponse>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<GetEntityOnboardingStateResponse> _parser = new pb::MessageParser<GetEntityOnboardingStateResponse>(() => new GetEntityOnboardingStateResponse());
+    private static readonly pb::MessageParser<SomeApiReadResponse> _parser = new pb::MessageParser<SomeApiReadResponse>(() => new SomeApiReadResponse());
     private pb::UnknownFieldSet _unknownFields;
-    private int _hasBits0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<GetEntityOnboardingStateResponse> Parser { get { return _parser; } }
+    public static pb::MessageParser<SomeApiReadResponse> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -242,7 +269,7 @@ namespace Jumpstart.Domain.Onboardings.Queries.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public GetEntityOnboardingStateResponse() {
+    public SomeApiReadResponse() {
       OnConstruction();
     }
 
@@ -250,117 +277,31 @@ namespace Jumpstart.Domain.Onboardings.Queries.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public GetEntityOnboardingStateResponse(GetEntityOnboardingStateResponse other) : this() {
-      _hasBits0 = other._hasBits0;
-      id_ = other.id_;
-      args_ = other.args_ != null ? other.args_.Clone() : null;
-      approval_ = other.approval_ != null ? other.approval_.Clone() : null;
-      currentValue_ = other.currentValue_;
-      approvalTimeRemainingSeconds_ = other.approvalTimeRemainingSeconds_;
+    public SomeApiReadResponse(SomeApiReadResponse other) : this() {
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public GetEntityOnboardingStateResponse Clone() {
-      return new GetEntityOnboardingStateResponse(this);
-    }
-
-    /// <summary>Field number for the "id" field.</summary>
-    public const int IdFieldNumber = 1;
-    private string id_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string Id {
-      get { return id_; }
-      set {
-        id_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "args" field.</summary>
-    public const int ArgsFieldNumber = 2;
-    private global::Jumpstart.Domain.Onboardings.Workflows.V1.OnboardEntityRequest args_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Jumpstart.Domain.Onboardings.Workflows.V1.OnboardEntityRequest Args {
-      get { return args_; }
-      set {
-        args_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "approval" field.</summary>
-    public const int ApprovalFieldNumber = 3;
-    private global::Jumpstart.Domain.Onboardings.Values.V1.Approval approval_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Jumpstart.Domain.Onboardings.Values.V1.Approval Approval {
-      get { return approval_; }
-      set {
-        approval_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "current_value" field.</summary>
-    public const int CurrentValueFieldNumber = 4;
-    private string currentValue_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string CurrentValue {
-      get { return currentValue_; }
-      set {
-        currentValue_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "approval_time_remaining_seconds" field.</summary>
-    public const int ApprovalTimeRemainingSecondsFieldNumber = 5;
-    private readonly static ulong ApprovalTimeRemainingSecondsDefaultValue = 0UL;
-
-    private ulong approvalTimeRemainingSeconds_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ulong ApprovalTimeRemainingSeconds {
-      get { if ((_hasBits0 & 1) != 0) { return approvalTimeRemainingSeconds_; } else { return ApprovalTimeRemainingSecondsDefaultValue; } }
-      set {
-        _hasBits0 |= 1;
-        approvalTimeRemainingSeconds_ = value;
-      }
-    }
-    /// <summary>Gets whether the "approval_time_remaining_seconds" field is set</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool HasApprovalTimeRemainingSeconds {
-      get { return (_hasBits0 & 1) != 0; }
-    }
-    /// <summary>Clears the value of the "approval_time_remaining_seconds" field</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void ClearApprovalTimeRemainingSeconds() {
-      _hasBits0 &= ~1;
+    public SomeApiReadResponse Clone() {
+      return new SomeApiReadResponse(this);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as GetEntityOnboardingStateResponse);
+      return Equals(other as SomeApiReadResponse);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(GetEntityOnboardingStateResponse other) {
+    public bool Equals(SomeApiReadResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (Id != other.Id) return false;
-      if (!object.Equals(Args, other.Args)) return false;
-      if (!object.Equals(Approval, other.Approval)) return false;
-      if (CurrentValue != other.CurrentValue) return false;
-      if (ApprovalTimeRemainingSeconds != other.ApprovalTimeRemainingSeconds) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -368,11 +309,6 @@ namespace Jumpstart.Domain.Onboardings.Queries.V1 {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (Id.Length != 0) hash ^= Id.GetHashCode();
-      if (args_ != null) hash ^= Args.GetHashCode();
-      if (approval_ != null) hash ^= Approval.GetHashCode();
-      if (CurrentValue.Length != 0) hash ^= CurrentValue.GetHashCode();
-      if (HasApprovalTimeRemainingSeconds) hash ^= ApprovalTimeRemainingSeconds.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -391,26 +327,6 @@ namespace Jumpstart.Domain.Onboardings.Queries.V1 {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (Id.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(Id);
-      }
-      if (args_ != null) {
-        output.WriteRawTag(18);
-        output.WriteMessage(Args);
-      }
-      if (approval_ != null) {
-        output.WriteRawTag(26);
-        output.WriteMessage(Approval);
-      }
-      if (CurrentValue.Length != 0) {
-        output.WriteRawTag(34);
-        output.WriteString(CurrentValue);
-      }
-      if (HasApprovalTimeRemainingSeconds) {
-        output.WriteRawTag(40);
-        output.WriteUInt64(ApprovalTimeRemainingSeconds);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -421,26 +337,6 @@ namespace Jumpstart.Domain.Onboardings.Queries.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (Id.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(Id);
-      }
-      if (args_ != null) {
-        output.WriteRawTag(18);
-        output.WriteMessage(Args);
-      }
-      if (approval_ != null) {
-        output.WriteRawTag(26);
-        output.WriteMessage(Approval);
-      }
-      if (CurrentValue.Length != 0) {
-        output.WriteRawTag(34);
-        output.WriteString(CurrentValue);
-      }
-      if (HasApprovalTimeRemainingSeconds) {
-        output.WriteRawTag(40);
-        output.WriteUInt64(ApprovalTimeRemainingSeconds);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -451,21 +347,6 @@ namespace Jumpstart.Domain.Onboardings.Queries.V1 {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (Id.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Id);
-      }
-      if (args_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Args);
-      }
-      if (approval_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Approval);
-      }
-      if (CurrentValue.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(CurrentValue);
-      }
-      if (HasApprovalTimeRemainingSeconds) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(ApprovalTimeRemainingSeconds);
-      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -474,30 +355,9 @@ namespace Jumpstart.Domain.Onboardings.Queries.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(GetEntityOnboardingStateResponse other) {
+    public void MergeFrom(SomeApiReadResponse other) {
       if (other == null) {
         return;
-      }
-      if (other.Id.Length != 0) {
-        Id = other.Id;
-      }
-      if (other.args_ != null) {
-        if (args_ == null) {
-          Args = new global::Jumpstart.Domain.Onboardings.Workflows.V1.OnboardEntityRequest();
-        }
-        Args.MergeFrom(other.Args);
-      }
-      if (other.approval_ != null) {
-        if (approval_ == null) {
-          Approval = new global::Jumpstart.Domain.Onboardings.Values.V1.Approval();
-        }
-        Approval.MergeFrom(other.Approval);
-      }
-      if (other.CurrentValue.Length != 0) {
-        CurrentValue = other.CurrentValue;
-      }
-      if (other.HasApprovalTimeRemainingSeconds) {
-        ApprovalTimeRemainingSeconds = other.ApprovalTimeRemainingSeconds;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -518,32 +378,6 @@ namespace Jumpstart.Domain.Onboardings.Queries.V1 {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
-          case 10: {
-            Id = input.ReadString();
-            break;
-          }
-          case 18: {
-            if (args_ == null) {
-              Args = new global::Jumpstart.Domain.Onboardings.Workflows.V1.OnboardEntityRequest();
-            }
-            input.ReadMessage(Args);
-            break;
-          }
-          case 26: {
-            if (approval_ == null) {
-              Approval = new global::Jumpstart.Domain.Onboardings.Values.V1.Approval();
-            }
-            input.ReadMessage(Approval);
-            break;
-          }
-          case 34: {
-            CurrentValue = input.ReadString();
-            break;
-          }
-          case 40: {
-            ApprovalTimeRemainingSeconds = input.ReadUInt64();
-            break;
-          }
         }
       }
     #endif
@@ -563,32 +397,6 @@ namespace Jumpstart.Domain.Onboardings.Queries.V1 {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
-          case 10: {
-            Id = input.ReadString();
-            break;
-          }
-          case 18: {
-            if (args_ == null) {
-              Args = new global::Jumpstart.Domain.Onboardings.Workflows.V1.OnboardEntityRequest();
-            }
-            input.ReadMessage(Args);
-            break;
-          }
-          case 26: {
-            if (approval_ == null) {
-              Approval = new global::Jumpstart.Domain.Onboardings.Values.V1.Approval();
-            }
-            input.ReadMessage(Approval);
-            break;
-          }
-          case 34: {
-            CurrentValue = input.ReadString();
-            break;
-          }
-          case 40: {
-            ApprovalTimeRemainingSeconds = input.ReadUInt64();
-            break;
-          }
         }
       }
     }

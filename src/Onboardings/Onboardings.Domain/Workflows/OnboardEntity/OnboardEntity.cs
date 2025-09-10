@@ -26,14 +26,16 @@ public class OnboardEntity : IOnboardEntity
     [WorkflowInit]
     public OnboardEntity(OnboardEntityRequest args)
     {
+        var opts = args.Options ?? new OnboardEntityExecutionOptions();
         _state = new GetEntityOnboardingStateResponse
         {
             Args = args,
             Id = args.Id,
             CurrentValue = args.Value,
+            Options = opts,
             Approval = new Approval
             {
-                Status = args.SkipApproval ? ApprovalStatus.Approved : ApprovalStatus.Pending
+                Status = opts.SkipApproval ? ApprovalStatus.Approved : ApprovalStatus.Pending
             }
         };   
     }
@@ -42,16 +44,7 @@ public class OnboardEntity : IOnboardEntity
     public async Task ExecuteAsync(OnboardEntityRequest args)
     {
         args = AssertValidRequest(args);
-        _state = new GetEntityOnboardingStateResponse
-        {
-            Args = args,
-            Id = args.Id,
-            CurrentValue = args.Value,
-            Approval = new Approval
-            {
-                Status = args.SkipApproval ? ApprovalStatus.Approved : ApprovalStatus.Pending
-            }
-        };
+        
       
 
     var logger = Workflow.Logger;
@@ -67,7 +60,7 @@ public class OnboardEntity : IOnboardEntity
             // to the TaskQueue this Workflow execution is using. 
             TaskQueue = Workflow.Info.TaskQueue
         };
-        if (!args.SkipApproval)
+        if (!_state.Options.SkipApproval)
         {
             await AwaitApproval(args);
         }
@@ -106,14 +99,14 @@ public class OnboardEntity : IOnboardEntity
     private async Task AwaitApproval(OnboardEntityRequest args)
     {
         var logger = Workflow.Logger;
-        var waitApprovalSecs = args.CompletionTimeoutSeconds;
+        var waitApprovalSecs = _state.Options.CompletionTimeoutSeconds;
         if (args.HasDeputyOwnerEmail)
         {
             // We lean into integer division here to be unconcerned about
             // determinism issues. Note that if we did this with a float/double
             // we could run into a problem with hardware results and violate the determinism
             // requirement for our Timer.
-            waitApprovalSecs = args.CompletionTimeoutSeconds / 2;
+            waitApprovalSecs = _state.Options.CompletionTimeoutSeconds / 2;
         }
         logger.LogInformation($"Waiting {waitApprovalSecs} seconds for approval");
 
@@ -131,10 +124,10 @@ public class OnboardEntity : IOnboardEntity
             logger.LogInformation("entered failure to receive approval");
             if (!args.HasDeputyOwnerEmail)
             {
-                var message = $"Onboarding {args.Id} failed to be approved in {args.CompletionTimeoutSeconds} seconds.";
+                var message = $"Onboarding {args.Id} failed to be approved in {_state.Options.CompletionTimeoutSeconds} seconds.";
                 logger.LogError(message);
                 // We never received approval from Deputy or primary owners, so we just fail the workflow
-                throw new ApplicationFailureException(message, nameof(Values.V1.Errors.OnboardEntityTimedOut));
+                throw new ApplicationFailureException(message, nameof(Errors.OnboardEntityTimedOut));
             }
               
             // Since we are delivering an message, we want to restrict the number of retry attempts we make 
@@ -155,7 +148,8 @@ public class OnboardEntity : IOnboardEntity
                 Id = args.Id,
                 Value = _state.CurrentValue,
                 // DeputyOwnerEmail = null,
-                CompletionTimeoutSeconds = args.CompletionTimeoutSeconds - waitApprovalSecs,
+                Options = new OnboardEntityExecutionOptions{ 
+                    CompletionTimeoutSeconds = _state.Options.CompletionTimeoutSeconds - waitApprovalSecs,},
                 Email = args.Email,
             };
             throw Workflow.CreateContinueAsNewException<OnboardEntity>(wf => wf.ExecuteAsync(newArgs),
@@ -184,20 +178,16 @@ public class OnboardEntity : IOnboardEntity
              * Note that `WorkflowFailedException` will count towards the `workflow_failed` SDK Metric (https://docs.temporal.io/references/sdk-metrics#workflow_failed).
              */
         {
-            throw new ApplicationFailureException("OnboardEntity.Id and OnboardEntity.Value is required", nameof(Values.V1.Errors.InvalidArguments));
+            throw new ApplicationFailureException("OnboardEntity.Id and OnboardEntity.Value is required", nameof(Errors.InvalidArguments));
         }
 
-        if (args is { SkipApproval: true, HasDeputyOwnerEmail: true })
+        if (args is { Options.SkipApproval: true, HasDeputyOwnerEmail: true })
         {
-            throw new ApplicationFailureException("Either skip approval or provide a Deputy Owner email, not both.",nameof(Values.V1.Errors.InvalidArguments));
+            throw new ApplicationFailureException("Either skip approval or provide a Deputy Owner email, not both.",nameof(Errors.InvalidArguments));
         }
-        if(!string.IsNullOrEmpty(args.DeputyOwnerEmail) && (TimeSpan.FromSeconds(args.CompletionTimeoutSeconds) < TimeSpan.FromDays(4)))
+        if(!string.IsNullOrEmpty(args.DeputyOwnerEmail) && (TimeSpan.FromSeconds(args.Options.CompletionTimeoutSeconds) < TimeSpan.FromDays(4)))
         {
-            throw new ApplicationFailureException("Give at least four days to receive approval",nameof(Values.V1.Errors.InvalidArguments));
-        }
-        if (args.CompletionTimeoutSeconds < 1)
-        {
-            args.CompletionTimeoutSeconds = DefaultCompletionTimeoutSeconds;
+            throw new ApplicationFailureException("Give at least four days to receive approval",nameof(Errors.InvalidArguments));
         }
         
         return args;
