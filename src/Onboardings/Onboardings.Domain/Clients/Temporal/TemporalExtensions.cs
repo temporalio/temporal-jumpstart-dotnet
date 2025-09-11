@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Temporalio.Client;
 using Temporalio.Extensions.Hosting;
+using Temporalio.Runtime;
 using Temporalio.Worker;
 
 namespace Onboardings.Domain.Clients.Temporal;
@@ -23,7 +24,17 @@ public static class TemporalExtensions
                 ClientPrivateKey = File.ReadAllBytes(cfg.Connection.Mtls.KeyFile)
             };
         }
-
+        var runtime = new TemporalRuntime(new()
+        {
+            Telemetry = new()
+            {
+                Metrics = new()
+                {
+                    Prometheus = new("0.0.0.0:9464")
+                }
+            },
+        });
+        opts.Runtime = runtime;
         return opts;
     }
 
