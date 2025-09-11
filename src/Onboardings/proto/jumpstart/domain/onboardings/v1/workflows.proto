@@ -21,7 +21,7 @@ message OnboardEntityRequest {
 
 
 message OnboardEntityExecutionOptions {
-  uint64 completion_timeout_seconds = 1;
+  uint64 approval_timeout_seconds = 1;
   bool skip_approval = 2;
 }
 
@@ -49,7 +49,7 @@ message RequestDeputyOwnerApprovalRequest {
   string deputy_owner_email = 2;
 }
 message GetOnboardEntityExecutionOptionsRequest {
-  OnboardEntityExecutionOptions options = 1;
+  OnboardEntityRequest args = 1;
 }
 message GetOnboardEntityExecutionOptionsResponse {
   OnboardEntityExecutionOptions options = 1;

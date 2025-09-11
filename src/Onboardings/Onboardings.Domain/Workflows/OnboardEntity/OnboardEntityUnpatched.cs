@@ -17,7 +17,7 @@ namespace Onboardings.Domain.Workflows.OnboardEntity;
 public class OnboardEntityUnpatched : IOnboardEntity
 {
     private GetEntityOnboardingStateResponse _state;
-    public static ulong DefaultCompletionTimeoutSeconds =  7 * 86400;
+    public static ulong DefaultApprovalTimeoutSeconds =  7 * 86400;
 
     // Since Signals and Updates could be run before the `_state` it initialized 
     // (the WorkflowRun method has not been invoked yet) we want to assign the
@@ -104,14 +104,14 @@ public class OnboardEntityUnpatched : IOnboardEntity
     private async Task AwaitApproval(OnboardEntityRequest args)
     {
         var logger = Workflow.Logger;
-        var waitApprovalSecs = _state.Options.CompletionTimeoutSeconds;
+        var waitApprovalSecs = _state.Options.ApprovalTimeoutSeconds;
         if (args.HasDeputyOwnerEmail)
         {
             // We lean into integer division here to be unconcerned about
             // determinism issues. Note that if we did this with a float/double
             // we could run into a problem with hardware results and violate the determinism
             // requirement for our Timer.
-            waitApprovalSecs = _state.Options.CompletionTimeoutSeconds / 2;
+            waitApprovalSecs = _state.Options.ApprovalTimeoutSeconds / 2;
         }
         logger.LogInformation($"Waiting {waitApprovalSecs} seconds for approval");
 
@@ -129,7 +129,7 @@ public class OnboardEntityUnpatched : IOnboardEntity
             logger.LogInformation("entered failure to receive approval");
             if (!args.HasDeputyOwnerEmail)
             {
-                var message = $"Onboarding {args.Id} failed to be approved in {_state.Options.CompletionTimeoutSeconds} seconds.";
+                var message = $"Onboarding {args.Id} failed to be approved in {_state.Options.ApprovalTimeoutSeconds} seconds.";
                 logger.LogError(message);
                 // We never received approval from Deputy or primary owners, so we just fail the workflow
                 throw new ApplicationFailureException(message, nameof(Errors.OnboardEntityTimedOut));
@@ -154,7 +154,7 @@ public class OnboardEntityUnpatched : IOnboardEntity
                 Value = _state.CurrentValue,
                 // DeputyOwnerEmail = null,
                 Options = new OnboardEntityExecutionOptions{ 
-                    CompletionTimeoutSeconds = _state.Options.CompletionTimeoutSeconds - waitApprovalSecs,},
+                    ApprovalTimeoutSeconds = _state.Options.ApprovalTimeoutSeconds - waitApprovalSecs,},
                 Email = args.Email,
             };
             throw Workflow.CreateContinueAsNewException<OnboardEntity>(wf => wf.ExecuteAsync(newArgs),
@@ -190,7 +190,7 @@ public class OnboardEntityUnpatched : IOnboardEntity
         {
             throw new ApplicationFailureException("Either skip approval or provide a Deputy Owner email, not both.",nameof(Errors.InvalidArguments));
         }
-        if(!string.IsNullOrEmpty(args.DeputyOwnerEmail) && (TimeSpan.FromSeconds(args.Options.CompletionTimeoutSeconds) < TimeSpan.FromDays(4)))
+        if(!string.IsNullOrEmpty(args.DeputyOwnerEmail) && (TimeSpan.FromSeconds(args.Options.ApprovalTimeoutSeconds) < TimeSpan.FromDays(4)))
         {
             throw new ApplicationFailureException("Give at least four days to receive approval",nameof(Errors.InvalidArguments));
         }

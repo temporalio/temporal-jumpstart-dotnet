@@ -35,54 +35,54 @@ namespace Jumpstart.Domain.Onboardings.Workflows.V1 {
             "DgoCaWQYAyABKAlSAmlkEhQKBXZhbHVlGAQgASgJUgV2YWx1ZRIxChJkZXB1",
             "dHlfb3duZXJfZW1haWwYBSABKAlIAVIQZGVwdXR5T3duZXJFbWFpbIgBARIZ",
             "CgVlbWFpbBgGIAEoCUgCUgVlbWFpbIgBAUIKCghfb3B0aW9uc0IVChNfZGVw",
-            "dXR5X293bmVyX2VtYWlsQggKBl9lbWFpbCKCAQodT25ib2FyZEVudGl0eUV4",
-            "ZWN1dGlvbk9wdGlvbnMSPAoaY29tcGxldGlvbl90aW1lb3V0X3NlY29uZHMY",
-            "ASABKARSGGNvbXBsZXRpb25UaW1lb3V0U2Vjb25kcxIjCg1za2lwX2FwcHJv",
-            "dmFsGAIgASgIUgxza2lwQXBwcm92YWwiIQofR2V0RW50aXR5T25ib2FyZGlu",
-            "Z1N0YXRlUmVxdWVzdCLOAwogR2V0RW50aXR5T25ib2FyZGluZ1N0YXRlUmVz",
-            "cG9uc2USDgoCaWQYASABKAlSAmlkElMKBGFyZ3MYAiABKAsyPy5qdW1wc3Rh",
-            "cnQuZG9tYWluLm9uYm9hcmRpbmdzLndvcmtmbG93cy52MS5PbmJvYXJkRW50",
-            "aXR5UmVxdWVzdFIEYXJncxJiCgdvcHRpb25zGAMgASgLMkguanVtcHN0YXJ0",
-            "LmRvbWFpbi5vbmJvYXJkaW5ncy53b3JrZmxvd3MudjEuT25ib2FyZEVudGl0",
-            "eUV4ZWN1dGlvbk9wdGlvbnNSB29wdGlvbnMSTAoIYXBwcm92YWwYBCABKAsy",
-            "MC5qdW1wc3RhcnQuZG9tYWluLm9uYm9hcmRpbmdzLnZhbHVlcy52MS5BcHBy",
-            "b3ZhbFIIYXBwcm92YWwSIwoNY3VycmVudF92YWx1ZRgFIAEoCVIMY3VycmVu",
-            "dFZhbHVlEkoKH2FwcHJvdmFsX3RpbWVfcmVtYWluaW5nX3NlY29uZHMYBiAB",
-            "KARIAFIcYXBwcm92YWxUaW1lUmVtYWluaW5nU2Vjb25kc4gBAUIiCiBfYXBw",
-            "cm92YWxfdGltZV9yZW1haW5pbmdfc2Vjb25kcyJAChhSZWdpc3RlckNybUVu",
-            "dGl0eVJlcXVlc3QSDgoCaWQYASABKAlSAmlkEhQKBXZhbHVlGAIgASgJUgV2",
-            "YWx1ZSJhCiFSZXF1ZXN0RGVwdXR5T3duZXJBcHByb3ZhbFJlcXVlc3QSDgoC",
-            "aWQYASABKAlSAmlkEiwKEmRlcHV0eV9vd25lcl9lbWFpbBgCIAEoCVIQZGVw",
-            "dXR5T3duZXJFbWFpbCKNAQonR2V0T25ib2FyZEVudGl0eUV4ZWN1dGlvbk9w",
-            "dGlvbnNSZXF1ZXN0EmIKB29wdGlvbnMYASABKAsySC5qdW1wc3RhcnQuZG9t",
-            "YWluLm9uYm9hcmRpbmdzLndvcmtmbG93cy52MS5PbmJvYXJkRW50aXR5RXhl",
-            "Y3V0aW9uT3B0aW9uc1IHb3B0aW9ucyKOAQooR2V0T25ib2FyZEVudGl0eUV4",
-            "ZWN1dGlvbk9wdGlvbnNSZXNwb25zZRJiCgdvcHRpb25zGAEgASgLMkguanVt",
-            "cHN0YXJ0LmRvbWFpbi5vbmJvYXJkaW5ncy53b3JrZmxvd3MudjEuT25ib2Fy",
-            "ZEVudGl0eUV4ZWN1dGlvbk9wdGlvbnNSB29wdGlvbnMirwEKI05vdGlmeU9u",
-            "Ym9hcmRFbnRpdHlDb21wbGV0ZWRSZXF1ZXN0Eg4KAmlkGAEgASgJUgJpZBIU",
-            "CgVlbWFpbBgCIAEoCVIFZW1haWwSFAoFdmFsdWUYAyABKAlSBXZhbHVlEkwK",
-            "CGFwcHJvdmFsGAQgASgLMjAuanVtcHN0YXJ0LmRvbWFpbi5vbmJvYXJkaW5n",
-            "cy52YWx1ZXMudjEuQXBwcm92YWxSCGFwcHJvdmFsIjAKFEFwcHJvdmVFbnRp",
-            "dHlSZXF1ZXN0EhgKB2NvbW1lbnQYASABKAlSB2NvbW1lbnQiLwoTUmVqZWN0",
-            "RW50aXR5UmVxdWVzdBIYCgdjb21tZW50GAEgASgJUgdjb21tZW50IicKD1Nl",
-            "dFZhbHVlUmVxdWVzdBIUCgV2YWx1ZRgBIAEoCVIFdmFsdWVCiAIKLWNvbS5q",
-            "dW1wc3RhcnQuZG9tYWluLm9uYm9hcmRpbmdzLndvcmtmbG93cy52MUIOV29y",
-            "a2Zsb3dzUHJvdG9QAaICBEpET1eqAilKdW1wc3RhcnQuRG9tYWluLk9uYm9h",
-            "cmRpbmdzLldvcmtmbG93cy5WMcoCKUp1bXBzdGFydFxEb21haW5cT25ib2Fy",
-            "ZGluZ3NcV29ya2Zsb3dzXFYx4gI1SnVtcHN0YXJ0XERvbWFpblxPbmJvYXJk",
-            "aW5nc1xXb3JrZmxvd3NcVjFcR1BCTWV0YWRhdGHqAi1KdW1wc3RhcnQ6OkRv",
-            "bWFpbjo6T25ib2FyZGluZ3M6OldvcmtmbG93czo6VjFiBnByb3RvMw=="));
+            "dXR5X293bmVyX2VtYWlsQggKBl9lbWFpbCJ+Ch1PbmJvYXJkRW50aXR5RXhl",
+            "Y3V0aW9uT3B0aW9ucxI4ChhhcHByb3ZhbF90aW1lb3V0X3NlY29uZHMYASAB",
+            "KARSFmFwcHJvdmFsVGltZW91dFNlY29uZHMSIwoNc2tpcF9hcHByb3ZhbBgC",
+            "IAEoCFIMc2tpcEFwcHJvdmFsIiEKH0dldEVudGl0eU9uYm9hcmRpbmdTdGF0",
+            "ZVJlcXVlc3QizgMKIEdldEVudGl0eU9uYm9hcmRpbmdTdGF0ZVJlc3BvbnNl",
+            "Eg4KAmlkGAEgASgJUgJpZBJTCgRhcmdzGAIgASgLMj8uanVtcHN0YXJ0LmRv",
+            "bWFpbi5vbmJvYXJkaW5ncy53b3JrZmxvd3MudjEuT25ib2FyZEVudGl0eVJl",
+            "cXVlc3RSBGFyZ3MSYgoHb3B0aW9ucxgDIAEoCzJILmp1bXBzdGFydC5kb21h",
+            "aW4ub25ib2FyZGluZ3Mud29ya2Zsb3dzLnYxLk9uYm9hcmRFbnRpdHlFeGVj",
+            "dXRpb25PcHRpb25zUgdvcHRpb25zEkwKCGFwcHJvdmFsGAQgASgLMjAuanVt",
+            "cHN0YXJ0LmRvbWFpbi5vbmJvYXJkaW5ncy52YWx1ZXMudjEuQXBwcm92YWxS",
+            "CGFwcHJvdmFsEiMKDWN1cnJlbnRfdmFsdWUYBSABKAlSDGN1cnJlbnRWYWx1",
+            "ZRJKCh9hcHByb3ZhbF90aW1lX3JlbWFpbmluZ19zZWNvbmRzGAYgASgESABS",
+            "HGFwcHJvdmFsVGltZVJlbWFpbmluZ1NlY29uZHOIAQFCIgogX2FwcHJvdmFs",
+            "X3RpbWVfcmVtYWluaW5nX3NlY29uZHMiQAoYUmVnaXN0ZXJDcm1FbnRpdHlS",
+            "ZXF1ZXN0Eg4KAmlkGAEgASgJUgJpZBIUCgV2YWx1ZRgCIAEoCVIFdmFsdWUi",
+            "YQohUmVxdWVzdERlcHV0eU93bmVyQXBwcm92YWxSZXF1ZXN0Eg4KAmlkGAEg",
+            "ASgJUgJpZBIsChJkZXB1dHlfb3duZXJfZW1haWwYAiABKAlSEGRlcHV0eU93",
+            "bmVyRW1haWwifgonR2V0T25ib2FyZEVudGl0eUV4ZWN1dGlvbk9wdGlvbnNS",
+            "ZXF1ZXN0ElMKBGFyZ3MYASABKAsyPy5qdW1wc3RhcnQuZG9tYWluLm9uYm9h",
+            "cmRpbmdzLndvcmtmbG93cy52MS5PbmJvYXJkRW50aXR5UmVxdWVzdFIEYXJn",
+            "cyKOAQooR2V0T25ib2FyZEVudGl0eUV4ZWN1dGlvbk9wdGlvbnNSZXNwb25z",
+            "ZRJiCgdvcHRpb25zGAEgASgLMkguanVtcHN0YXJ0LmRvbWFpbi5vbmJvYXJk",
+            "aW5ncy53b3JrZmxvd3MudjEuT25ib2FyZEVudGl0eUV4ZWN1dGlvbk9wdGlv",
+            "bnNSB29wdGlvbnMirwEKI05vdGlmeU9uYm9hcmRFbnRpdHlDb21wbGV0ZWRS",
+            "ZXF1ZXN0Eg4KAmlkGAEgASgJUgJpZBIUCgVlbWFpbBgCIAEoCVIFZW1haWwS",
+            "FAoFdmFsdWUYAyABKAlSBXZhbHVlEkwKCGFwcHJvdmFsGAQgASgLMjAuanVt",
+            "cHN0YXJ0LmRvbWFpbi5vbmJvYXJkaW5ncy52YWx1ZXMudjEuQXBwcm92YWxS",
+            "CGFwcHJvdmFsIjAKFEFwcHJvdmVFbnRpdHlSZXF1ZXN0EhgKB2NvbW1lbnQY",
+            "ASABKAlSB2NvbW1lbnQiLwoTUmVqZWN0RW50aXR5UmVxdWVzdBIYCgdjb21t",
+            "ZW50GAEgASgJUgdjb21tZW50IicKD1NldFZhbHVlUmVxdWVzdBIUCgV2YWx1",
+            "ZRgBIAEoCVIFdmFsdWVCiAIKLWNvbS5qdW1wc3RhcnQuZG9tYWluLm9uYm9h",
+            "cmRpbmdzLndvcmtmbG93cy52MUIOV29ya2Zsb3dzUHJvdG9QAaICBEpET1eq",
+            "AilKdW1wc3RhcnQuRG9tYWluLk9uYm9hcmRpbmdzLldvcmtmbG93cy5WMcoC",
+            "KUp1bXBzdGFydFxEb21haW5cT25ib2FyZGluZ3NcV29ya2Zsb3dzXFYx4gI1",
+            "SnVtcHN0YXJ0XERvbWFpblxPbmJvYXJkaW5nc1xXb3JrZmxvd3NcVjFcR1BC",
+            "TWV0YWRhdGHqAi1KdW1wc3RhcnQ6OkRvbWFpbjo6T25ib2FyZGluZ3M6Oldv",
+            "cmtmbG93czo6VjFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Jumpstart.Domain.Onboardings.Values.V1.ValuesReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Jumpstart.Domain.Onboardings.Workflows.V1.OnboardEntityRequest), global::Jumpstart.Domain.Onboardings.Workflows.V1.OnboardEntityRequest.Parser, new[]{ "Options", "Timestamp", "Id", "Value", "DeputyOwnerEmail", "Email" }, new[]{ "Options", "DeputyOwnerEmail", "Email" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Jumpstart.Domain.Onboardings.Workflows.V1.OnboardEntityExecutionOptions), global::Jumpstart.Domain.Onboardings.Workflows.V1.OnboardEntityExecutionOptions.Parser, new[]{ "CompletionTimeoutSeconds", "SkipApproval" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Jumpstart.Domain.Onboardings.Workflows.V1.OnboardEntityExecutionOptions), global::Jumpstart.Domain.Onboardings.Workflows.V1.OnboardEntityExecutionOptions.Parser, new[]{ "ApprovalTimeoutSeconds", "SkipApproval" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Jumpstart.Domain.Onboardings.Workflows.V1.GetEntityOnboardingStateRequest), global::Jumpstart.Domain.Onboardings.Workflows.V1.GetEntityOnboardingStateRequest.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Jumpstart.Domain.Onboardings.Workflows.V1.GetEntityOnboardingStateResponse), global::Jumpstart.Domain.Onboardings.Workflows.V1.GetEntityOnboardingStateResponse.Parser, new[]{ "Id", "Args", "Options", "Approval", "CurrentValue", "ApprovalTimeRemainingSeconds" }, new[]{ "ApprovalTimeRemainingSeconds" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Jumpstart.Domain.Onboardings.Workflows.V1.RegisterCrmEntityRequest), global::Jumpstart.Domain.Onboardings.Workflows.V1.RegisterCrmEntityRequest.Parser, new[]{ "Id", "Value" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Jumpstart.Domain.Onboardings.Workflows.V1.RequestDeputyOwnerApprovalRequest), global::Jumpstart.Domain.Onboardings.Workflows.V1.RequestDeputyOwnerApprovalRequest.Parser, new[]{ "Id", "DeputyOwnerEmail" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Jumpstart.Domain.Onboardings.Workflows.V1.GetOnboardEntityExecutionOptionsRequest), global::Jumpstart.Domain.Onboardings.Workflows.V1.GetOnboardEntityExecutionOptionsRequest.Parser, new[]{ "Options" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Jumpstart.Domain.Onboardings.Workflows.V1.GetOnboardEntityExecutionOptionsRequest), global::Jumpstart.Domain.Onboardings.Workflows.V1.GetOnboardEntityExecutionOptionsRequest.Parser, new[]{ "Args" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Jumpstart.Domain.Onboardings.Workflows.V1.GetOnboardEntityExecutionOptionsResponse), global::Jumpstart.Domain.Onboardings.Workflows.V1.GetOnboardEntityExecutionOptionsResponse.Parser, new[]{ "Options" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Jumpstart.Domain.Onboardings.Workflows.V1.NotifyOnboardEntityCompletedRequest), global::Jumpstart.Domain.Onboardings.Workflows.V1.NotifyOnboardEntityCompletedRequest.Parser, new[]{ "Id", "Email", "Value", "Approval" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Jumpstart.Domain.Onboardings.Workflows.V1.ApproveEntityRequest), global::Jumpstart.Domain.Onboardings.Workflows.V1.ApproveEntityRequest.Parser, new[]{ "Comment" }, null, null, null, null),
@@ -562,7 +562,7 @@ namespace Jumpstart.Domain.Onboardings.Workflows.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public OnboardEntityExecutionOptions(OnboardEntityExecutionOptions other) : this() {
-      completionTimeoutSeconds_ = other.completionTimeoutSeconds_;
+      approvalTimeoutSeconds_ = other.approvalTimeoutSeconds_;
       skipApproval_ = other.skipApproval_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -573,15 +573,15 @@ namespace Jumpstart.Domain.Onboardings.Workflows.V1 {
       return new OnboardEntityExecutionOptions(this);
     }
 
-    /// <summary>Field number for the "completion_timeout_seconds" field.</summary>
-    public const int CompletionTimeoutSecondsFieldNumber = 1;
-    private ulong completionTimeoutSeconds_;
+    /// <summary>Field number for the "approval_timeout_seconds" field.</summary>
+    public const int ApprovalTimeoutSecondsFieldNumber = 1;
+    private ulong approvalTimeoutSeconds_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ulong CompletionTimeoutSeconds {
-      get { return completionTimeoutSeconds_; }
+    public ulong ApprovalTimeoutSeconds {
+      get { return approvalTimeoutSeconds_; }
       set {
-        completionTimeoutSeconds_ = value;
+        approvalTimeoutSeconds_ = value;
       }
     }
 
@@ -612,7 +612,7 @@ namespace Jumpstart.Domain.Onboardings.Workflows.V1 {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (CompletionTimeoutSeconds != other.CompletionTimeoutSeconds) return false;
+      if (ApprovalTimeoutSeconds != other.ApprovalTimeoutSeconds) return false;
       if (SkipApproval != other.SkipApproval) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -621,7 +621,7 @@ namespace Jumpstart.Domain.Onboardings.Workflows.V1 {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (CompletionTimeoutSeconds != 0UL) hash ^= CompletionTimeoutSeconds.GetHashCode();
+      if (ApprovalTimeoutSeconds != 0UL) hash ^= ApprovalTimeoutSeconds.GetHashCode();
       if (SkipApproval != false) hash ^= SkipApproval.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -641,9 +641,9 @@ namespace Jumpstart.Domain.Onboardings.Workflows.V1 {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (CompletionTimeoutSeconds != 0UL) {
+      if (ApprovalTimeoutSeconds != 0UL) {
         output.WriteRawTag(8);
-        output.WriteUInt64(CompletionTimeoutSeconds);
+        output.WriteUInt64(ApprovalTimeoutSeconds);
       }
       if (SkipApproval != false) {
         output.WriteRawTag(16);
@@ -659,9 +659,9 @@ namespace Jumpstart.Domain.Onboardings.Workflows.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (CompletionTimeoutSeconds != 0UL) {
+      if (ApprovalTimeoutSeconds != 0UL) {
         output.WriteRawTag(8);
-        output.WriteUInt64(CompletionTimeoutSeconds);
+        output.WriteUInt64(ApprovalTimeoutSeconds);
       }
       if (SkipApproval != false) {
         output.WriteRawTag(16);
@@ -677,8 +677,8 @@ namespace Jumpstart.Domain.Onboardings.Workflows.V1 {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (CompletionTimeoutSeconds != 0UL) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(CompletionTimeoutSeconds);
+      if (ApprovalTimeoutSeconds != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(ApprovalTimeoutSeconds);
       }
       if (SkipApproval != false) {
         size += 1 + 1;
@@ -695,8 +695,8 @@ namespace Jumpstart.Domain.Onboardings.Workflows.V1 {
       if (other == null) {
         return;
       }
-      if (other.CompletionTimeoutSeconds != 0UL) {
-        CompletionTimeoutSeconds = other.CompletionTimeoutSeconds;
+      if (other.ApprovalTimeoutSeconds != 0UL) {
+        ApprovalTimeoutSeconds = other.ApprovalTimeoutSeconds;
       }
       if (other.SkipApproval != false) {
         SkipApproval = other.SkipApproval;
@@ -721,7 +721,7 @@ namespace Jumpstart.Domain.Onboardings.Workflows.V1 {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            CompletionTimeoutSeconds = input.ReadUInt64();
+            ApprovalTimeoutSeconds = input.ReadUInt64();
             break;
           }
           case 16: {
@@ -748,7 +748,7 @@ namespace Jumpstart.Domain.Onboardings.Workflows.V1 {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            CompletionTimeoutSeconds = input.ReadUInt64();
+            ApprovalTimeoutSeconds = input.ReadUInt64();
             break;
           }
           case 16: {
@@ -1858,7 +1858,7 @@ namespace Jumpstart.Domain.Onboardings.Workflows.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public GetOnboardEntityExecutionOptionsRequest(GetOnboardEntityExecutionOptionsRequest other) : this() {
-      options_ = other.options_ != null ? other.options_.Clone() : null;
+      args_ = other.args_ != null ? other.args_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1868,15 +1868,15 @@ namespace Jumpstart.Domain.Onboardings.Workflows.V1 {
       return new GetOnboardEntityExecutionOptionsRequest(this);
     }
 
-    /// <summary>Field number for the "options" field.</summary>
-    public const int OptionsFieldNumber = 1;
-    private global::Jumpstart.Domain.Onboardings.Workflows.V1.OnboardEntityExecutionOptions options_;
+    /// <summary>Field number for the "args" field.</summary>
+    public const int ArgsFieldNumber = 1;
+    private global::Jumpstart.Domain.Onboardings.Workflows.V1.OnboardEntityRequest args_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Jumpstart.Domain.Onboardings.Workflows.V1.OnboardEntityExecutionOptions Options {
-      get { return options_; }
+    public global::Jumpstart.Domain.Onboardings.Workflows.V1.OnboardEntityRequest Args {
+      get { return args_; }
       set {
-        options_ = value;
+        args_ = value;
       }
     }
 
@@ -1895,7 +1895,7 @@ namespace Jumpstart.Domain.Onboardings.Workflows.V1 {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (!object.Equals(Options, other.Options)) return false;
+      if (!object.Equals(Args, other.Args)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1903,7 +1903,7 @@ namespace Jumpstart.Domain.Onboardings.Workflows.V1 {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (options_ != null) hash ^= Options.GetHashCode();
+      if (args_ != null) hash ^= Args.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1922,9 +1922,9 @@ namespace Jumpstart.Domain.Onboardings.Workflows.V1 {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (options_ != null) {
+      if (args_ != null) {
         output.WriteRawTag(10);
-        output.WriteMessage(Options);
+        output.WriteMessage(Args);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -1936,9 +1936,9 @@ namespace Jumpstart.Domain.Onboardings.Workflows.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (options_ != null) {
+      if (args_ != null) {
         output.WriteRawTag(10);
-        output.WriteMessage(Options);
+        output.WriteMessage(Args);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -1950,8 +1950,8 @@ namespace Jumpstart.Domain.Onboardings.Workflows.V1 {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (options_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Options);
+      if (args_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Args);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1965,11 +1965,11 @@ namespace Jumpstart.Domain.Onboardings.Workflows.V1 {
       if (other == null) {
         return;
       }
-      if (other.options_ != null) {
-        if (options_ == null) {
-          Options = new global::Jumpstart.Domain.Onboardings.Workflows.V1.OnboardEntityExecutionOptions();
+      if (other.args_ != null) {
+        if (args_ == null) {
+          Args = new global::Jumpstart.Domain.Onboardings.Workflows.V1.OnboardEntityRequest();
         }
-        Options.MergeFrom(other.Options);
+        Args.MergeFrom(other.Args);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1991,10 +1991,10 @@ namespace Jumpstart.Domain.Onboardings.Workflows.V1 {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
-            if (options_ == null) {
-              Options = new global::Jumpstart.Domain.Onboardings.Workflows.V1.OnboardEntityExecutionOptions();
+            if (args_ == null) {
+              Args = new global::Jumpstart.Domain.Onboardings.Workflows.V1.OnboardEntityRequest();
             }
-            input.ReadMessage(Options);
+            input.ReadMessage(Args);
             break;
           }
         }
@@ -2017,10 +2017,10 @@ namespace Jumpstart.Domain.Onboardings.Workflows.V1 {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 10: {
-            if (options_ == null) {
-              Options = new global::Jumpstart.Domain.Onboardings.Workflows.V1.OnboardEntityExecutionOptions();
+            if (args_ == null) {
+              Args = new global::Jumpstart.Domain.Onboardings.Workflows.V1.OnboardEntityRequest();
             }
-            input.ReadMessage(Options);
+            input.ReadMessage(Args);
             break;
           }
         }
