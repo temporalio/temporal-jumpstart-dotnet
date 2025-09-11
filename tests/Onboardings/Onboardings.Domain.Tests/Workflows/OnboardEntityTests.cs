@@ -1,19 +1,15 @@
-using Microsoft.Extensions.Logging;
-using Onboardings.Domain.Commands.V1;
-using Onboardings.Domain.Queries.V2;
-using Onboardings.Domain.Workflows;
+using Jumpstart.Domain.Onboardings.Workflows.V1;
 using Onboardings.Domain.Workflows.OnboardEntity;
-using Onboardings.Domain.Workflows.V2;
 using Temporalio.Activities;
 using Temporalio.Api.Enums.V1;
 using Temporalio.Client;
+using Temporalio.Common;
 using Temporalio.Converters;
 using Temporalio.Exceptions;
 using Temporalio.Testing;
 using Temporalio.Worker;
 using Xunit.Abstractions;
-using ProtoErrors = Onboardings.Domain.Values.V1.Errors;
-using IntegrationErrors = Onboardings.Domain.Integrations.Errors;
+using ProtoErrors = Jumpstart.Domain.Onboardings.Values.V1.Errors;
 
 
 namespace Onboardings.Domain.Tests.Workflows;
@@ -28,21 +24,87 @@ public class OnboardEntityTests : TestBase
         await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
         var wid = Guid.NewGuid();
         var emptyValue = "";
-        var args = new OnboardEntityRequest { Id = wid.ToString(), Value = emptyValue, SkipApproval = true, };
+        var args = new OnboardEntityRequest { Id = wid.ToString(), Value = emptyValue, 
+            Options = new OnboardEntityExecutionOptions {SkipApproval = true, }};
+        [Activity]
+        Task<GetOnboardEntityExecutionOptionsResponse> GetOnboardEntityExecutionOptions(
+            GetOnboardEntityExecutionOptionsRequest req)
+        {
+            // this is effectively an echo activity
+            return Task.FromResult(new GetOnboardEntityExecutionOptionsResponse { Options = req.Args.Options, });
+        }
         using var worker = new TemporalWorker(
             env.Client,
-            new TemporalWorkerOptions("test").AddWorkflow<OnboardEntity>());
-
+            new TemporalWorkerOptions("test").AddWorkflow<OnboardEntity>().AddActivity(GetOnboardEntityExecutionOptions));
+        
+        var wfopts = new WorkflowOptions
+        {
+            Id = args.Id,
+            TaskQueue = worker.Options.TaskQueue!,
+            RetryPolicy = new RetryPolicy { MaximumAttempts = 1 },
+        };
+        
+        
         await worker.ExecuteAsync(async () =>
         {
             var e = await Assert.ThrowsAsync<WorkflowFailedException>(async () =>
             {
                 await env.Client.ExecuteWorkflowAsync(
-                    (OnboardEntity wf) => wf.ExecuteAsync(args),
-                    new WorkflowOptions(id: args.Id, taskQueue: worker.Options.TaskQueue!));
+                    (OnboardEntity wf) => wf.ExecuteAsync(args),wfopts);
             });
             var ae = Assert.IsType<ApplicationFailureException>(e.InnerException);
             Assert.Equal(nameof(ProtoErrors.InvalidArguments), ae.ErrorType);
+        });
+    }
+    [Fact]
+    public async Task ExecuteAsync_SimpleRun_GivenValidArgs_TimesOutPerDefaults()
+    {
+        await using var env = await WorkflowEnvironment.StartLocalAsync();
+        var wid = Guid.NewGuid();
+        var args = new OnboardEntityRequest
+        {
+            Id = wid.ToString(), 
+            Value = Guid.NewGuid().ToString(), 
+            Options = new OnboardEntityExecutionOptions {  SkipApproval = false},
+        };
+
+        [Activity]
+        Task<GetOnboardEntityExecutionOptionsResponse> GetOnboardEntityExecutionOptions(
+            GetOnboardEntityExecutionOptionsRequest args)
+        {
+            var result = new GetOnboardEntityExecutionOptionsResponse
+            {
+                Options = new OnboardEntityExecutionOptions
+                {
+                    // this is the total amount of time this wf would run before giving up without an approval
+                    ApprovalTimeoutSeconds = 2,
+                    SkipApproval = false,
+                },
+            };
+            return Task.FromResult(result);
+        }
+       
+        using var worker = new TemporalWorker(
+            env.Client,
+            new TemporalWorkerOptions("test")
+                .AddWorkflow<OnboardEntity>()
+                .AddActivity(GetOnboardEntityExecutionOptions));
+        var wfOpts = new WorkflowOptions
+        {
+            Id = args.Id,
+            TaskQueue = worker.Options.TaskQueue!,
+            RetryPolicy = new RetryPolicy { MaximumAttempts = 1 },
+        };
+        await worker.ExecuteAsync(async () =>
+        {
+            var handle = await env.Client.StartWorkflowAsync<OnboardEntity>(wf => wf.ExecuteAsync(args),wfOpts);
+
+            var e = await Assert.ThrowsAsync<WorkflowFailedException>(async () =>
+            {
+                await handle.GetResultAsync();
+            });
+            var appEx = Assert.IsType<ApplicationFailureException>(e.InnerException);
+            Assert.Equal(nameof(ProtoErrors.OnboardEntityTimedOut), appEx.ErrorType);
         });
     }
 
@@ -52,14 +114,21 @@ public class OnboardEntityTests : TestBase
         await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
         var args = new OnboardEntityRequest
         {
-            Id = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString(), SkipApproval = true,
+            Id = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString(), 
+            Options = new OnboardEntityExecutionOptions{SkipApproval = true},
         };
 
         RegisterCrmEntityRequest requested = null;
 
         var workerOptions = new TemporalWorkerOptions("test");
         workerOptions.AddWorkflow<OnboardEntity>();
-
+        [Activity]
+        Task<GetOnboardEntityExecutionOptionsResponse> GetOnboardEntityExecutionOptions(
+            GetOnboardEntityExecutionOptionsRequest req)
+        {
+            // this is effectively an echo activity
+            return Task.FromResult(new GetOnboardEntityExecutionOptionsResponse { Options = req.Args.Options, });
+        }
         /* There are a number of ways to mock the activity.
          Here is an inline example
          */
@@ -71,7 +140,7 @@ public class OnboardEntityTests : TestBase
         }
 
         workerOptions.AddActivity(RegisterCrmEntity);
-
+        workerOptions.AddActivity(GetOnboardEntityExecutionOptions);
         /* Or here we can create an activity definition */
         var act = [Activity("RegisterCrmEntity")](RegisterCrmEntityRequest req) =>
         {
@@ -84,12 +153,17 @@ public class OnboardEntityTests : TestBase
             env.Client,
             workerOptions
         );
-
+        
+        var wfOpts = new WorkflowOptions
+        {
+            Id = args.Id,
+            TaskQueue = worker.Options.TaskQueue!,
+            RetryPolicy = new RetryPolicy { MaximumAttempts = 1 },
+        };
         await worker.ExecuteAsync(async () =>
         {
             await env.Client.ExecuteWorkflowAsync(
-                (OnboardEntity wf) => wf.ExecuteAsync(args),
-                new WorkflowOptions(id: args.Id, taskQueue: worker.Options.TaskQueue!));
+                (OnboardEntity wf) => wf.ExecuteAsync(args),wfOpts);
         });
         Assert.NotNull(requested);
         Assert.Equal(args.Id, requested.Id);
@@ -101,14 +175,22 @@ public class OnboardEntityTests : TestBase
         await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
         var args = new OnboardEntityRequest
         {
-            Id = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString(), SkipApproval = true,
+            Id = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString(), 
+            Options = new OnboardEntityExecutionOptions{SkipApproval = true},
+
         };
         RegisterCrmEntityRequest requested = null;
 
         var workerOptions = new TemporalWorkerOptions("test");
         workerOptions.LoggerFactory = LoggerFactory;
         workerOptions.AddWorkflow<OnboardEntity>();
-
+        [Activity]
+        Task<GetOnboardEntityExecutionOptionsResponse> GetOnboardEntityExecutionOptions(
+            GetOnboardEntityExecutionOptionsRequest req)
+        {
+            // this is effectively an echo activity
+            return Task.FromResult(new GetOnboardEntityExecutionOptionsResponse { Options = req.Args.Options, });
+        }
         [Activity]
         Task RegisterCrmEntity(RegisterCrmEntityRequest req)
         {
@@ -117,32 +199,35 @@ public class OnboardEntityTests : TestBase
                 Task.FromCanceled(new CancellationToken(true)).Exception);
             throw new ApplicationFailureException(
                 message: "test failure",
-                // providing this seems to override the bubbling up of the ERR_SERVICE_UNRECOVERABLE ErrorType
                 inner: inner,
-                errorType: IntegrationErrors.ErrServiceUnrecoverable,
+                errorType: nameof(ProtoErrors.ServiceUnavailable),
                 nonRetryable: true);
         }
 
         workerOptions.AddActivity(RegisterCrmEntity);
-
+        workerOptions.AddActivity(GetOnboardEntityExecutionOptions);
         using var worker = new TemporalWorker(
             env.Client,
             workerOptions
         );
-
+        var wfOpts = new WorkflowOptions
+        {
+            Id = args.Id,
+            TaskQueue = worker.Options.TaskQueue!,
+            RetryPolicy = new RetryPolicy { MaximumAttempts = 1 },
+        };
         await worker.ExecuteAsync(async () =>
         {
             WorkflowFailedException e = await Assert.ThrowsAsync<WorkflowFailedException>(async () =>
             {
                 await env.Client.ExecuteWorkflowAsync(
-                    (OnboardEntity wf) => wf.ExecuteAsync(args),
-                    new WorkflowOptions(id: args.Id, taskQueue: worker.Options.TaskQueue!));
+                    (OnboardEntity wf) => wf.ExecuteAsync(args),wfOpts);
             });
             // To get to the ErrorType that is NonRetryable, you must walk the `InnerException` from the WorkflowFailed.
             // Notice that the caller must have foreknowledge that it was an Activity that raised this ErrorType.
             var actEx = Assert.IsType<ActivityFailureException>(e.InnerException);
             var appEx = Assert.IsType<ApplicationFailureException>(actEx.InnerException);
-            Assert.Equal(IntegrationErrors.ErrServiceUnrecoverable, appEx.ErrorType);
+            Assert.Equal(nameof(ProtoErrors.ServiceUnavailable), appEx.ErrorType);
 
             // To get to the underlying Exception root cause, you must walk the BaseException .
             var baseEx = Assert.IsType<ApplicationFailureException>(e.GetBaseException());
@@ -159,7 +244,9 @@ public class OnboardEntityTests : TestBase
         await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
         var args = new OnboardEntityRequest
         {
-            Id = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString(), SkipApproval = false,
+            Id = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString(),
+            Options = new OnboardEntityExecutionOptions{SkipApproval = false},
+
         };
 
         RegisterCrmEntityRequest registrationRequestSent = null;
@@ -168,6 +255,13 @@ public class OnboardEntityTests : TestBase
         workerOptions.LoggerFactory = LoggerFactory;
         workerOptions.AddWorkflow<OnboardEntity>();
 
+        [Activity]
+        Task<GetOnboardEntityExecutionOptionsResponse> GetOnboardEntityExecutionOptions(
+            GetOnboardEntityExecutionOptionsRequest req)
+        {
+            // this is effectively an echo activity
+            return Task.FromResult(new GetOnboardEntityExecutionOptionsResponse { Options = req.Args.Options, });
+        }
         [Activity]
         Task RegisterCrmEntity(RegisterCrmEntityRequest req)
         {
@@ -184,16 +278,20 @@ public class OnboardEntityTests : TestBase
 
         workerOptions.AddActivity(RegisterCrmEntity);
         workerOptions.AddActivity(RequestDeputyOwnerApproval);
-
+        workerOptions.AddActivity(GetOnboardEntityExecutionOptions);
         using var worker = new TemporalWorker(
             env.Client,
             workerOptions
         );
-
+        var wfOpts = new WorkflowOptions
+        {
+            Id = args.Id,
+            TaskQueue = worker.Options.TaskQueue!,
+            RetryPolicy = new RetryPolicy { MaximumAttempts = 1 },
+        };
         await worker.ExecuteAsync(async () =>
         {
-            var handle = await env.Client.StartWorkflowAsync<OnboardEntity>(wf => wf.ExecuteAsync(args),
-                new WorkflowOptions(args.Id, worker.Options.TaskQueue!));
+            var handle = await env.Client.StartWorkflowAsync<OnboardEntity>(wf => wf.ExecuteAsync(args),wfOpts);
 
             var e = await Assert.ThrowsAsync<WorkflowFailedException>(async () =>
             {
@@ -215,9 +313,8 @@ public class OnboardEntityTests : TestBase
         {
             Id = Guid.NewGuid().ToString(),
             Value = Guid.NewGuid().ToString(),
-            SkipApproval = false,
             DeputyOwnerEmail = "deputy@dawg.com",
-            CompletionTimeoutSeconds = OnboardEntity.DefaultCompletionTimeoutSeconds,
+            Options = new OnboardEntityExecutionOptions{SkipApproval = false, ApprovalTimeoutSeconds = 86400 },
         };
 
         RegisterCrmEntityRequest? registrationRequestSent = null;
@@ -225,6 +322,13 @@ public class OnboardEntityTests : TestBase
         var workerOptions = new TemporalWorkerOptions("test") { LoggerFactory = LoggerFactory };
         workerOptions.AddWorkflow<OnboardEntity>();
 
+        [Activity]
+        Task<GetOnboardEntityExecutionOptionsResponse> GetOnboardEntityExecutionOptions(
+            GetOnboardEntityExecutionOptionsRequest req)
+        {
+            // this is effectively an echo activity
+            return Task.FromResult(new GetOnboardEntityExecutionOptionsResponse { Options = req.Args.Options, });
+        }
         [Activity]
         Task RegisterCrmEntity(RegisterCrmEntityRequest? req)
         {
@@ -241,16 +345,20 @@ public class OnboardEntityTests : TestBase
 
         workerOptions.AddActivity(RegisterCrmEntity);
         workerOptions.AddActivity(RequestDeputyOwnerApproval);
-
+        workerOptions.AddActivity(GetOnboardEntityExecutionOptions);
         using var worker = new TemporalWorker(
             env.Client,
             workerOptions
         );
-
+        var wfOpts = new WorkflowOptions
+        {
+            Id = args.Id,
+            TaskQueue = worker.Options.TaskQueue!,
+            RetryPolicy = new RetryPolicy { MaximumAttempts = 1 },
+        };
         await worker.ExecuteAsync(async () =>
         {
-            var handle = await env.Client.StartWorkflowAsync<OnboardEntity>(wf => wf.ExecuteAsync(args),
-                new WorkflowOptions(args.Id, worker.Options.TaskQueue!));
+            var handle = await env.Client.StartWorkflowAsync<OnboardEntity>(wf => wf.ExecuteAsync(args), wfOpts);
 
             var e = await Assert.ThrowsAsync<WorkflowContinuedAsNewException>(async () =>
             {
@@ -284,7 +392,7 @@ public class OnboardEntityTests : TestBase
         {
             Id = Guid.NewGuid().ToString(),
             Value = Guid.NewGuid().ToString(),
-            CompletionTimeoutSeconds = (ulong)TimeSpan.FromSeconds(3).Seconds,
+            Options = new OnboardEntityExecutionOptions{ApprovalTimeoutSeconds =  (ulong)TimeSpan.FromSeconds(3).Seconds},
         };
 
 
@@ -293,6 +401,13 @@ public class OnboardEntityTests : TestBase
         var workerOptions = new TemporalWorkerOptions("test") { LoggerFactory = LoggerFactory };
         workerOptions.AddWorkflow<OnboardEntity>();
 
+        [Activity]
+        Task<GetOnboardEntityExecutionOptionsResponse> GetOnboardEntityExecutionOptions(
+            GetOnboardEntityExecutionOptionsRequest req)
+        {
+            // this is effectively an echo activity
+            return Task.FromResult(new GetOnboardEntityExecutionOptionsResponse { Options = req.Args.Options, });
+        }
         [Activity]
         Task RegisterCrmEntity(RegisterCrmEntityRequest req)
         {
@@ -309,7 +424,7 @@ public class OnboardEntityTests : TestBase
 
         workerOptions.AddActivity(RegisterCrmEntity);
         workerOptions.AddActivity(RequestDeputyOwnerApproval);
-
+        workerOptions.AddActivity(GetOnboardEntityExecutionOptions);
         using var worker = new TemporalWorker(
             env.Client,
             workerOptions
@@ -317,8 +432,12 @@ public class OnboardEntityTests : TestBase
 
         await worker.ExecuteAsync(async () =>
         {
-            var handle = await env.Client.StartWorkflowAsync<OnboardEntity>(wf => wf.ExecuteAsync(args),
-                new WorkflowOptions(args.Id, worker.Options.TaskQueue!));
+            var wopts = new WorkflowOptions { 
+                Id = args.Id, 
+                TaskQueue = worker.Options.TaskQueue!,
+                // RetryPolicy = new RetryPolicy{MaximumAttempts = 1}
+                };
+            var handle = await env.Client.StartWorkflowAsync<OnboardEntity>(wf => wf.ExecuteAsync(args),wopts);
             await env.DelayAsync(TimeSpan.FromSeconds(2));
             await handle.SignalAsync(wf => wf.ApproveAsync(new ApproveEntityRequest { Comment = "beep" }));
             await handle.GetResultAsync(followRuns: false);
@@ -335,7 +454,8 @@ public class OnboardEntityTests : TestBase
         {
             Id = Guid.NewGuid().ToString(),
             Value = Guid.NewGuid().ToString(),
-            CompletionTimeoutSeconds = (ulong)TimeSpan.FromSeconds(3).Seconds,
+            
+            Options = new OnboardEntityExecutionOptions { ApprovalTimeoutSeconds = (ulong)TimeSpan.FromSeconds(3).Seconds},
         };
 
         RegisterCrmEntityRequest registrationRequestSent = null;
@@ -343,6 +463,13 @@ public class OnboardEntityTests : TestBase
         var workerOptions = new TemporalWorkerOptions("test") { LoggerFactory = LoggerFactory };
         workerOptions.AddWorkflow<OnboardEntity>();
 
+        [Activity]
+        Task<GetOnboardEntityExecutionOptionsResponse> GetOnboardEntityExecutionOptions(
+            GetOnboardEntityExecutionOptionsRequest req)
+        {
+            // this is effectively an echo activity
+            return Task.FromResult(new GetOnboardEntityExecutionOptionsResponse { Options = req.Args.Options, });
+        }
         [Activity]
         Task RegisterCrmEntity(RegisterCrmEntityRequest req)
         {
@@ -359,16 +486,21 @@ public class OnboardEntityTests : TestBase
 
         workerOptions.AddActivity(RegisterCrmEntity);
         workerOptions.AddActivity(RequestDeputyOwnerApproval);
+        workerOptions.AddActivity(GetOnboardEntityExecutionOptions);
 
         using var worker = new TemporalWorker(
             env.Client,
             workerOptions
         );
-
+        var wfOpts = new WorkflowOptions
+        {
+            Id = args.Id,
+            TaskQueue = worker.Options.TaskQueue!,
+            RetryPolicy = new RetryPolicy{MaximumAttempts = 1},
+        };
         await worker.ExecuteAsync(async () =>
         {
-            var handle = await env.Client.StartWorkflowAsync<OnboardEntity>(wf => wf.ExecuteAsync(args),
-                new WorkflowOptions(args.Id, worker.Options.TaskQueue!));
+            var handle = await env.Client.StartWorkflowAsync<OnboardEntity>(wf => wf.ExecuteAsync(args), wfOpts);
             await env.DelayAsync(TimeSpan.FromSeconds(2));
             await handle.SignalAsync(wf => wf.RejectAsync(new RejectEntityRequest { Comment = "beep" }));
             await handle.GetResultAsync(followRuns: false);
@@ -385,7 +517,8 @@ public class OnboardEntityTests : TestBase
         {
             Id = Guid.NewGuid().ToString(),
             Value = Guid.NewGuid().ToString(),
-            CompletionTimeoutSeconds = (ulong)TimeSpan.FromSeconds(5).Seconds,
+            Options = new OnboardEntityExecutionOptions { ApprovalTimeoutSeconds = (ulong)TimeSpan.FromSeconds(5).Seconds},
+
         };
 
 
@@ -394,6 +527,13 @@ public class OnboardEntityTests : TestBase
         var workerOptions = new TemporalWorkerOptions("test") { LoggerFactory = LoggerFactory };
         workerOptions.AddWorkflow<OnboardEntity>();
 
+        [Activity]
+        Task<GetOnboardEntityExecutionOptionsResponse> GetOnboardEntityExecutionOptions(
+            GetOnboardEntityExecutionOptionsRequest req)
+        {
+            // this is effectively an echo activity
+            return Task.FromResult(new GetOnboardEntityExecutionOptionsResponse { Options = req.Args.Options, });
+        }
         [Activity]
         Task RegisterCrmEntity(RegisterCrmEntityRequest req)
         {
@@ -410,6 +550,7 @@ public class OnboardEntityTests : TestBase
 
         workerOptions.AddActivity(RegisterCrmEntity);
         workerOptions.AddActivity(RequestDeputyOwnerApproval);
+        workerOptions.AddActivity(GetOnboardEntityExecutionOptions);
 
         using var worker = new TemporalWorker(
             env.Client,
@@ -443,14 +584,25 @@ public class OnboardEntityTests : TestBase
         {
             Id = Guid.NewGuid().ToString(),
             Value = Guid.NewGuid().ToString(),
-            CompletionTimeoutSeconds = (ulong)TimeSpan.FromSeconds(20).Seconds,
-            SkipApproval = false,
+            Options = new OnboardEntityExecutionOptions
+            {
+                SkipApproval = false,
+                ApprovalTimeoutSeconds = (ulong)TimeSpan.FromSeconds(20).Seconds
+            },
+
         };
 
         RegisterCrmEntityRequest registrationRequestSent = null;
         var workerOptions = new TemporalWorkerOptions("test") { LoggerFactory = LoggerFactory };
         workerOptions.AddWorkflow<OnboardEntity>();
 
+        [Activity]
+        Task<GetOnboardEntityExecutionOptionsResponse> GetOnboardEntityExecutionOptions(
+            GetOnboardEntityExecutionOptionsRequest req)
+        {
+            // this is effectively an echo activity
+            return Task.FromResult(new GetOnboardEntityExecutionOptionsResponse { Options = req.Args.Options, });
+        }
         [Activity]
         Task RegisterCrmEntity(RegisterCrmEntityRequest req)
         {
@@ -469,6 +621,7 @@ public class OnboardEntityTests : TestBase
 
         workerOptions.AddActivity(RegisterCrmEntity);
         workerOptions.AddActivity(RequestDeputyOwnerApproval);
+        workerOptions.AddActivity(GetOnboardEntityExecutionOptions);
 
         using var worker = new TemporalWorker(
             env.Client,

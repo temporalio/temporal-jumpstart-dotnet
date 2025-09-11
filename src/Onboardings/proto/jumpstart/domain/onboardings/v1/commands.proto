@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package jumpstart.domain.onboardings.commands.v1;
+
+message SomeApiWriteRequest {
+  string id = 1;
+}
+message SomeApiWriteResponse {}

@@ -1,6 +1,5 @@
-using Onboardings.Domain.Commands.V1;
-using Onboardings.Domain.Queries.V2;
-using Onboardings.Domain.Workflows.V2;
+using Jumpstart.Domain.Onboardings.Queries.V1;
+using Jumpstart.Domain.Onboardings.Workflows.V1;
 
 namespace Onboardings.Domain.Workflows.OnboardEntity;
 
@@ -26,4 +25,5 @@ public interface IOnboardEntity
     Task RejectAsync(RejectEntityRequest rejectEntityRequest);
     Task<GetEntityOnboardingStateResponse> SetValueAsync(SetValueRequest cmd);
     GetEntityOnboardingStateResponse GetEntityOnboardingStateAsync(GetEntityOnboardingStateRequest q);
+
 }

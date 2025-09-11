@@ -1,0 +1,18 @@
+syntax = "proto3";
+import "jumpstart/domain/onboardings/v1/values.proto";
+package jumpstart.api.onboardings.v1;
+
+message ApprovalsPut {
+  string id = 1;
+  jumpstart.domain.onboardings.values.v1.Approval approval = 2;
+}
+message OnboardingsPut {
+  string value = 1;
+  optional string deputyOwnerEmail = 2;
+  optional jumpstart.domain.onboardings.values.v1.Approval approval = 3;
+}
+message OnboardingsGet {
+  string id = 1;
+  string current_value = 2;
+  jumpstart.domain.onboardings.values.v1.Approval approval = 3;
+}

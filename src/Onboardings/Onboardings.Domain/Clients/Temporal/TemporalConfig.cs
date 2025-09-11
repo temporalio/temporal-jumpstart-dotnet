@@ -21,6 +21,12 @@ public record WorkerConfig
     public required CacheConfig Cache { get; init; } = new();
 }
 
+public record MetricsConfig
+{
+    public PrometheusConfig? Prometheus { get; init; } 
+}
+public record PrometheusConfig(string? BindAddress);
+
 public record CapacityConfig(
     int MaxConcurrentWorkflowTaskPollers = Defaults.CapacityMaxConcurrentWorkflowTaskPollers,
     int MaxConcurrentWorkflowTaskExecutors = Defaults.CapacityMaxConcurrentWorkflowTaskExecutors,
@@ -45,11 +51,16 @@ public record TemporalConfig
     public TemporalConfig()
     {
     }
-    public TemporalConfig(WorkerConfig Worker, ConnectionConfig Connection)
+    public TemporalConfig(
+        WorkerConfig Worker, 
+        ConnectionConfig Connection,
+        MetricsConfig? Metrics = null)
     {
         this.Worker = Worker;
         this.Connection = Connection;
+        this.Metrics = Metrics;
     }
+    public MetricsConfig? Metrics { get; init; }
 
     public WorkerConfig Worker { get; init; }
     public ConnectionConfig Connection { get; init; }

@@ -1,8 +1,0 @@
-syntax = "proto3";
-import "snailforce/api/v1/message.proto";
-
-package snailforce.api.v1;
-
-service SnailforceService {
-  rpc Register(v1.RegisterRequest) returns (v1.RegisterResponse);
-}

@@ -1,7 +1,9 @@
 using Onboardings.Domain.Clients;
 using Onboardings.Domain.Clients.Crm;
-using Onboardings.Domain.Commands.V1;
-using Onboardings.Domain.Integrations;
+using Jumpstart.Domain.Onboardings.Commands.V1;
+using Jumpstart.Domain.Onboardings.Workflows.V1;
+using Onboardings.Domain.Workflows.OnboardEntity;
+using Onboardings.Domain.Workflows.OnboardEntity.Activities;
 using Temporalio.Testing;
 using Xunit.Abstractions;
 
@@ -50,7 +52,7 @@ public class RegisterCrmEntityTests(ITestOutputHelper output) : TestBase(output)
         var args = new RegisterCrmEntityRequest{
             Id = Guid.NewGuid().ToString(),
             Value = Guid.NewGuid().ToString()};
-        var handlers = new Handlers(crmClient);
+        var handlers = new RegistrationActivities(crmClient);
         ActivityEnvironment env = new ActivityEnvironment()
         {
             Logger = LoggerFactory.CreateLogger("test"),
@@ -71,7 +73,7 @@ public class RegisterCrmEntityTests(ITestOutputHelper output) : TestBase(output)
 
         var crmClient = new MockCrmClient(null);
         crmClient.PreviouslyRegisteredEntities.Add(args.Id, args.Value);
-        var handlers = new Handlers(crmClient);
+        var handlers = new RegistrationActivities(crmClient);
         ActivityEnvironment env = new ActivityEnvironment()
         {
             Logger = LoggerFactory.CreateLogger("test"),

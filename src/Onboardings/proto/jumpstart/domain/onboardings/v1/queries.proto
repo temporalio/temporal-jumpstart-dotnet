@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package jumpstart.domain.onboardings.queries.v1;
+
+
+message SomeApiReadRequest {
+  string id = 1;
+}
+message SomeApiReadResponse {}

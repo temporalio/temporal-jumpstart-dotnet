@@ -1,17 +1,15 @@
 using System.Diagnostics;
 using System.Linq.Expressions;
+using Jumpstart.Api.Onboardings.V1;
+using Jumpstart.Domain.Onboardings.Queries.V1;
+using Jumpstart.Domain.Onboardings.Values.V1;
+using Jumpstart.Domain.Onboardings.Workflows.V1;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Onboardings.Api.Messages;
-using Onboardings.Api.V1;
+using Onboardings.Api.Attributes;
 using Onboardings.Domain.Clients.Temporal;
-using Onboardings.Domain.Commands.V1;
-using Onboardings.Domain.Queries.V2;
-using Onboardings.Domain.Values.V1;
-using Onboardings.Domain.Workflows;
 using Onboardings.Domain.Workflows.OnboardEntity;
-using Onboardings.Domain.Workflows.V2;
 using Temporalio.Api.Enums.V1;
 using Temporalio.Client;
 using Temporalio.Converters;
@@ -30,12 +28,18 @@ public class OnboardingsControllerV2(
     private readonly ILogger _logger = logger.CreateLogger<OnboardingsControllerV2>();
 
     [HttpPut("{id}")]
+    [AddHeaderParameter(Name = "x-user-id", Required = true)]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> OnboardEntityAsync(string id, OnboardingsPut req)
+    public async Task<IActionResult> OnboardEntityAsync(
+        string id, 
+        OnboardingsPut req)
     {
         var temporalClient = httpContextAccessor.HttpContext?.Features.GetRequiredFeature<ITemporalClient>();
-
+        if (req.Approval == null)
+        {
+            req.Approval = new Approval { Status = ApprovalStatus.Pending, };
+        }
         if (req.Approval.Status.Equals(ApprovalStatus.Pending))
         {
             return await StartWorkflow(id, req, temporalClient);

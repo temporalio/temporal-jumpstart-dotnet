@@ -1,6 +1,5 @@
-using Onboardings.Domain.Commands.V1;
+using Jumpstart.Domain.Onboardings.Workflows.V1;
 using Onboardings.Domain.Workflows.OnboardEntity;
-using Onboardings.Domain.Workflows.V2;
 using Temporalio.Activities;
 using Temporalio.Client;
 using Temporalio.Common;
@@ -24,7 +23,8 @@ public class OnboardEntityReplayTests(ITestOutputHelper output, ITestOutputHelpe
         await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
         var args = new OnboardEntityRequest
         {
-            Id = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString(), SkipApproval = true,
+            Id = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString(),
+            Options = new OnboardEntityExecutionOptions { SkipApproval = true},
         };
 
         RegisterCrmEntityRequest requested = null;
@@ -81,7 +81,7 @@ public class OnboardEntityReplayTests(ITestOutputHelper output, ITestOutputHelpe
         var args = new OnboardEntityRequest
         {
             Id = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString(), 
-            SkipApproval = true,
+            Options = new OnboardEntityExecutionOptions { SkipApproval = true},
         };
 
         RegisterCrmEntityRequest requested = null;
@@ -141,7 +141,7 @@ public class OnboardEntityReplayTests(ITestOutputHelper output, ITestOutputHelpe
         var args = new OnboardEntityRequest
         {
             Id = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString(), 
-            SkipApproval = true,
+            Options = new OnboardEntityExecutionOptions{ SkipApproval = true },
         };
 
         RegisterCrmEntityRequest requested = null;
