@@ -3,9 +3,13 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Onboardings.Api.Attributes;
 using Onboardings.Api.Middleware;
 using Onboardings.Domain.Clients.Temporal;
+using Onboardings.Domain.Workflows;
 using Temporalio.Client;
+using Temporalio.Client.Interceptors;
+using Temporalio.Converters;
 
 namespace Onboardings.Api;
 
@@ -27,8 +31,22 @@ public class Startup
         services.AddOptions<TemporalConfig>().BindConfiguration(temporalConfigSection);
         services.AddHttpContextAccessor();
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
-        services.AddTemporalClient(o => { o.ConfigureClient(temporalConfig); }).Configure<ITemporalClient>(c =>
+        services.AddSwaggerGen(c =>
+        {
+            c.OperationFilter<AddHeaderParameterFilter>();
+        });
+        services.AddTemporalClient(o =>
+        {
+            o.ConfigureClient(temporalConfig);
+            o.Interceptors =
+            [
+                new ContextPropagationInterceptor<Identity>(
+                    IdentityContext.User,
+                    DataConverter.Default.PayloadConverter),
+                new ApplicationContextInterceptor(),
+            ];
+
+        }).Configure<ITemporalClient>(c =>
         {
             // connect when container is built
             c.Connection.ConnectAsync();

@@ -4,9 +4,9 @@ using Onboardings.Domain.Clients.Email;
 using Onboardings.Domain.Clients.Temporal;
 using Onboardings.Domain.Workflows;
 using Onboardings.Domain.Workflows.OnboardEntity;
+using Onboardings.Domain.Workflows.OnboardEntity.Activities;
 using Temporalio.Extensions.Hosting;
-using IntegrationsHandlers = Onboardings.Domain.Integrations.Handlers;
-using NotificationHandlers = Onboardings.Domain.Notifications.Handlers;
+
 namespace Onboardings.Workers
 {
     public class Program
@@ -35,14 +35,12 @@ namespace Onboardings.Workers
             builder.Services.AddSingleton<IEmailClient, InMemoryEmailClient>();
             
             // configure our Worker
-            builder.Services.AddHostedTemporalWorker(
-                temporalConfig.Worker.TaskQueue).
-                ConfigureOptions(opt =>
-            {
-                opt.ConfigureService(temporalConfig);
-            })
-                .AddScopedActivities<IntegrationsHandlers>()
-                .AddScopedActivities<NotificationHandlers>()
+
+            builder.Services.AddHostedTemporalWorker(temporalConfig.Worker.TaskQueue)
+                .ConfigureOptions(o => { o.ConfigureService(temporalConfig); })
+                .AddScopedActivities<RegistrationActivities>()
+                .AddScopedActivities<NotificationActivities>()
+                .AddScopedActivities<OnboardEntityActivities>()
                 .AddWorkflow<OnboardEntity>()
                 .AddWorkflow<Ping>();
 

@@ -12,8 +12,28 @@ public static class TemporalExtensions
         TemporalConfig cfg)
     {
         opts ??= new TemporalClientConnectOptions();
-
+        
         Debug.Assert(cfg.Connection != null, "Connection is required");
+        
+        TemporalRuntimeOptions? runtimeOpts = null;
+        
+        if (cfg.Metrics != null && cfg.Metrics.Prometheus != null && cfg.Metrics.Prometheus.BindAddress != null)
+        {
+            runtimeOpts = new TemporalRuntimeOptions();
+            runtimeOpts.Telemetry = new TelemetryOptions
+            {
+                Metrics = new MetricsOptions
+                {
+                    Prometheus = new PrometheusOptions(cfg.Metrics.Prometheus.BindAddress),
+                }
+            };
+        }
+
+        if (runtimeOpts != null)
+        {
+            opts.Runtime = new TemporalRuntime(runtimeOpts);
+        }
+        
         opts.Namespace = cfg.Connection.Namespace;
         opts.TargetHost = cfg.Connection.Target;
 
@@ -41,7 +61,6 @@ public static class TemporalExtensions
     // ReSharper disable once MemberCanBePrivate.Global
     public static void ConfigureWorker(this TemporalWorkerOptions opts, TemporalConfig cfg)
     {
-        opts.UseWorkerVersioning = false;
         // rate limits
         opts.MaxTaskQueueActivitiesPerSecond = cfg.Worker.RateLimits.MaxTaskQueueActivitiesPerSecond;
         opts.MaxActivitiesPerSecond = cfg.Worker.RateLimits.MaxWorkerActivitiesPerSecond;
@@ -52,7 +71,7 @@ public static class TemporalExtensions
         opts.MaxConcurrentWorkflowTasks = cfg.Worker.Capacity.MaxConcurrentWorkflowTaskExecutors;
 
         // pollers
-        opts.MaxConcurrentActivityTaskPolls = cfg.Worker.Capacity.MaxConcurrentWorkflowTaskPollers;
+        opts.MaxConcurrentWorkflowTaskPolls = cfg.Worker.Capacity.MaxConcurrentWorkflowTaskPollers;
         opts.MaxConcurrentActivityTaskPolls = cfg.Worker.Capacity.MaxConcurrentActivityTaskPollers;
 
         opts.MaxCachedWorkflows = cfg.Worker.Cache.MaxInstances;

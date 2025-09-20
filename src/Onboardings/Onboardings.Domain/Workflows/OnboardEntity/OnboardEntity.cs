@@ -1,14 +1,14 @@
+using System.ComponentModel;
+using Jumpstart.Domain.Onboardings.Queries.V1;
+using Jumpstart.Domain.Onboardings.Values.V1;
+using Jumpstart.Domain.Onboardings.Workflows.V1;
 using Microsoft.Extensions.Logging;
-using Onboardings.Domain.Commands.V1;
-using Onboardings.Domain.Integrations;
-using Onboardings.Domain.Queries.V2;
-using Onboardings.Domain.Values.V1;
-using Onboardings.Domain.Workflows.V2;
+using Onboardings.Domain.Workflows.OnboardEntity.Activities;
 using Temporalio.Api.Enums.V1;
-using Temporalio.Common;
 using Temporalio.Exceptions;
 using Temporalio.Workflows;
-using NotificationHandlers = Onboardings.Domain.Notifications.Handlers;
+using RetryPolicy = Temporalio.Common.RetryPolicy;
+
 namespace Onboardings.Domain.Workflows.OnboardEntity;
 
 
@@ -17,40 +17,50 @@ namespace Onboardings.Domain.Workflows.OnboardEntity;
 // ReSharper disable once ClassNeverInstantiated.Global
 public class OnboardEntity : IOnboardEntity
 {
-    private GetEntityOnboardingStateResponse _state;
-    public static ulong DefaultCompletionTimeoutSeconds =  7 * 86400;
     
-    [WorkflowRun]
-    public async Task ExecuteAsync(OnboardEntityRequest args)
+    private GetEntityOnboardingStateResponse _state;
+    public static string EnvironmentKeyDefaultApprovalTimeoutSeconds =  "ONBOARD_ENVIRONMENT_APPROVAL_TIMEOUT_SECONDS";
+
+    // Since Signals and Updates could be run before the `_state` it initialized 
+    // (the WorkflowRun method has not been invoked yet) we want to assign the
+    // _state to zero-value in the WorkflowInit to avoid Null reference exceptions.
+    // See this doc for more details: https://docs.temporal.io/handling-messages#workflow-initializers
+    [WorkflowInit]
+    public OnboardEntity(OnboardEntityRequest args)
     {
-        args = AssertValidRequest(args);
+        var opts = args.Options ?? new OnboardEntityExecutionOptions();
         _state = new GetEntityOnboardingStateResponse
         {
             Args = args,
             Id = args.Id,
             CurrentValue = args.Value,
+            Options = opts,
             Approval = new Approval
             {
-                Status = args.SkipApproval ? ApprovalStatus.Approved : ApprovalStatus.Pending
+                Status = opts.SkipApproval ? ApprovalStatus.Approved : ApprovalStatus.Pending
             }
-        };
-      
-
-    var logger = Workflow.Logger;
+        };   
+    }
+    
+    [WorkflowRun]
+    public async Task ExecuteAsync(OnboardEntityRequest args)
+    {
+        var logger = Workflow.Logger;
         logger.LogInformation($"onboarding entity with runid {Workflow.Info.RunId}");
+
+        // Right away, we evaluate input arguments _inside a LocalActivity_ to determine the workflow execution options.
+        // Prefer interacting with environment or other config values inside an Activity instead of directly in a Workflow to avoid
+        // NonDeterminism errors that can be caused by changing configuration on executions in progress.
+        var configuredOpts =  await Workflow.ExecuteLocalActivityAsync((OnboardEntityActivities act) =>
+            act.GetOnboardEntityExecutionOptions(new GetOnboardEntityExecutionOptionsRequest { Args = args, }),  new LocalActivityOptions { StartToCloseTimeout = TimeSpan.FromSeconds(15) });
+        
+        _state.Options = configuredOpts.Options;
+        
+        // Validate our inputs now
         AssertValidRequest(args);
-
-        var opts = new ActivityOptions {
-            StartToCloseTimeout = TimeSpan.FromSeconds(5),
-            // Targeting a specific TaskQueue for Activities is useful if you have hosts that run expensive hardware, 
-            // need rate limiting provided by the Temporal service, or access to resources at those hosts in isolation.
-            // Prefer using TaskQueue assignment for strategic reasons; that is, split things up when you really need it.
-            // The TaskQueue assignment done here is redundant since by default Activities will be executed that are subscribed
-            // to the TaskQueue this Workflow execution is using. 
-            TaskQueue = Workflow.Info.TaskQueue
-        };
-
-        if (!args.SkipApproval)
+        
+        
+        if (!_state.Options.SkipApproval)
         {
             await AwaitApproval(args);
         }
@@ -68,9 +78,17 @@ public class OnboardEntity : IOnboardEntity
              // Now that we have implemented the Activity, though, we will replace it with the strongly typed invocation.
                 await Workflow.ExecuteActivityAsync("RegisterCrmEntity", new []{new RegisterCrmEntityRequest(args.Id, args.Value)}, opts);
             */
-            await Workflow.ExecuteActivityAsync((Handlers act) =>
+            await Workflow.ExecuteActivityAsync((RegistrationActivities act) =>
                     act.RegisterCrmEntity(new RegisterCrmEntityRequest { Id = args.Id, Value=args.Value}),
-                opts);
+                new ActivityOptions {
+                    StartToCloseTimeout = TimeSpan.FromSeconds(5),
+                    // Targeting a specific TaskQueue for Activities is useful if you have hosts that run expensive hardware, 
+                    // need rate limiting provided by the Temporal service, or access to resources at those hosts in isolation.
+                    // Prefer using TaskQueue assignment for strategic reasons; that is, split things up when you really need it.
+                    // The TaskQueue assignment done here is redundant since by default Activities will be executed that are subscribed
+                    // to the TaskQueue this Workflow execution is using. 
+                    TaskQueue = Workflow.Info.TaskQueue
+                });
         }
         catch (ActivityFailureException e)
         {
@@ -89,29 +107,27 @@ public class OnboardEntity : IOnboardEntity
     private async Task AwaitApproval(OnboardEntityRequest args)
     {
         var logger = Workflow.Logger;
-        var waitApprovalSecs = args.CompletionTimeoutSeconds;
-        if (args.HasDeputyOwnerEmail)
-        {
-            // We lean into integer division here to be unconcerned about
-            // determinism issues. Note that if we did this with a float/double
-            // we could run into a problem with hardware results and violate the determinism
-            // requirement for our Timer.
-            waitApprovalSecs = args.CompletionTimeoutSeconds / 2;
-        }
-        logger.LogInformation($"Waiting {waitApprovalSecs} seconds for approval");
+        
+        logger.LogInformation($"Waiting {_state.Options.ApprovalTimeoutSeconds} seconds for approval");
 
         // this blocks until we flip the `ApprovalStatus` bit on our state object
         var conditionMet =
-            await Workflow.WaitConditionAsync(() => !_state.Approval.Status.Equals(ApprovalStatus.Pending), TimeSpan.FromSeconds(waitApprovalSecs));
+            await Workflow.WaitConditionWithOptionsAsync(
+                new WaitConditionOptions
+                {
+                    ConditionCheck = () => !_state.Approval.Status.Equals(ApprovalStatus.Pending),
+                    Timeout = TimeSpan.FromSeconds(_state.Options.ApprovalTimeoutSeconds),
+                    TimeoutSummary = "AwaitApproval",
+                });
         if (!conditionMet)
         {
             logger.LogInformation("entered failure to receive approval");
             if (!args.HasDeputyOwnerEmail)
             {
-                var message = $"Onboarding {args.Id} failed to be approved in {args.CompletionTimeoutSeconds} seconds.";
+                var message = $"Onboarding {args.Id} failed to be approved in {_state.Options.ApprovalTimeoutSeconds} seconds.";
                 logger.LogError(message);
                 // We never received approval from Deputy or primary owners, so we just fail the workflow
-                throw new ApplicationFailureException(message, nameof(Values.V1.Errors.OnboardEntityTimedOut));
+                throw new ApplicationFailureException(message, nameof(Errors.OnboardEntityTimedOut));
             }
               
             // Since we are delivering an message, we want to restrict the number of retry attempts we make 
@@ -121,26 +137,32 @@ public class OnboardEntity : IOnboardEntity
                     StartToCloseTimeout = TimeSpan.FromSeconds(60),
                     RetryPolicy = new RetryPolicy() { MaximumAttempts = 2, }
                 };
-            await Workflow.ExecuteActivityAsync((NotificationHandlers act) =>
+            await Workflow.ExecuteActivityAsync((Activities.NotificationActivities act) =>
                     act.RequestDeputyOwnerApproval(
                         new RequestDeputyOwnerApprovalRequest { Id=args.Id, DeputyOwnerEmail = args.DeputyOwnerEmail! }),
                 notificationOptions);
 
             // Now that we have notified the `DeputyOwner` that we need approval we can resume our wait for approval.
-            // Let's just recursively call our Workflow without the DeputyOwnerEmail specified and with the balance of our approval period.
+            // Let's just recursively call our Workflow without the DeputyOwnerEmail specified.
             var newArgs = new OnboardEntityRequest {
                 Id = args.Id,
                 Value = _state.CurrentValue,
                 // DeputyOwnerEmail = null,
-                CompletionTimeoutSeconds = args.CompletionTimeoutSeconds - waitApprovalSecs,
+                Options = new OnboardEntityExecutionOptions{ 
+                    ApprovalTimeoutSeconds = _state.Options.ApprovalTimeoutSeconds
+                },
                 Email = args.Email,
             };
             throw Workflow.CreateContinueAsNewException<OnboardEntity>(wf => wf.ExecuteAsync(newArgs),
                 new ContinueAsNewOptions() { TaskQueue = Workflow.Info.TaskQueue, });
         }
+        
     }
 
-    private static OnboardEntityRequest AssertValidRequest(OnboardEntityRequest args)
+    // AssertValidRequest
+    // Validates arguments for cases where an ApplicationFailure should result as a result of 
+    // bad args. 
+    private static void AssertValidRequest(OnboardEntityRequest args)
     {
         if (string.IsNullOrEmpty(args.Id) || string.IsNullOrEmpty(args.Value))
             /*
@@ -149,10 +171,10 @@ public class OnboardEntity : IOnboardEntity
              * We throw an ApplicationFailureException here which would ultimately result in a `WorkflowFailedException`.
              * This is a common way to fail a Workflow which will never succeed due to bad arguments or some other invariant.
              *
-             * It is common to use ApplicationFailure for business failures, but these should be considered distinct from an intermittent failure such as
-             * a bug in the code or some dependency which is temporarily unavailable. Temporal can often recover from these kinds of intermittent failures
-             * with a redeployment, downstream service correction, etc. These intermittent failures would typically result in an Exception NOT descended from
-             * TemporalFailure and would therefore NOT fail the Workflow Execution.
+             * It is common to use ApplicationFailure for business failures, but these should be considered distinct from a transient errors such as
+             * a bug in the code or some dependency which is temporarily unavailable. Temporal can often recover from these kinds of transient errors
+             * with a redeployment, downstream service correction, etc.
+             * These transient failures would typically result in an Exception NOT descended from TemporalFailure and would therefore NOT fail the Workflow Execution.
              *
              * If you have explicit business metrics setup to monitor failed Workflows, you could alternatively return a "Status" result with the business failure
              * and allow the Workflow Execution to "Complete" without failure.
@@ -160,23 +182,13 @@ public class OnboardEntity : IOnboardEntity
              * Note that `WorkflowFailedException` will count towards the `workflow_failed` SDK Metric (https://docs.temporal.io/references/sdk-metrics#workflow_failed).
              */
         {
-            throw new ApplicationFailureException("OnboardEntity.Id and OnboardEntity.Value is required", nameof(Values.V1.Errors.InvalidArguments));
+            throw new ApplicationFailureException("OnboardEntity.Id and OnboardEntity.Value is required", nameof(Errors.InvalidArguments));
         }
 
-        if (args is { SkipApproval: true, HasDeputyOwnerEmail: true })
+        if (args is { Options.SkipApproval: true, HasDeputyOwnerEmail: true })
         {
-            throw new ApplicationFailureException("Either skip approval or provide a Deputy Owner email, not both.",nameof(Values.V1.Errors.InvalidArguments));
+            throw new ApplicationFailureException("Either skip approval or provide a Deputy Owner email, not both.",nameof(Errors.InvalidArguments));
         }
-        if(!string.IsNullOrEmpty(args.DeputyOwnerEmail) && (TimeSpan.FromSeconds(args.CompletionTimeoutSeconds) < TimeSpan.FromDays(4)))
-        {
-            throw new ApplicationFailureException("Give at least four days to receive approval",nameof(Values.V1.Errors.InvalidArguments));
-        }
-        if (args.CompletionTimeoutSeconds < 1)
-        {
-            args.CompletionTimeoutSeconds = DefaultCompletionTimeoutSeconds;
-        }
-        
-        return args;
     }
 
     [WorkflowSignal]
@@ -217,4 +229,5 @@ public class OnboardEntity : IOnboardEntity
     {
         return _state;
     }
+    
 }

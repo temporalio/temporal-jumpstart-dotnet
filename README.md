@@ -1,6 +1,6 @@
 # temporal-jumpstart-dotnet
 Jumpstart workshop for dotNet
 
-## Curriculum
+## Onboardings Reference Application
 
-Docs [here](docs/curriculum/README.md).
+See [here](src/Onboardings) for the reference app.

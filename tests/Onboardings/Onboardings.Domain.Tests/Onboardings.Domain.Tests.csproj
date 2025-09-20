@@ -13,8 +13,8 @@
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0"/>
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
         <PackageReference Include="MartinCostello.Logging.XUnit" Version="0.3.0" />
-        <PackageReference Include="Temporalio.Extensions.Hosting" Version="1.7.0"/>
-        <PackageReference Include="Temporalio" Version="1.7.0" />
+        <PackageReference Include="Temporalio.Extensions.Hosting" Version="1.8.0"/>
+        <PackageReference Include="Temporalio" Version="1.8.0" />
         <PackageReference Include="System.Linq.Async" Version="6.0.1"/>
 
         <PackageReference Include="xunit" Version="2.4.2"/>
@@ -30,6 +30,9 @@
     <ItemGroup>
         <ProjectReference Include="..\..\..\src\Onboardings\Onboardings.Domain\Onboardings.Domain.csproj" />
         <ProjectReference Include="..\..\..\src\Onboardings\Onboardings.Generated\Onboardings.Generated.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Clients\Temporal\" />
     </ItemGroup>
 
 </Project>
