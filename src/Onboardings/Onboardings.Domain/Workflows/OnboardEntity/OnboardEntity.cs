@@ -5,6 +5,7 @@ using Jumpstart.Domain.Onboardings.Workflows.V1;
 using Microsoft.Extensions.Logging;
 using Onboardings.Domain.Workflows.OnboardEntity.Activities;
 using Temporalio.Api.Enums.V1;
+using Temporalio.Common;
 using Temporalio.Exceptions;
 using Temporalio.Workflows;
 using RetryPolicy = Temporalio.Common.RetryPolicy;
@@ -47,13 +48,21 @@ public class OnboardEntity : IOnboardEntity
     {
         var logger = Workflow.Logger;
         logger.LogInformation($"onboarding entity with runid {Workflow.Info.RunId}");
-
+        // Workflow.UpsertTypedSearchAttributes(new SearchAttributeUpdate[]
+        // {
+        //     SearchAttributeKey.CreateKeyword("OnboardingsValue").ValueSet(args.Value),
+        // });
+        logger.LogInformation("updated SA");
+       
         // Right away, we evaluate input arguments _inside a LocalActivity_ to determine the workflow execution options.
         // Prefer interacting with environment or other config values inside an Activity instead of directly in a Workflow to avoid
         // NonDeterminism errors that can be caused by changing configuration on executions in progress.
         var configuredOpts =  await Workflow.ExecuteLocalActivityAsync((OnboardEntityActivities act) =>
-            act.GetOnboardEntityExecutionOptions(new GetOnboardEntityExecutionOptionsRequest { Args = args, }),  new LocalActivityOptions { StartToCloseTimeout = TimeSpan.FromSeconds(15) });
-        
+            act.GetOnboardEntityExecutionOptions(new GetOnboardEntityExecutionOptionsRequest { Args = args, }),  new LocalActivityOptions
+        {
+            StartToCloseTimeout = TimeSpan.FromSeconds(15)
+        });
+        logger.LogInformation("configured options");
         _state.Options = configuredOpts.Options;
         
         // Validate our inputs now

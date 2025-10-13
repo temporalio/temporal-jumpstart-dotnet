@@ -9,7 +9,7 @@ using pb = global::Google.Protobuf;
 using pbc = global::Google.Protobuf.Collections;
 using pbr = global::Google.Protobuf.Reflection;
 using scg = global::System.Collections.Generic;
-namespace Jumpstart.Domain.Onboardings.Commands.V1 {
+namespace Jumpstart.Domain.Onboardings.V1 {
 
   /// <summary>Holder for reflection information generated from jumpstart/domain/onboardings/v1/commands.proto</summary>
   public static partial class CommandsReflection {
@@ -25,20 +25,19 @@ namespace Jumpstart.Domain.Onboardings.Commands.V1 {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "Ci5qdW1wc3RhcnQvZG9tYWluL29uYm9hcmRpbmdzL3YxL2NvbW1hbmRzLnBy",
-            "b3RvEihqdW1wc3RhcnQuZG9tYWluLm9uYm9hcmRpbmdzLmNvbW1hbmRzLnYx",
-            "IjcKD1JlZ2lzdGVyUmVxdWVzdBIOCgJpZBgBIAEoCVICaWQSFAoFdmFsdWUY",
-            "AiABKAlSBXZhbHVlIhIKEFJlZ2lzdGVyUmVzcG9uc2VCggIKLGNvbS5qdW1w",
-            "c3RhcnQuZG9tYWluLm9uYm9hcmRpbmdzLmNvbW1hbmRzLnYxQg1Db21tYW5k",
-            "c1Byb3RvUAGiAgRKRE9DqgIoSnVtcHN0YXJ0LkRvbWFpbi5PbmJvYXJkaW5n",
-            "cy5Db21tYW5kcy5WMcoCKEp1bXBzdGFydFxEb21haW5cT25ib2FyZGluZ3Nc",
-            "Q29tbWFuZHNcVjHiAjRKdW1wc3RhcnRcRG9tYWluXE9uYm9hcmRpbmdzXENv",
-            "bW1hbmRzXFYxXEdQQk1ldGFkYXRh6gIsSnVtcHN0YXJ0OjpEb21haW46Ok9u",
-            "Ym9hcmRpbmdzOjpDb21tYW5kczo6VjFiBnByb3RvMw=="));
+            "b3RvEh9qdW1wc3RhcnQuZG9tYWluLm9uYm9hcmRpbmdzLnYxIjcKD1JlZ2lz",
+            "dGVyUmVxdWVzdBIOCgJpZBgBIAEoCVICaWQSFAoFdmFsdWUYAiABKAlSBXZh",
+            "bHVlIhIKEFJlZ2lzdGVyUmVzcG9uc2VC0wEKI2NvbS5qdW1wc3RhcnQuZG9t",
+            "YWluLm9uYm9hcmRpbmdzLnYxQg1Db21tYW5kc1Byb3RvUAGiAgNKRE+qAh9K",
+            "dW1wc3RhcnQuRG9tYWluLk9uYm9hcmRpbmdzLlYxygIfSnVtcHN0YXJ0XERv",
+            "bWFpblxPbmJvYXJkaW5nc1xWMeICK0p1bXBzdGFydFxEb21haW5cT25ib2Fy",
+            "ZGluZ3NcVjFcR1BCTWV0YWRhdGHqAiJKdW1wc3RhcnQ6OkRvbWFpbjo6T25i",
+            "b2FyZGluZ3M6OlYxYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Jumpstart.Domain.Onboardings.Commands.V1.RegisterRequest), global::Jumpstart.Domain.Onboardings.Commands.V1.RegisterRequest.Parser, new[]{ "Id", "Value" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Jumpstart.Domain.Onboardings.Commands.V1.RegisterResponse), global::Jumpstart.Domain.Onboardings.Commands.V1.RegisterResponse.Parser, null, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Jumpstart.Domain.Onboardings.V1.RegisterRequest), global::Jumpstart.Domain.Onboardings.V1.RegisterRequest.Parser, new[]{ "Id", "Value" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Jumpstart.Domain.Onboardings.V1.RegisterResponse), global::Jumpstart.Domain.Onboardings.V1.RegisterResponse.Parser, null, null, null, null, null)
           }));
     }
     #endregion
@@ -60,7 +59,7 @@ namespace Jumpstart.Domain.Onboardings.Commands.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Jumpstart.Domain.Onboardings.Commands.V1.CommandsReflection.Descriptor.MessageTypes[0]; }
+      get { return global::Jumpstart.Domain.Onboardings.V1.CommandsReflection.Descriptor.MessageTypes[0]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -295,7 +294,7 @@ namespace Jumpstart.Domain.Onboardings.Commands.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Jumpstart.Domain.Onboardings.Commands.V1.CommandsReflection.Descriptor.MessageTypes[1]; }
+      get { return global::Jumpstart.Domain.Onboardings.V1.CommandsReflection.Descriptor.MessageTypes[1]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
