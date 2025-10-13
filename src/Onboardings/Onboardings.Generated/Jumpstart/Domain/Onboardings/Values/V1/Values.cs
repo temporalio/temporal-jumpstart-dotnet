@@ -31,16 +31,16 @@ namespace Jumpstart.Domain.Onboardings.Values.V1 {
             "Cgdjb21tZW50GAIgASgJUgdjb21tZW50KooBCg5BcHByb3ZhbFN0YXR1cxIf",
             "ChtBUFBST1ZBTF9TVEFUVVNfVU5TUEVDSUZJRUQQABIbChdBUFBST1ZBTF9T",
             "VEFUVVNfUEVORElORxABEhwKGEFQUFJPVkFMX1NUQVRVU19SRUpFQ1RFRBAC",
-            "EhwKGEFQUFJPVkFMX1NUQVRVU19BUFBST1ZFRBADKoMBCgZFcnJvcnMSFgoS",
+            "EhwKGEFQUFJPVkFMX1NUQVRVU19BUFBST1ZFRBADKpwBCgZFcnJvcnMSFgoS",
             "RVJST1JTX1VOU1BFQ0lGSUVEEAASHAoYRVJST1JTX0lOVkFMSURfQVJHVU1F",
             "TlRTEAESIwofRVJST1JTX09OQk9BUkRfRU5USVRZX1RJTUVEX09VVBACEh4K",
-            "GkVSUk9SU19TRVJWSUNFX1VOQVZBSUxBQkxFEANC9gEKKmNvbS5qdW1wc3Rh",
-            "cnQuZG9tYWluLm9uYm9hcmRpbmdzLnZhbHVlcy52MUILVmFsdWVzUHJvdG9Q",
-            "AaICBEpET1aqAiZKdW1wc3RhcnQuRG9tYWluLk9uYm9hcmRpbmdzLlZhbHVl",
-            "cy5WMcoCJkp1bXBzdGFydFxEb21haW5cT25ib2FyZGluZ3NcVmFsdWVzXFYx",
-            "4gIySnVtcHN0YXJ0XERvbWFpblxPbmJvYXJkaW5nc1xWYWx1ZXNcVjFcR1BC",
-            "TWV0YWRhdGHqAipKdW1wc3RhcnQ6OkRvbWFpbjo6T25ib2FyZGluZ3M6OlZh",
-            "bHVlczo6VjFiBnByb3RvMw=="));
+            "GkVSUk9SU19TRVJWSUNFX1VOQVZBSUxBQkxFEAMSFwoTRVJST1JTX1VOQVVU",
+            "SE9SSVpFRBAEQvYBCipjb20uanVtcHN0YXJ0LmRvbWFpbi5vbmJvYXJkaW5n",
+            "cy52YWx1ZXMudjFCC1ZhbHVlc1Byb3RvUAGiAgRKRE9WqgImSnVtcHN0YXJ0",
+            "LkRvbWFpbi5PbmJvYXJkaW5ncy5WYWx1ZXMuVjHKAiZKdW1wc3RhcnRcRG9t",
+            "YWluXE9uYm9hcmRpbmdzXFZhbHVlc1xWMeICMkp1bXBzdGFydFxEb21haW5c",
+            "T25ib2FyZGluZ3NcVmFsdWVzXFYxXEdQQk1ldGFkYXRh6gIqSnVtcHN0YXJ0",
+            "OjpEb21haW46Ok9uYm9hcmRpbmdzOjpWYWx1ZXM6OlYxYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Jumpstart.Domain.Onboardings.Values.V1.ApprovalStatus), typeof(global::Jumpstart.Domain.Onboardings.Values.V1.Errors), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -63,6 +63,7 @@ namespace Jumpstart.Domain.Onboardings.Values.V1 {
     [pbr::OriginalName("ERRORS_INVALID_ARGUMENTS")] InvalidArguments = 1,
     [pbr::OriginalName("ERRORS_ONBOARD_ENTITY_TIMED_OUT")] OnboardEntityTimedOut = 2,
     [pbr::OriginalName("ERRORS_SERVICE_UNAVAILABLE")] ServiceUnavailable = 3,
+    [pbr::OriginalName("ERRORS_UNAUTHORIZED")] Unauthorized = 4,
   }
 
   #endregion

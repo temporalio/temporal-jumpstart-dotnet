@@ -6,7 +6,6 @@ using Onboardings.Domain.Workflows;
 using Onboardings.Domain.Workflows.OnboardEntity;
 using Onboardings.Domain.Workflows.OnboardEntity.Activities;
 using Temporalio.Extensions.Hosting;
-using Temporalio.Workflows;
 
 namespace Onboardings.Workers
 {
@@ -36,6 +35,7 @@ namespace Onboardings.Workers
             builder.Services.AddSingleton<IEmailClient, InMemoryEmailClient>();
             
             // configure our Worker
+
             builder.Services.AddHostedTemporalWorker(temporalConfig.Worker.TaskQueue)
                 .ConfigureOptions(o => { o.ConfigureService(temporalConfig); })
                 .AddScopedActivities<RegistrationActivities>()

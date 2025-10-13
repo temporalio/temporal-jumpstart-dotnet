@@ -1,6 +1,7 @@
 using System.Runtime.InteropServices.ComTypes;
 using Jumpstart.Domain.Onboardings.Workflows.V1;
 using Temporalio.Activities;
+using Temporalio.Exceptions;
 
 namespace Onboardings.Domain.Workflows.OnboardEntity.Activities;
 

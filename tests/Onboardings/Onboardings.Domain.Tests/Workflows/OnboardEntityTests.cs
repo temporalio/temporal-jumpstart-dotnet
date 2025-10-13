@@ -1,7 +1,10 @@
+using Google.Protobuf.Collections;
 using Jumpstart.Domain.Onboardings.Workflows.V1;
 using Onboardings.Domain.Workflows.OnboardEntity;
 using Temporalio.Activities;
 using Temporalio.Api.Enums.V1;
+using Temporalio.Api.OperatorService.V1;
+using Temporalio.Api.WorkflowService.V1;
 using Temporalio.Client;
 using Temporalio.Common;
 using Temporalio.Converters;
@@ -16,12 +19,20 @@ namespace Onboardings.Domain.Tests.Workflows;
 
 public class OnboardEntityTests : TestBase
 {
-    private readonly ITestOutputHelper _testOutputHelper;
 
     [Fact]
     public async Task ExecuteAsync_SimpleRun_GivenInvalidArgs_FailsFast()
     {
-        await using var env = await WorkflowEnvironment.StartTimeSkippingAsync();
+        await using var env =
+            await WorkflowEnvironment.StartTimeSkippingAsync(
+                new WorkflowEnvironmentStartTimeSkippingOptions() { LoggerFactory = LoggerFactory, });
+        var addSA = new AddSearchAttributesRequest
+        {
+            Namespace = env.Client.Options.Namespace,
+        };
+        addSA.SearchAttributes["OnboardingsValue"] = IndexedValueType.Keyword;
+        await env.Client.OperatorService.AddSearchAttributesAsync(addSA);
+        
         var wid = Guid.NewGuid();
         var emptyValue = "";
         var args = new OnboardEntityRequest { Id = wid.ToString(), Value = emptyValue, 
@@ -33,9 +44,14 @@ public class OnboardEntityTests : TestBase
             // this is effectively an echo activity
             return Task.FromResult(new GetOnboardEntityExecutionOptionsResponse { Options = req.Args.Options, });
         }
+
+        var workerOpts = new TemporalWorkerOptions("test");
+        var fails = new List<Type>(workerOpts.WorkflowFailureExceptionTypes ?? new List<Type>());
+        fails.Add(typeof(Exception));
+        workerOpts.WorkflowFailureExceptionTypes = fails;
+        workerOpts.AddWorkflow<OnboardEntity>().AddActivity(GetOnboardEntityExecutionOptions);
         using var worker = new TemporalWorker(
-            env.Client,
-            new TemporalWorkerOptions("test").AddWorkflow<OnboardEntity>().AddActivity(GetOnboardEntityExecutionOptions));
+            env.Client, workerOpts);
         
         var wfopts = new WorkflowOptions
         {
@@ -54,6 +70,66 @@ public class OnboardEntityTests : TestBase
             });
             var ae = Assert.IsType<ApplicationFailureException>(e.InnerException);
             Assert.Equal(nameof(ProtoErrors.InvalidArguments), ae.ErrorType);
+        });
+    }
+    [Fact]
+    public async Task ExecuteAsync_SimpleRun_GivenValidArgs_IndexesValue()
+    {
+        var attrValue = SearchAttributeKey.CreateKeyword("OnboardingsValue");
+        await using var env = await WorkflowEnvironment.StartLocalAsync(
+        new WorkflowEnvironmentStartLocalOptions()
+        {
+            SearchAttributes = [attrValue],
+        });
+        var wid = Guid.NewGuid();
+        var value = Guid.NewGuid().ToString();
+        var args = new OnboardEntityRequest { Id = wid.ToString(), Value = value, 
+            Options = new OnboardEntityExecutionOptions {SkipApproval = true, }};
+        [Activity]
+        Task<GetOnboardEntityExecutionOptionsResponse> GetOnboardEntityExecutionOptions(
+            GetOnboardEntityExecutionOptionsRequest req)
+        {
+            // this is effectively an echo activity
+            return Task.FromResult(new GetOnboardEntityExecutionOptionsResponse { Options = req.Args.Options, });
+        }
+        [Activity]
+        Task RegisterCrmEntity(RegisterCrmEntityRequest req)
+        {
+            return Task.CompletedTask;
+        }
+
+        var workerOpts = new TemporalWorkerOptions("test").AddWorkflow<OnboardEntity>().AddActivity(RegisterCrmEntity)
+            .AddActivity(GetOnboardEntityExecutionOptions);
+        workerOpts.DeploymentOptions = new WorkerDeploymentOptions
+        {
+            Version = new WorkerDeploymentVersion("dontfailme", "v1")
+        };
+        using var worker = new TemporalWorker(
+            env.Client,
+            workerOpts);
+        
+        
+        var wfOpts = new WorkflowOptions
+        {
+            Id = args.Id,
+            TaskQueue = worker.Options.TaskQueue!,
+            RetryPolicy = new RetryPolicy { MaximumAttempts = 1 },
+        };
+        
+        
+        await worker.ExecuteAsync(async () =>
+        {
+            var handle = await env.Client.StartWorkflowAsync<OnboardEntity>(wf => wf.ExecuteAsync(args),wfOpts);
+            await handle.GetResultAsync();
+            var expectSa = new SearchAttributeCollection.Builder().
+                Set(SearchAttributeKey.CreateKeyword("OnboardingsValue"), args.Value).ToSearchAttributeCollection();
+            var actualSas = (await handle.DescribeAsync()).TypedSearchAttributes;
+            foreach (var actualSasUntypedValue in actualSas.UntypedValues)
+            {
+                Console.WriteLine(actualSasUntypedValue.Key.Name + ":" + actualSasUntypedValue);
+            }
+            Assert.True(actualSas.ContainsKey(attrValue));
+            Assert.Equal(expectSa.UntypedValues, actualSas.UntypedValues.Where(kvp => kvp.Key.Name.Equals(attrValue.Name)));
         });
     }
     [Fact]
@@ -664,11 +740,9 @@ public class OnboardEntityTests : TestBase
         Assert.NotNull(registrationRequestSent);
         Assert.Equal(args.Value, registrationRequestSent.Value);
     }
-    
 
-public OnboardEntityTests(ITestOutputHelper output, ITestOutputHelper testOutputHelper) : base(output)
-{
-    _testOutputHelper = testOutputHelper;
-}
 
+    public OnboardEntityTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+    {
+    }
 }

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Onboardings.Domain.Clients;
 using Onboardings.Domain.Clients.Crm;
 using Jumpstart.Domain.Onboardings.Commands.V1;
@@ -55,6 +56,7 @@ public class RegisterCrmEntityTests(ITestOutputHelper output) : TestBase(output)
         var handlers = new RegistrationActivities(crmClient);
         ActivityEnvironment env = new ActivityEnvironment()
         {
+            
             Logger = LoggerFactory.CreateLogger("test"),
         };
         await Assert.ThrowsAsync<HttpRequestException>(async () =>
