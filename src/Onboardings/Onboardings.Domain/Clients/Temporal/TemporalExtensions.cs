@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using System.Text;
+using Microsoft.Extensions.Options;
 using Temporalio.Client;
 using Temporalio.Extensions.Hosting;
 using Temporalio.Runtime;
@@ -36,25 +38,24 @@ public static class TemporalExtensions
         
         opts.Namespace = cfg.Connection.Namespace;
         opts.TargetHost = cfg.Connection.Target;
-
+        
         if (cfg.Connection.Mtls != null)
         {
             opts.Tls = new TlsOptions {
                 ClientCert = File.ReadAllBytes(cfg.Connection.Mtls.CertChainFile),
                 ClientPrivateKey = File.ReadAllBytes(cfg.Connection.Mtls.KeyFile)
             };
-        }
-        var runtime = new TemporalRuntime(new()
+        } else if (cfg.Connection.ApiKey != null)
         {
-            Telemetry = new()
+            var key = File.ReadAllText(cfg.Connection.ApiKey, Encoding.UTF8).Trim();
+            if (string.IsNullOrEmpty(key))
             {
-                Metrics = new()
-                {
-                    Prometheus = new("0.0.0.0:9464")
-                }
-            },
-        });
-        opts.Runtime = runtime;
+                throw new ArgumentException("The API Key is invalid.");
+            }
+            opts.ApiKey = key;
+            opts.Tls = new();
+        }
+        
         return opts;
     }
 

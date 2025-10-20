@@ -1,0 +1,24 @@
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    container_name: otel-collector
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      # Expose ports if you want to send OTLP metrics directly (optional)
+      - "4317:4317"   # OTLP gRPC receiver
+      - "4318:4318"   # OTLP HTTP receiver
+      - "8888:8888"   # Prometheus metrics for the collector itself
+      - "13133:13133" # Health check endpoint
+    environment:
+      # Set these environment variables with your GrafanaCloud credentials
+      # Option 1: Set them in your shell before running docker-compose
+      # Option 2: Create a .env file with these values
+      - GRAFANA_CLOUD_PROMETHEUS_ENDPOINT=${GRAFANA_CLOUD_PROMETHEUS_ENDPOINT}
+      - GRAFANA_CLOUD_USERNAME=${GRAFANA_CLOUD_USERNAME}
+      - GRAFANA_CLOUD_PASSWORD=${GRAFANA_CLOUD_PASSWORD}
+    restart: unless-stopped
+    extra_hosts:
+      # Allow collector to reach services on host machine
+      - "host.docker.internal:host-gateway"

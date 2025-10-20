@@ -44,7 +44,7 @@ public record CacheConfig(int MaxInstances = Defaults.CacheMaxInstances);
 public record MtlsConfig(string KeyFile, string CertChainFile);
 
 // ReSharper disable once ClassNeverInstantiated.Global
-public record ConnectionConfig(string Namespace, string Target, MtlsConfig? Mtls = null);
+public record ConnectionConfig(string Namespace, string Target, string? ApiKey = null, MtlsConfig? Mtls = null);
 
 public record TemporalConfig
 {
