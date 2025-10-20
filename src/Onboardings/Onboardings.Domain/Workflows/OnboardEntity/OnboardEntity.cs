@@ -52,8 +52,8 @@ public class OnboardEntity : IOnboardEntity
         // {
         //     SearchAttributeKey.CreateKeyword("OnboardingsValue").ValueSet(args.Value),
         // });
-        logger.LogInformation("updated SA");
-       
+        // throw new InvalidOperationException("OH NO!");
+        // throw new ApplicationFailureException("Synthetic", "SYNTHETIC");
         // Right away, we evaluate input arguments _inside a LocalActivity_ to determine the workflow execution options.
         // Prefer interacting with environment or other config values inside an Activity instead of directly in a Workflow to avoid
         // NonDeterminism errors that can be caused by changing configuration on executions in progress.
