@@ -1,14 +1,73 @@
-# GrafanaCloud Integration Setup
+# Grafana Observability Setup
 
-This guide walks you through setting up the OpenTelemetry Collector to forward Temporal .NET metrics to GrafanaCloud.
+This guide walks you through setting up the OpenTelemetry Collector to forward Temporal .NET metrics to either:
+- **Local Grafana** (runs in Docker, no cloud account needed)
+- **Grafana Cloud** (managed service, free tier available)
+- **Both** (send metrics to local and cloud simultaneously)
 
 ## Prerequisites
 
 - Docker and Docker Compose installed
-- A GrafanaCloud account (free tier available at https://grafana.com/products/cloud/)
-- Your Temporal .NET worker running and exposing Prometheus metrics
+- Your Temporal .NET worker running and exposing Prometheus metrics (port 9464)
+- (Optional) A GrafanaCloud account for cloud monitoring (https://grafana.com/products/cloud/)
 
-## Step 1: Get GrafanaCloud Credentials
+## Quick Start
+
+Choose your deployment option:
+
+### Option 1: Local Grafana (Recommended for Development)
+
+No credentials needed! Just run:
+
+```bash
+# Start local Grafana, Prometheus, and OTel Collector
+docker-compose -f docker-compose.otel.yaml --profile local up -d
+
+# Start your Temporal worker
+cd src/Onboardings/Onboardings.Workers
+dotnet run --configuration=LocalWorker
+
+# Access Grafana at http://localhost:3000
+# Default credentials: admin/admin
+```
+
+### Option 2: Grafana Cloud Only
+
+Requires cloud credentials. See [Grafana Cloud Setup](#grafana-cloud-setup) below.
+
+```bash
+# Create .env file with your Grafana Cloud credentials (see below)
+# Then start the collector
+docker-compose -f docker-compose.otel.yaml --profile cloud up -d
+
+# Start your Temporal worker
+cd src/Onboardings/Onboardings.Workers
+dotnet run --configuration=LocalWorker
+```
+
+### Option 3: Both Local and Cloud
+
+Send metrics to both destinations simultaneously:
+
+```bash
+# Create .env file with your Grafana Cloud credentials (see below)
+# Start everything
+docker-compose -f docker-compose.otel.yaml --profile both up -d
+
+# Start your Temporal worker
+cd src/Onboardings/Onboardings.Workers
+dotnet run --configuration=LocalWorker
+
+# Access local Grafana at http://localhost:3000
+```
+
+---
+
+## Grafana Cloud Setup
+
+**Only required for `cloud` or `both` profiles.**
+
+### Step 1: Get GrafanaCloud Credentials
 
 1. Log into your GrafanaCloud account
 2. Navigate to **Connections** → **Add new connection** → **Hosted Prometheus metrics**
@@ -18,59 +77,38 @@ This guide walks you through setting up the OpenTelemetry Collector to forward T
    - **Username**: Your instance ID (e.g., `123456`)
    - **API Key/Token**: Generate a new API token with `metrics:write` permission
 
-## Step 2: Create Environment Variables
+### Step 2: Create Environment Variables
 
 Create a `.env` file in the project root (this file is gitignored):
 
 ```bash
-# .env
+# .env file
 GRAFANA_CLOUD_PROMETHEUS_ENDPOINT=https://prometheus-prod-XX-XXX.grafana.net/api/prom/push
-GRAFANA_CLOUD_API_KEY=<your-instance-id>:<your-api-token>
+GRAFANA_CLOUD_USERNAME=123456
+GRAFANA_CLOUD_PASSWORD=glc_xxxxxxxxxxxxxxxxxxxx
 ```
 
-**Note**: The API key should be in the format `username:password` or use a Bearer token. If using username/password:
-```bash
-GRAFANA_CLOUD_API_KEY=123456:glc_xxxxxxxxxxxxxxxxxxxx
-```
+---
 
-Alternatively, if using Bearer token format, the collector config already sets the Authorization header correctly.
+## Verifying Metrics
 
-## Step 3: Start the OpenTelemetry Collector
+### Local Grafana
 
-```bash
-# Start the collector
-docker-compose -f docker-compose.otel.yaml up -d
-
-# View logs to verify it's running
-docker-compose -f docker-compose.otel.yaml logs -f otel-collector
-```
-
-You should see log messages indicating:
-- The collector has started successfully
-- It's scraping metrics from your Temporal worker (port 9464)
-- It's sending data to GrafanaCloud
-
-## Step 4: Start Your Temporal Worker
-
-Make sure your Temporal .NET worker is running and exposing metrics:
-
-```bash
-cd src/Onboardings/Onboardings.Workers
-dotnet run --configuration=LocalWorker
-```
-
-The worker will expose Prometheus metrics on port 9464 (as configured in TemporalExtensions.cs).
-
-## Step 5: Verify Metrics in GrafanaCloud
-
-1. Log into your GrafanaCloud dashboard
+1. Open http://localhost:3000 (login: admin/admin)
 2. Go to **Explore**
-3. Select your Prometheus data source
+3. The Prometheus datasource is pre-configured
 4. Query for metrics like:
    - `temporal_workflow_*`
    - `temporal_activity_*`
    - `temporal_worker_*`
 5. Filter by label: `service="temporal-worker"`
+
+### Grafana Cloud
+
+1. Log into your GrafanaCloud dashboard
+2. Go to **Explore**
+3. Select your Prometheus data source
+4. Query for metrics (same as above)
 
 ## Troubleshooting
 
@@ -129,14 +167,31 @@ service:
       exporters: [prometheusremotewrite, logging]
 ```
 
-## Stopping the Collector
+## Stopping Services
 
 ```bash
-docker-compose -f docker-compose.otel.yaml down
+# Stop all services (use the same profile you started with)
+docker-compose -f docker-compose.otel.yaml --profile local down
+# or
+docker-compose -f docker-compose.otel.yaml --profile cloud down
+# or
+docker-compose -f docker-compose.otel.yaml --profile both down
 ```
 
 ## Architecture
 
+### Local Profile
+```
+Temporal .NET Worker (localhost:9464)
+         ↓ (scrape every 15s)
+OpenTelemetry Collector (Docker)
+         ↓ (batch & forward)
+Prometheus (Docker:9090)
+         ↓
+Grafana (Docker:3000)
+```
+
+### Cloud Profile
 ```
 Temporal .NET Worker (localhost:9464)
          ↓ (scrape every 15s)
@@ -145,6 +200,16 @@ OpenTelemetry Collector (Docker)
 GrafanaCloud Prometheus
          ↓
 GrafanaCloud Dashboards
+```
+
+### Both Profile
+```
+Temporal .NET Worker (localhost:9464)
+         ↓ (scrape every 15s)
+OpenTelemetry Collector (Docker)
+         ↓ (batch & forward to both)
+         ├─→ Local Prometheus (Docker:9090) → Grafana (Docker:3000)
+         └─→ GrafanaCloud Prometheus → GrafanaCloud Dashboards
 ```
 
 ## Next Steps

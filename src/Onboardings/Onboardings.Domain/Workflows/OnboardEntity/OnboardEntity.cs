@@ -52,7 +52,16 @@ public class OnboardEntity : IOnboardEntity
         // {
         //     SearchAttributeKey.CreateKeyword("OnboardingsValue").ValueSet(args.Value),
         // });
-        // throw new InvalidOperationException("OH NO!");
+        if (args.Value.StartsWith("wftfailure"))
+        {
+            throw new InvalidOperationException(args.Value);
+        }
+
+        if (args.Value.StartsWith("appfailure"))
+        {
+            throw new ApplicationFailureException(args.Value, "appfailure");
+        }
+
         // throw new ApplicationFailureException("Synthetic", "SYNTHETIC");
         // Right away, we evaluate input arguments _inside a LocalActivity_ to determine the workflow execution options.
         // Prefer interacting with environment or other config values inside an Activity instead of directly in a Workflow to avoid
