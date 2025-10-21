@@ -2,7 +2,7 @@ services:
   # OpenTelemetry Collector for Grafana Cloud only
   otel-collector:
     image: otel/opentelemetry-collector-contrib:latest
-    container_name: otel-collector
+    container_name: otel-collector-cloud
     command:
       - "--config=/etc/otel-collector-config.yaml"
     volumes:
@@ -27,7 +27,7 @@ services:
   # OpenTelemetry Collector for Local Prometheus only
   otel-collector-local:
     image: otel/opentelemetry-collector-contrib:latest
-    container_name: otel-collector
+    container_name: otel-collector-local
     command:
       - "--config=/etc/otel-collector-config-local.yaml"
     volumes:
@@ -50,7 +50,7 @@ services:
   # OpenTelemetry Collector for Both Local and Cloud
   otel-collector-both:
     image: otel/opentelemetry-collector-contrib:latest
-    container_name: otel-collector
+    container_name: otel-collector-both
     command:
       - "--config=/etc/otel-collector-config-both.yaml"
     volumes:
@@ -84,6 +84,7 @@ services:
       - '--web.console.libraries=/usr/share/prometheus/console_libraries'
       - '--web.console.templates=/usr/share/prometheus/consoles'
       - '--web.enable-lifecycle'
+      - '--web.enable-remote-write-receiver'
     volumes:
       - ./prometheus-local.yml:/etc/prometheus/prometheus.yml
       - prometheus-data:/prometheus
