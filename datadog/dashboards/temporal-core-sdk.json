@@ -1,5 +1,5 @@
 {
-  "title": "Temporal SDK Metrics 🎉",
+  "title": "Temporal Core SDK Metrics",
   "description": "Dashboard using distribution metrics with enabled percentiles",
   "widgets": [
     {
