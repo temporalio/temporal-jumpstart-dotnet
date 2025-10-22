@@ -2,19 +2,32 @@
 # This collector scrapes Prometheus metrics from Temporal .NET SDK and forwards to local Prometheus
 
 receivers:
-  # Scrape Prometheus metrics from the Temporal .NET worker
+  # Scrape Prometheus metrics from the Temporal .NET worker(s)
+  # To add more workers, add additional targets below
   prometheus:
     config:
       scrape_configs:
         - job_name: 'temporal-dotnet-worker'
           scrape_interval: 15s
           static_configs:
-            # Update this if your worker uses a different port
-            # Current setup uses port 9464 (hardcoded in TemporalExtensions.cs)
+            # Worker 1 - Primary worker on port 9464
             - targets: ['host.docker.internal:9464']
               labels:
                 service: 'temporal-worker'
                 environment: 'local'
+                worker_instance: 'worker-1'
+            # Worker 2 - Uncomment to add a second worker
+            # - targets: ['host.docker.internal:9465']
+            #   labels:
+            #     service: 'temporal-worker'
+            #     environment: 'local'
+            #     worker_instance: 'worker-2'
+            # Worker 3 - Uncomment to add a third worker
+            # - targets: ['host.docker.internal:9466']
+            #   labels:
+            #     service: 'temporal-worker'
+            #     environment: 'local'
+            #     worker_instance: 'worker-3'
 
 processors:
   # Add batch processing to reduce network calls

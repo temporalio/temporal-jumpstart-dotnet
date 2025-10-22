@@ -187,9 +187,38 @@ This shows:
 
 ## Customization
 
+### Add Multiple Worker Endpoints
+
+To scrape metrics from multiple Temporal workers, edit `conf.d/openmetrics.d/conf.yaml` and uncomment/add additional instances:
+
+```yaml
+instances:
+  # Worker 1
+  - openmetrics_endpoint: http://host.docker.internal:9464/metrics
+    tags:
+      - "service:temporal-worker"
+      - "worker_instance:worker-1"
+    metrics:
+      - "temporal_*"
+    histogram_buckets_as_distributions: true
+    # ... (other config)
+
+  # Worker 2
+  - openmetrics_endpoint: http://host.docker.internal:9465/metrics
+    tags:
+      - "service:temporal-worker"
+      - "worker_instance:worker-2"
+    metrics:
+      - "temporal_*"
+    histogram_buckets_as_distributions: true
+    # ... (other config)
+```
+
+Each instance will send metrics to DataDog with the appropriate `worker_instance` tag for filtering.
+
 ### Add More Prometheus Endpoints
 
-Edit `conf.d/prometheus.d/conf.yaml` to scrape additional endpoints:
+To scrape non-Temporal metrics, add additional instances in `conf.d/openmetrics.d/conf.yaml`:
 
 ```yaml
 instances:
