@@ -71,6 +71,32 @@ The worker will expose Prometheus metrics on port 9464 (as configured in Tempora
 
 It may take 2-3 minutes for metrics to first appear in DataDog.
 
+### Step 6: (Optional) Install the Temporal SDK Dashboard
+
+We've included a script to automatically upload the official Temporal SDK dashboard to your DataDog account:
+
+```bash
+cd datadog
+chmod +x setup-dashboard.sh
+./setup-dashboard.sh
+```
+
+This requires:
+- `DD_API_KEY` - Your DataDog API key (already in .env)
+- `DD_APP_KEY` - Your DataDog Application key (add to .env)
+
+To get your Application Key:
+1. Go to https://app.datadoghq.com/organization-settings/application-keys
+2. Create a new Application Key
+3. Add it to your `.env` file as `DD_APP_KEY=your_app_key_here`
+
+The script will:
+- Upload the dashboard from `dashboards/temporal-core-sdk.json`
+- Provide the dashboard URL
+- List which metrics need percentiles enabled
+
+**Note:** The dashboard is stored locally in `dashboards/temporal-core-sdk.json` from the [official Temporal dashboards repository](https://github.com/temporalio/dashboards/blob/master/sdk/datadog/temporal_sdk_dashboard.json).
+
 ## Configuration
 
 ### OpenMetrics Configuration
