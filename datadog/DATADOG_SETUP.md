@@ -73,10 +73,21 @@ It may take 2-3 minutes for metrics to first appear in DataDog.
 
 ## Configuration
 
-### Prometheus Scraping
+### OpenMetrics Configuration
 
-The DataDog agent is configured to scrape Prometheus metrics from your Temporal worker. Configuration is in:
-- `conf.d/prometheus.d/conf.yaml` - Prometheus scrape configuration
+The DataDog agent uses the **OpenMetrics integration** (not Prometheus) to scrape metrics from your Temporal worker. This is important because:
+
+- **Converts histogram buckets to DataDog distributions** - enables percentile calculations (p50, p75, p95, p99)
+- **Works with Temporal's official DataDog dashboard** - https://github.com/temporalio/dashboards
+- **Better metric representation** for latency and timing metrics
+
+Configuration is in:
+- `conf.d/openmetrics.d/conf.yaml` - OpenMetrics scrape configuration
+
+After metrics start flowing, **enable percentiles in DataDog**:
+1. Go to https://app.datadoghq.com/metric/summary
+2. Search for `temporal_request_latency`, `temporal_workflow_endtoend_latency`, etc.
+3. Click each metric → **Advanced** → **Percentiles** → **Configure** → Enable p95, p99
 
 ### Custom Tags
 
@@ -113,9 +124,9 @@ Then configure your application to send traces to `localhost:8126`.
 
 If you see errors about connecting to `host.docker.internal:9464`:
 
-**On Linux**: Replace `host.docker.internal` with your machine's IP or `172.17.0.1` in `conf.d/prometheus.d/conf.yaml`:
+**On Linux**: Replace `host.docker.internal` with your machine's IP or `172.17.0.1` in `conf.d/openmetrics.d/conf.yaml`:
 ```yaml
-- prometheus_url: http://172.17.0.1:9464/metrics
+- openmetrics_endpoint: http://172.17.0.1:9464/metrics
 ```
 
 **On macOS/Windows**: `host.docker.internal` should work out of the box.
