@@ -7,14 +7,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Google.Protobuf" Version="3.31.1" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
         <PackageReference Include="Temporalio" Version="1.8.0" />
       <PackageReference Include="Temporalio.Extensions.Hosting" Version="1.8.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\App.Generated\App.Generated.csproj" />
+      <ProjectReference Include="..\App.Messages\App.Messages.csproj" />
     </ItemGroup>
 
 </Project>

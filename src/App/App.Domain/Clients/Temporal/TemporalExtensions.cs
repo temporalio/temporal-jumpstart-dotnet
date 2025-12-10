@@ -44,17 +44,8 @@ public static class TemporalExtensions
                 ClientPrivateKey = File.ReadAllBytes(cfg.Connection.Mtls.KeyFile)
             };
         }
-        var runtime = new TemporalRuntime(new()
-        {
-            Telemetry = new()
-            {
-                Metrics = new()
-                {
-                    Prometheus = new("0.0.0.0:9464")
-                }
-            },
-        });
-        opts.Runtime = runtime;
+
+
         return opts;
     }
 

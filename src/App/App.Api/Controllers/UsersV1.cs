@@ -1,9 +1,8 @@
 using System.Diagnostics;
-using Jumpstart.Api.Onboardings.V1;
+using App.Api.Messages;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using App.Api.Messages;
 using App.Domain.Clients.Temporal;
 using App.Domain.Workflows;
 using Temporalio.Client;
@@ -22,18 +21,17 @@ public class UsersControllerV1(
 {
     private readonly ILogger _logger = logger.CreateLogger<UsersControllerV1>();
 
-    [HttpPut("{id}")]
+    [HttpPost("{id}")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> PutUserAsync(string id, PutPing req)
+    public async Task<IActionResult> PostUserAsync(string id, UserPost req)
     {
         var temporalClient = httpContextAccessor.HttpContext?.Features.GetRequiredFeature<ITemporalClient>();
         var opts = new WorkflowOptions { TaskQueue = temporalConfig.Value.Worker.TaskQueue, Id = id, };
 
         try
         {
-            var handle = await temporalClient.StartWorkflowAsync<MyWorkflow>(wf => wf.ExecuteAsync(req.Ping), opts);
-            // poor man's uri template. prefer RFC 6570 implementation
+            var handle = await temporalClient.StartWorkflowAsync<MyWorkflow>(wf => wf.ExecuteAsync(req.id), opts);
             _logger.LogInformation("started workflow {id}", handle.Id);
             var location = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/v1/users/{id}";
             return Accepted(location);
@@ -51,7 +49,7 @@ public class UsersControllerV1(
 
     [HttpGet("{id}")]
     [Produces("application/json")]
-    public async Task<ActionResult<OnboardingsGet>> GetUserAsync(string id)
+    public async Task<ActionResult<UserGet>> GetUserAsync(string id)
     {
         Debug.Assert(httpContextAccessor.HttpContext != null, "httpContextAccessor.HttpContext != null");
         var temporalClient = httpContextAccessor.HttpContext.Features.GetRequiredFeature<ITemporalClient>();
@@ -61,7 +59,7 @@ public class UsersControllerV1(
             var handle = temporalClient.GetWorkflowHandle<MyWorkflow>(id, null, null);
             var result = await handle.QueryAsync<string>(wf => wf.GetState());
 
-            return Ok(result);
+            return Ok(new UserGet(result, result));
         }
         catch (RpcException e)
         {

@@ -1,62 +1,57 @@
-# Onboardings
+# App
 
-Generated content ends up in the `Onboardings.Generated` project.
+Generic scaffold for building Temporal workflow applications with .NET.
 
 ## Running the Applications
 
 ### Prerequisites
 * [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 * [Temporal CLI](https://docs.temporal.io/cli#install) (for local development)
-* [Buf](https://buf.build/docs/cli/installation/) (for proto generation)
 
-### Running Onboardings.Api
+### Local Development Setup
 
-#### Local Development (Temporal CLI)
-```sh
-cd {SolutionRoot}/src/Onboardings/Onboardings.Api
-dotnet run --configuration=Local
-```
+1. **Start Temporal CLI dev server:**
+   ```sh
+   temporal server start-dev
+   ```
 
-#### Temporal Cloud
-```sh
-cd {SolutionRoot}/src/Onboardings/Onboardings.Api
-dotnet run --configuration=Cloud
-```
+2. **Run the Worker (in a separate terminal):**
+   ```sh
+   cd {SolutionRoot}/src/App/App.Workers
+   dotnet run --launch-profile local
+   ```
 
-### Running Onboardings.Workers
+3. **Run the API (in a separate terminal):**
+   ```sh
+   cd {SolutionRoot}/src/App/App.Api
+   dotnet run --launch-profile local
+   ```
 
-#### Local Development (Temporal CLI)
-```sh
-cd {SolutionRoot}/src/Onboardings/Onboardings.Workers
-dotnet run --configuration=Local
-```
+### Accessing the API
 
-#### Local Worker (Alternative Local Config)
-```sh
-cd {SolutionRoot}/src/Onboardings/Onboardings.Workers
-dotnet run --configuration=LocalWorker
-```
+Once the API is running, you can access:
 
-#### Temporal Cloud
-```sh
-cd {SolutionRoot}/src/Onboardings/Onboardings.Workers
-dotnet run --configuration=Cloud
-```
+- **Swagger UI**: [https://localhost:7148/swagger](https://localhost:7148/swagger)
+- **HTTP endpoint**: http://localhost:5031
+- **HTTPS endpoint**: https://localhost:7148
+
+### API Endpoints
+
+The API exposes the following endpoints under `/api/v1/users`:
+
+- **POST `/api/v1/users/{id}`** - Start a new workflow execution
+- **GET `/api/v1/users/{id}`** - Query workflow state
 
 ### Configuration
 
-The launch profiles use configuration files located in `{SolutionRoot}/config/`:
+The application uses configuration files located in `{SolutionRoot}/config/`:
 
 - **`appsettings.Local.json`**: Connects to local Temporal CLI service (`localhost:7233`) with default namespace
-- **`appsettings.LocalWorker.json`**: Alternative local configuration with different Prometheus metrics port (9464)
 - **`appsettings.Cloud.json`**: Connects to Temporal Cloud with mTLS authentication
 
-### Protobufs
+### Message Types
 
-The messages used in the `onboardings` and `snailforce` services will be generated as follows.
+The application uses simple C# records in the `App.Messages` project for communication between the API and workflows:
 
-```sh
-cd {SolutionRoot}/src/Onboardings
-# generate messages
-buf generate
-```
+- **`WorkflowRequest`**: Input for starting workflows
+- **`WorkflowResponse`**: Response containing workflow state

@@ -1,8 +1,0 @@
-syntax = "proto3";
-import "jumpstart/domain/onboardings/v1/commands.proto";
-
-package jumpstart.domain.onboardings.v1;
-
-service OnboardingsService {
-  rpc Register(jumpstart.domain.onboardings.v1.RegisterRequest) returns (jumpstart.domain.onboardings.v1.RegisterResponse);
-}

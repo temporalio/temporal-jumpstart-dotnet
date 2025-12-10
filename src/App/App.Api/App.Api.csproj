@@ -17,6 +17,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\App.Domain\App.Domain.csproj" />
+      <ProjectReference Include="..\App.Messages\App.Messages.csproj" />
     </ItemGroup>
 
 </Project>

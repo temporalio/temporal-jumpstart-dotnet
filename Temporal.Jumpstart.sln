@@ -1,5 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# 
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Api", "src\App\App.Api\App.Api.csproj", "{5D465544-EF32-4EDF-A8F1-4F9A6CCA5E41}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Domain", "src\App\App.Domain\App.Domain.csproj", "{AD6D55A5-E74D-4281-98D5-A622AEAD6868}"
@@ -7,8 +8,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Workers", "src\App\App.Workers\App.Workers.csproj", "{6E47C763-2FEA-4B52-9AA5-B6F7C6F726E5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Api.Tests", "tests\App\App.Api.Tests\App.Api.Tests.csproj", "{017F5E9B-7F87-4592-8F35-9B0690F73D29}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Generated", "src\App\App.Generated\App.Generated.csproj", "{ADCA9D65-4BDC-480B-8005-204AC617D72A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Messages", "src\App\App.Messages\App.Messages.csproj", "{CC9AF197-3262-40A0-9634-85BC9BA47ECC}"
 EndProject
@@ -86,10 +85,6 @@ Global
 		{017F5E9B-7F87-4592-8F35-9B0690F73D29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{017F5E9B-7F87-4592-8F35-9B0690F73D29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{017F5E9B-7F87-4592-8F35-9B0690F73D29}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ADCA9D65-4BDC-480B-8005-204AC617D72A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ADCA9D65-4BDC-480B-8005-204AC617D72A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ADCA9D65-4BDC-480B-8005-204AC617D72A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ADCA9D65-4BDC-480B-8005-204AC617D72A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CC9AF197-3262-40A0-9634-85BC9BA47ECC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CC9AF197-3262-40A0-9634-85BC9BA47ECC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC9AF197-3262-40A0-9634-85BC9BA47ECC}.Release|Any CPU.ActiveCfg = Release|Any CPU
