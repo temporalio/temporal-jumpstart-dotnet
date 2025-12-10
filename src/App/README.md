@@ -48,10 +48,3 @@ The application uses configuration files located in `{SolutionRoot}/config/`:
 
 - **`appsettings.Local.json`**: Connects to local Temporal CLI service (`localhost:7233`) with default namespace
 - **`appsettings.Cloud.json`**: Connects to Temporal Cloud with mTLS authentication
-
-### Message Types
-
-The application uses simple C# records in the `App.Messages` project for communication between the API and workflows:
-
-- **`WorkflowRequest`**: Input for starting workflows
-- **`WorkflowResponse`**: Response containing workflow state
