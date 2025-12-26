@@ -32,6 +32,7 @@
         <ProjectReference Include="..\..\..\src\Onboardings\Onboardings.Generated\Onboardings.Generated.csproj" />
     </ItemGroup>
     <ItemGroup>
+      <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
       <Folder Include="Clients\Temporal\" />
     </ItemGroup>
 
